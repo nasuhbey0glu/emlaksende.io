@@ -1,0 +1,23 @@
+# Images Folder
+
+Bu klasöre aşağıdaki görselleri ekleyin:
+
+1. **emlaksendelogo.png** - EMLAKSENDE logosu (40x40px önerilen)
+2. **background.jpg** - Hero section arka plan görseli (1920x1080px veya daha büyük)
+
+Mevcut klasörde bulunan görsel dosyalar:
+- emlaksendelogo.png (workspace'teki emlaksendelogo.png dosyasını buraya kopyalayın)
+- background.jpg (workspace'teki background.jpg dosyasını buraya kopyalayın)
+
+## Görsel Gereksinimleri:
+
+### Logo (emlaksendelogo.png):
+- Format: PNG (saydam arka plan)
+- Boyut: 40x40px (veya kare format)
+- Kalite: Yüksek çözünürlük
+
+### Background (background.jpg):
+- Format: JPG
+- Boyut: En az 1920x1080px
+- Konu: Yeşil tarla, doğa manzarası
+- Kalite: Web için optimize edilmiş
