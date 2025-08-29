@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeler - EMLAKSENDE</title>
+    
+    <!-- Firebase SDKs - Load first -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #14274e;
+            z-index: 1000;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            gap: 20px;
+            padding: 0 40px;
+        }
+
+        /* Left side - Logo and Search */
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-self: start;
+        }
+
+        /* Logo Section - Left */
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            margin-right: 0;
+        }
+
+        .logo-image {
+            height: 65px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Search Section - Center */
+        .nav-search {
+            display: flex;
+            justify-content: flex-start;
+            max-width: 400px;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 50px 12px 45px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 14px;
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .search-icon:hover {
+            color: white;
+        }
+
+        /* Navigation Menu - Right */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-shrink: 0;
+            justify-self: end;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .user-icon {
+            font-size: 14px;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Hide mobile search on desktop */
+        .mobile-search-item {
+            display: none;
+        }
+
+        .hamburger-line {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 3px 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Page Layout */
+        .page-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .page-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-header {
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1E2A47;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .active-count {
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* Mobile Toggle */
+        .mobile-filter-toggle {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .hamburger-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .hamburger-line-filter {
+            width: 20px;
+            height: 2px;
+            background: #333;
+            border-radius: 2px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #F7F7F7;
+            border-radius: 16px;
+            padding: 24px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .filter-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            color: #1E2A47;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group:last-child {
+            margin-bottom: 20px;
+        }
+
+        .group-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            cursor: pointer;
+            padding: 12px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .group-label:hover {
+            background: #f9fafb;
+            border-color: #97D2AD;
+        }
+
+        .group-label.active {
+            background: #f0f9f0;
+            border-color: #97D2AD;
+            color: #2d5016;
+        }
+
+        .collapse-icon {
+            width: 20px;
+            height: 20px;
+            padding: 2px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .collapse-icon:hover {
+            background: linear-gradient(135deg, #97D2AD 0%, #7bb89a 100%);
+            border-color: #97D2AD;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 2px 6px rgba(151, 210, 173, 0.3);
+        }
+
+        .collapse-icon.rotated {
+            transform: rotate(180deg);
+            background: linear-gradient(135deg, #97D2AD 0%, #7bb89a 100%);
+            border-color: #97D2AD;
+            color: white;
+            box-shadow: 0 2px 6px rgba(151, 210, 173, 0.3);
+        }
+
+        .collapse-icon.rotated:hover {
+            transform: rotate(180deg) scale(1.1);
+        }
+
+        .collapse-icon svg {
+            width: 12px;
+            height: 12px;
+            stroke-width: 2.5;
+        }
+
+        .filter-content {
+            margin-top: 12px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .filter-content.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .save-filters-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #97D2AD 0%, #7bb89a 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(151, 210, 173, 0.3);
+        }
+
+        .save-filters-btn:hover {
+            background: linear-gradient(135deg, #7bb89a 0%, #6ba88a 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(151, 210, 173, 0.4);
+        }
+
+        .form-row {
+            display: grid;
+            gap: 12px;
+        }
+
+        .form-row.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #97D2AD;
+            box-shadow: 0 0 0 3px rgba(151, 210, 173, 0.1);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        /* Sort Controls */
+        .sort-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sort-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .sort-select {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        /* ===== PROJECTS GRID ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            justify-items: center;
+            max-width: 1125px;
+            margin: 0 auto;
+            margin-top: 100px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: rgba(20, 39, 78, 0.1);
+        }
+
+        .project-card:hover .project-overlay {
+            background: linear-gradient(135deg, rgba(20, 39, 78, 0.85) 0%, rgba(20, 39, 78, 0.65) 100%);
+        }
+
+        .project-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(20, 39, 78, 0.7) 0%, rgba(20, 39, 78, 0.5) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .project-badge {
+            background: rgba(255, 255, 255, 0.95);
+            color: #14274e;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-info {
+            padding: 25px;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #14274e;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .project-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .project-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .project-stat i {
+            color: #14274e;
+            font-size: 1rem;
+        }
+
+        .project-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .feature-tag {
+            background: #e8f2ff;
+            color: #14274e;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-date {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .project-arrow {
+            color: #14274e;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-arrow {
+            transform: translateX(5px);
+        }
+
+        /* ===== LOADING STATE ===== */
+        .loading-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #14274e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-description {
+            font-size: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Mobile Drawer */
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .drawer-content {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 80%;
+            max-width: 320px;
+            height: 100%;
+            background: #F7F7F7;
+            padding: 24px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-drawer.open {
+            display: block;
+        }
+
+        .mobile-drawer.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #374151;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1199px) {
+            .page-layout { 
+                grid-template-columns: 1fr; 
+            }
+            .sidebar { 
+                display: none; 
+            }
+            .mobile-filter-toggle { 
+                display: flex; 
+                justify-content: flex-start; 
+            }
+            .page-header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            
+            .nav-search {
+                display: none;
+            }
+            
+            .nav-menu {
+                gap: 24px;
+            }
+            
+            /* Header fixes for tablet */
+            .nav-logo {
+                margin-left: 0;
+            }
+            
+            .nav {
+                padding: 0 20px;
+            }
+        }
+        
+        @media (max-width: 1023px) {
+            .projects-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .nav-search {
+                display: none !important;
+            }
+            
+            /* Show mobile search on mobile */
+            .mobile-search-item {
+                display: block !important;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+
+            .nav-menu.active {
+                display: flex;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #14274e;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .project-info {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-card {
+                margin: 0 -5px;
+            }
+
+            .project-title {
+                font-size: 1.1rem;
+            }
+
+            .project-stats {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <nav class="nav">
+                <!-- Left Side - Logo and Search -->
+                <div class="nav-left">
+                    <!-- Logo Section -->
+                    <div class="nav-logo">
+                        <img src="images/emlaknew.png" alt="EMLAKSENDE Logo" class="logo-image">
+                    </div>
+
+                    <!-- Search Section -->
+                    <div class="nav-search">
+                        <div class="search-box">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="search-icon">
+                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
+                            </svg>
+                            <input type="text" placeholder="Arsanı Ara" class="search-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Menu - Right -->
+                <ul class="nav-menu" id="navMenu">
+                    <!-- Mobile Search -->
+                    <li class="nav-item mobile-search-item">
+                        <div class="mobile-search">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="mobile-search-icon">
+                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
+                            </svg>
+                            <input type="text" placeholder="Arsanı Ara" class="mobile-search-input">
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="ilanlar.html" class="nav-link">İlanlar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="projeler.html" class="nav-link">Projeler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-user user-icon"></i>
+                            Giriş
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Menü">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Mobile/Tablet toolbar -->
+        <div class="mobile-filter-toggle">
+            <button class="hamburger-btn" id="mobileFilterToggle" aria-label="Filtreyi Aç/Kapat">
+                <div class="hamburger-icon" aria-hidden="true">
+                    <div class="hamburger-line-filter"></div>
+                    <div class="hamburger-line-filter"></div>
+                    <div class="hamburger-line-filter"></div>
+                </div>
+                <span>Filtre</span>
+            </button>
+        </div>
+
+        <!-- Desktop layout -->
+        <section class="page-layout">
+            <!-- Left Side with Title and Filters -->
+            <div class="page-left">
+                <!-- Header -->
+                <header class="page-header">
+                    <h1 class="page-title">PROJELER</h1>
+                    <div class="active-count" id="activeCount">Aktif proje sayısı: Yükleniyor...</div>
+                </header>
+
+                <!-- Sidebar (desktop) -->
+                <aside class="sidebar" aria-label="Filtre menüsü">
+                    <h3 class="filter-title">Filtrele</h3>
+
+                    <div class="filter-group">
+                        <div class="group-label" data-target="location-filter">
+                            Konum
+                            <svg class="collapse-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="filter-content" id="location-filter">
+                            <div class="form-row">
+                                <select class="form-select" id="cityFilter" aria-label="Şehir">
+                                    <option value="">City</option>
+                                    <option>Balıkesir</option>
+                                    <option>İstanbul</option>
+                                    <option>Ankara</option>
+                                    <option>İzmir</option>
+                                </select>
+                                <select class="form-select" id="districtFilter" aria-label="İlçe">
+                                    <option value="">District</option>
+                                    <option>Edremit</option>
+                                    <option>Çankaya</option>
+                                    <option>Çeşme</option>
+                                </select>
+                                <select class="form-select" id="neighborhoodFilter" aria-label="Mahalle">
+                                    <option value="">Neighborhood</option>
+                                    <option>Zeytinli</option>
+                                    <option>Merkez</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="group-label" data-target="project-count-filter">
+                            İlan Sayısı
+                            <svg class="collapse-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="filter-content" id="project-count-filter">
+                            <div class="form-row two-col">
+                                <input class="form-input" type="number" id="minProjectsFilter" placeholder="Min İlan" aria-label="Minimum ilan sayısı" />
+                                <input class="form-input" type="number" id="maxProjectsFilter" placeholder="Max İlan" aria-label="Maksimum ilan sayısı" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="group-label" data-target="feature-filter">
+                            Özellikler
+                            <svg class="collapse-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="filter-content" id="feature-filter">
+                            <div class="form-row">
+                                <select class="form-select" id="featureFilter" aria-label="Özellik">
+                                    <option value="">Tüm Özellikler</option>
+                                    <option value="elektrik">Elektrik</option>
+                                    <option value="su">Su</option>
+                                    <option value="dogalgaz">Doğalgaz</option>
+                                    <option value="kanalizasyon">Kanalizasyon</option>
+                                    <option value="ana_yola_yakin">Anayola Yakın</option>
+                                    <option value="denize_yakin">Denize Yakın</option>
+                                    <option value="projeli">Projeli</option>
+                                    <option value="ifrazli">İfrazlı</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="save-filters-btn" id="saveFiltersBtn" onclick="applyFilters()">
+                        Filtreleri Kaydet
+                    </button>
+                </aside>
+            </div>
+
+            <!-- Content -->
+            <div>
+                <!-- Sort Controls -->
+                <div class="sort-controls">
+                    <label class="sort-label">Sırala:</label>
+                    <select id="sortSelect" class="sort-select" onchange="sortProjects()">
+                        <option value="newest">En Yeni</option>
+                        <option value="oldest">En Eski</option>
+                        <option value="mostProjects">En Çok İlan</option>
+                        <option value="leastProjects">En Az İlan</option>
+                        <option value="alphabetical">A-Z</option>
+                    </select>
+                </div>
+
+                <!-- Projects Grid -->
+                <div class="projects-grid" id="projectsGrid">
+                    <!-- Loading placeholder -->
+                    <div class="loading-placeholder">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Projeler yükleniyor...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-content">
+            <button class="drawer-close" id="drawerClose">&times;</button>
+            
+            <h3 class="filter-title">Filtrele</h3>
+            
+            <div class="filter-group">
+                <div class="group-label">Konum</div>
+                <div class="form-row">
+                    <select class="form-select" id="mobileCityFilter">
+                        <option value="">City</option>
+                        <option value="balikesir">Balıkesir</option>
+                        <option value="istanbul">İstanbul</option>
+                        <option value="ankara">Ankara</option>
+                        <option value="izmir">İzmir</option>
+                    </select>
+                    <select class="form-select" id="mobileDistrictFilter">
+                        <option value="">District</option>
+                        <option value="edremit">Edremit</option>
+                        <option value="cankaya">Çankaya</option>
+                        <option value="cesme">Çeşme</option>
+                    </select>
+                    <select class="form-select" id="mobileNeighborhoodFilter">
+                        <option value="">Neighborhood</option>
+                        <option value="zeytinli">Zeytinli</option>
+                        <option value="merkez">Merkez</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <div class="group-label">İlan Sayısı</div>
+                <div class="form-row two-col">
+                    <input type="number" class="form-input" id="mobileMinProjectsFilter" placeholder="Min İlan">
+                    <input type="number" class="form-input" id="mobileMaxProjectsFilter" placeholder="Max İlan">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <div class="group-label">Özellikler</div>
+                <div class="form-row">
+                    <select class="form-select" id="mobileFeatureFilter">
+                        <option value="">Tüm Özellikler</option>
+                        <option value="elektrik">Elektrik</option>
+                        <option value="su">Su</option>
+                        <option value="dogalgaz">Doğalgaz</option>
+                        <option value="kanalizasyon">Kanalizasyon</option>
+                        <option value="ana_yola_yakin">Anayola Yakın</option>
+                        <option value="denize_yakin">Denize Yakın</option>
+                        <option value="projeli">Projeli</option>
+                        <option value="ifrazli">İfrazlı</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhY-cgBNBGFd5o9e6l4_L4xYjOFAhyH0M",
+            authDomain: "emlaksende-8646a.firebaseapp.com",
+            databaseURL: "https://emlaksende-8646a-default-rtdb.firebaseio.com",
+            projectId: "emlaksende-8646a",
+            storageBucket: "emlaksende-8646a.firebasestorage.app",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abc123def456ghi789"
+        };
+
+        // Global variables
+        let database;
+        let allProjects = [];
+        let filteredProjects = [];
+
+        // Initialize Firebase and load projects
+        setTimeout(() => {
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                
+                database = firebase.database();
+                loadAllProjects();
+            } else {
+                console.error('Firebase SDK not loaded');
+            }
+        }, 100);
+
+        // Load all projects from Firebase
+        function loadAllProjects() {
+            const projectsGrid = document.getElementById('projectsGrid');
+            
+            database.ref('projeler').once('value')
+                .then(snapshot => {
+                    allProjects = [];
+                    const data = snapshot.val();
+                    
+                    if (data) {
+                        Object.keys(data).forEach(key => {
+                            const project = { ...data[key], id: key };
+                            allProjects.push(project);
+                        });
+                    }
+                    
+                    filteredProjects = [...allProjects];
+                    updateProjectGrid();
+                    updateActiveCount();
+                    populateFilterOptions();
+                })
+                .catch(error => {
+                    console.error('Projeler yüklenirken hata:', error);
+                    projectsGrid.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="empty-title">Yükleme Hatası</div>
+                            <div class="empty-description">Projeler yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin.</div>
+                        </div>
+                    `;
+                });
+        }
+
+        // Update project grid display
+        function updateProjectGrid() {
+            const projectsGrid = document.getElementById('projectsGrid');
+            
+            if (filteredProjects.length === 0) {
+                projectsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-building"></i></div>
+                        <div class="empty-title">Proje Bulunamadı</div>
+                        <div class="empty-description">Arama kriterlerinize uygun proje bulunamadı. Filtreleri değiştirmeyi deneyin.</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const projectsHTML = filteredProjects.map(project => createProjectCard(project)).join('');
+            projectsGrid.innerHTML = projectsHTML;
+        }
+
+        // Create project card HTML
+        function createProjectCard(project) {
+            const ilanSayisi = project.ilanlar ? Object.keys(project.ilanlar).length : 0;
+            const tarih = project.olusturulmaTarihi ? new Date(project.olusturulmaTarihi).toLocaleDateString('tr-TR') : 'Bilinmiyor';
+            
+            // Get some features to display
+            const features = [];
+            if (project.altyapi_ozellikleri) {
+                if (project.altyapi_ozellikleri.elektrik) features.push('Elektrik');
+                if (project.altyapi_ozellikleri.su) features.push('Su');
+                if (project.altyapi_ozellikleri.dogalgaz) features.push('Doğalgaz');
+            }
+            if (project.konum_ozellikleri) {
+                if (project.konum_ozellikleri.ana_yola_yakin) features.push('Anayola Yakın');
+                if (project.konum_ozellikleri.denize_yakin) features.push('Denize Yakın');
+            }
+            if (project.genel_ozellikler) {
+                if (project.genel_ozellikler.projeli) features.push('Projeli');
+                if (project.genel_ozellikler.ifrazli) features.push('İfrazlı');
+            }
+            
+            const displayFeatures = features.slice(0, 4); // İlk 4 özelliği göster
+            
+            return `
+                <div class="project-card" onclick="goToProjectDetail('${project.id}')">
+                    <div class="project-image">
+                        <img src="images/arsa1.jpg" alt="${project.baslik || 'Proje Görseli'}">
+                        <div class="project-overlay">
+                            <div class="project-badge">${ilanSayisi} İlan</div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">${project.baslik || 'Başlık Yok'}</h3>
+                        <p class="project-description">${project.aciklama || 'Açıklama bulunmuyor.'}</p>
+                        
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <i class="fas fa-building"></i>
+                                <span>${ilanSayisi} İlan</span>
+                            </div>
+                            <div class="project-stat">
+                                <i class="fas fa-calendar"></i>
+                                <span>${tarih}</span>
+                            </div>
+                        </div>
+                        
+                        ${displayFeatures.length > 0 ? `
+                        <div class="project-features">
+                            ${displayFeatures.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
+                            ${features.length > 4 ? `<span class="feature-tag">+${features.length - 4} daha</span>` : ''}
+                        </div>
+                        ` : ''}
+                        
+                        <div class="project-footer">
+                            <div class="project-date">ID: ${project.id.substring(0, 8)}</div>
+                            <div class="project-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Navigate to project detail page
+        function goToProjectDetail(projectId) {
+            window.location.href = `projedetay.html?id=${projectId}`;
+        }
+
+        // Update active count
+        function updateActiveCount() {
+            const activeCountElement = document.getElementById('activeCount');
+            if (activeCountElement) {
+                activeCountElement.textContent = filteredProjects.length;
+            }
+        }
+
+        // Populate filter options
+        function populateFilterOptions() {
+            const cities = [...new Set(allProjects.map(p => extractCityFromProjects(p)).filter(c => c))];
+            const districts = [...new Set(allProjects.map(p => extractDistrictFromProjects(p)).filter(d => d))];
+            const neighborhoods = [...new Set(allProjects.map(p => extractNeighborhoodFromProjects(p)).filter(n => n))];
+            
+            populateSelect('cityFilter', cities);
+            populateSelect('districtFilter', districts);
+            populateSelect('neighborhoodFilter', neighborhoods);
+        }
+
+        // Extract city from project's properties
+        function extractCityFromProjects(project) {
+            // Since projects don't directly have location, we'd need to check related properties
+            // For now, return null or implement based on your data structure
+            return null;
+        }
+
+        // Extract district from project's properties
+        function extractDistrictFromProjects(project) {
+            return null;
+        }
+
+        // Extract neighborhood from project's properties
+        function extractNeighborhoodFromProjects(project) {
+            return null;
+        }
+
+        // Populate select element with options
+        function populateSelect(selectId, options) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            
+            // Clear existing options except first
+            const firstOption = select.children[0];
+            select.innerHTML = '';
+            select.appendChild(firstOption);
+            
+            // Add new options
+            options.sort().forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = option;
+                select.appendChild(optionElement);
+            });
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const minProjects = parseInt(document.getElementById('minProjectsFilter').value) || 0;
+            const maxProjects = parseInt(document.getElementById('maxProjectsFilter').value) || Infinity;
+            const feature = document.getElementById('featureFilter').value;
+            
+            filteredProjects = allProjects.filter(project => {
+                const ilanSayisi = project.ilanlar ? Object.keys(project.ilanlar).length : 0;
+                
+                // İlan sayısı filtresi
+                if (ilanSayisi < minProjects || ilanSayisi > maxProjects) {
+                    return false;
+                }
+                
+                // Özellik filtresi
+                if (feature) {
+                    let hasFeature = false;
+                    
+                    // Altyapı özellikleri kontrolü
+                    if (project.altyapi_ozellikleri && project.altyapi_ozellikleri[feature]) {
+                        hasFeature = true;
+                    }
+                    
+                    // Konum özellikleri kontrolü
+                    if (project.konum_ozellikleri && project.konum_ozellikleri[feature]) {
+                        hasFeature = true;
+                    }
+                    
+                    // Genel özellikler kontrolü
+                    if (project.genel_ozellikler && project.genel_ozellikler[feature]) {
+                        hasFeature = true;
+                    }
+                    
+                    if (!hasFeature) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+            
+            updateProjectGrid();
+            updateActiveCount();
+        }
+
+        // Clear filters
+        function clearFilters() {
+            document.getElementById('cityFilter').selectedIndex = 0;
+            document.getElementById('districtFilter').selectedIndex = 0;
+            document.getElementById('neighborhoodFilter').selectedIndex = 0;
+            document.getElementById('minProjectsFilter').value = '';
+            document.getElementById('maxProjectsFilter').value = '';
+            document.getElementById('featureFilter').selectedIndex = 0;
+            document.getElementById('sortSelect').selectedIndex = 0;
+            
+            filteredProjects = [...allProjects];
+            updateProjectGrid();
+            updateActiveCount();
+        }
+
+        // Sort projects
+        function sortProjects() {
+            const sortValue = document.getElementById('sortSelect').value;
+            
+            switch (sortValue) {
+                case 'newest':
+                    filteredProjects.sort((a, b) => (b.olusturulmaTarihi || 0) - (a.olusturulmaTarihi || 0));
+                    break;
+                case 'oldest':
+                    filteredProjects.sort((a, b) => (a.olusturulmaTarihi || 0) - (b.olusturulmaTarihi || 0));
+                    break;
+                case 'mostProjects':
+                    filteredProjects.sort((a, b) => {
+                        const aCount = a.ilanlar ? Object.keys(a.ilanlar).length : 0;
+                        const bCount = b.ilanlar ? Object.keys(b.ilanlar).length : 0;
+                        return bCount - aCount;
+                    });
+                    break;
+                case 'leastProjects':
+                    filteredProjects.sort((a, b) => {
+                        const aCount = a.ilanlar ? Object.keys(a.ilanlar).length : 0;
+                        const bCount = b.ilanlar ? Object.keys(b.ilanlar).length : 0;
+                        return aCount - bCount;
+                    });
+                    break;
+                case 'alphabetical':
+                    filteredProjects.sort((a, b) => (a.baslik || '').localeCompare(b.baslik || ''));
+                    break;
+            }
+            
+            updateProjectGrid();
+        }
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (mobileToggle && navMenu) {
+            mobileToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        // Mobile filter toggle
+        const mobileFilterToggle = document.getElementById('mobileFilterToggle');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        const drawerClose = document.getElementById('drawerClose');
+
+        if (mobileFilterToggle && mobileDrawer) {
+            mobileFilterToggle.addEventListener('click', () => {
+                mobileDrawer.classList.add('open');
+            });
+        }
+
+        if (drawerClose && mobileDrawer) {
+            drawerClose.addEventListener('click', () => {
+                mobileDrawer.classList.remove('open');
+            });
+        }
+
+        // Filter group toggles
+        document.querySelectorAll('.group-label').forEach(label => {
+            label.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const content = document.getElementById(targetId);
+                const icon = this.querySelector('.collapse-icon');
+                
+                if (content) {
+                    content.classList.toggle('show');
+                    this.classList.toggle('active');
+                    if (icon) {
+                        icon.classList.toggle('rotated');
+                    }
+                }
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                if (searchTerm === '') {
+                    filteredProjects = [...allProjects];
+                } else {
+                    filteredProjects = allProjects.filter(project => 
+                        (project.baslik && project.baslik.toLowerCase().includes(searchTerm)) ||
+                        (project.aciklama && project.aciklama.toLowerCase().includes(searchTerm))
+                    );
+                }
+                
+                updateProjectGrid();
+                updateActiveCount();
+            });
+        }
+    </script>
+</body>
+</html>

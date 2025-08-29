@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMLAKSENDE - Kazandıran Arsan Burda</title>
+    <meta name="description" content="Aradığın yatırımlık, işlenmiş veya imarlık arsalar ise doğru yerdesin. Hemen ara veya bize ulaş!">
+    
+    <!-- Firebase SDKs - Load first -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <nav class="nav">
+                <!-- Left Side - Logo and Search -->
+                <div class="nav-left">
+                    <!-- Logo Section -->
+                    <div class="nav-logo">
+                        <img src="images/emlaknew.png" alt="EMLAKSENDE Logo" class="logo-image">
+                    </div>
+
+                    <!-- Search Section -->
+                    <div class="nav-search">
+                        <div class="search-box">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="search-icon">
+                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
+                            </svg>
+                            <input type="text" placeholder="Arsanı Ara" class="search-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Menu - Right -->
+                <ul class="nav-menu" id="navMenu">
+                    <!-- Mobile Search -->
+                    <li class="nav-item mobile-search-item">
+                        <div class="mobile-search">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="mobile-search-icon">
+                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14Z"/>
+                            </svg>
+                            <input type="text" placeholder="Arsanı Ara" class="mobile-search-input">
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="ilanlar.html" class="nav-link">İlanlar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="projeler.html" class="nav-link">Projeler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-user user-icon"></i>
+                            Giriş
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Menü">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero" id="hero">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="container">
+                <!-- Hero Logo -->
+                <div class="hero-logo">
+                    <img src="images/emlak.png" alt="EMLAKSENDE Logo" class="hero-logo-image">
+                </div>
+
+                <!-- Hero Title -->
+                <h1 class="hero-title">KAZANDIRAN ARSAN BURDA</h1>
+
+                <!-- Hero Description -->
+                <p class="hero-description">
+                    Aradığın yatırımlık, işlenmiş veya imarlık arsalar ise doğru yerdesin. 
+                    Hemen ara veya bize ulaş!
+                </p>
+
+                <!-- Search Module -->
+                <div class="search-module">
+                    <div class="search-container">
+                        <!-- City Select -->
+                        <div class="search-field">
+                            <select class="search-select" id="citySelect">
+                                <option value="">Şehir Seç</option>
+                                <option value="istanbul">İstanbul</option>
+                                <option value="ankara">Ankara</option>
+                                <option value="izmir">İzmir</option>
+                                <option value="bursa">Bursa</option>
+                                <option value="antalya">Antalya</option>
+                            </select>
+                        </div>
+
+                        <!-- District Select -->
+                        <div class="search-field">
+                            <select class="search-select" id="districtSelect" disabled>
+                                <option value="">İlçe Seç</option>
+                            </select>
+                        </div>
+
+                        <!-- Zoning Status Select -->
+                        <div class="search-field">
+                            <select class="search-select" id="zoningSelect">
+                                <option value="">İmar Durumu Seç</option>
+                                <option value="imarlı">İmarlı</option>
+                                <option value="tarla">Tarla</option>
+                                <option value="bag-bahce">Bağ & Bahçe</option>
+                                <option value="zeytinlik">Zeytinlik</option>
+                                <option value="arazi">Arazi</option>
+                                <option value="konut-imarlı">Konut İmarlı</option>
+                                <option value="ticari-imarlı">Ticari İmarlı</option>
+                                <option value="sanayi-imarlı">Sanayi İmarlı</option>
+                                <option value="turizm-imarlı">Turizm İmarlı</option>
+                            </select>
+                        </div>
+
+                        <!-- Search Button -->
+                        <button class="search-button" id="searchButton">
+                            <span>Detaylı Ara</span>
+                            <img src="images/emlak.png" alt="Emlak Logo" class="location-icon">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Process Section -->
+    <section class="process-section" id="processSection">
+        <div class="process-background">
+            <!-- Watermark Logo -->
+            <div class="process-watermark">
+                <img src="images/emlakyat.png" alt="EMLAKSENDE" class="watermark-logo">
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="process-content">
+                <!-- Left Side - Title -->
+                <div class="process-left">
+                    <h2 class="process-title">
+                        <span class="title-main">Emlaksende işlem</span>
+                        <span class="title-highlight">Çok Kolay</span>
+                        <span class="title-arrow">▶</span>
+                    </h2>
+                </div>
+
+                <!-- Right Side - Steps -->
+                <div class="process-right">
+                    <div class="process-steps">
+                        <!-- Step 1 -->
+                        <div class="process-step" data-step="1">
+                            <div class="step-icon">
+                                <img src="images/icon3.png" alt="Ne almak istediğini seç" class="step-icon-img">
+                            </div>
+                            <div class="step-content">
+                                <h3 class="step-title">Ne almak istediğini seç</h3>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="process-step" data-step="2">
+                            <div class="step-icon">
+                                <img src="images/icon2.png" alt="Kaporanızı Yatırın" class="step-icon-img">
+                            </div>
+                            <div class="step-content">
+                                <h3 class="step-title">Kaporanızı Yatırın</h3>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="process-step" data-step="3">
+                            <div class="step-icon">
+                                <img src="images/icon4.png" alt="Evraklarınızı Yükleyin" class="step-icon-img">
+                            </div>
+                            <div class="step-content">
+                                <h3 class="step-title">Evraklarınızı Yükleyin</h3>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="process-step" data-step="4">
+                            <div class="step-icon">
+                                <img src="images/icon1.png" alt="Tapunuz Hazır Hayırlı Olsun" class="step-icon-img">
+                            </div>
+                            <div class="step-content">
+                                <h3 class="step-title">Tapunuz Hazır Hayırlı Olsun</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Properties Section -->
+    <section class="properties-section" id="propertiesSection">
+        <!-- Background Logo -->
+        <img src="images/emlakyat2.png" alt="EMLAKSENDE" class="properties-background-logo">
+        <div class="container">
+            <!-- Section Header -->
+            <div class="properties-header">
+                <div class="properties-title-area">
+                    <img src="images/emlakyesilyat.png" alt="Emlak" class="title-logo">
+                    <h2 class="properties-title">Son Yüklenen İlanlar</h2>
+                </div>
+                <div class="properties-actions">
+                    <button class="btn-secondary">Tüm İlanları Gör</button>
+                    <button class="btn-primary">
+                        <img src="images/emlak.png" alt="Emlak" class="btn-logo">
+                        Şehir Seçin
+                    </button>
+                </div>
+            </div>
+
+            <!-- Properties Grid -->
+            <div class="properties-grid" id="propertiesGrid">
+                <!-- Property cards will be loaded dynamically from Firebase -->
+                <div class="loading-placeholder" id="loadingPlaceholder">
+                    <p>İlanlar yükleniyor...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" id="testimonialsSection">
+        <div class="container">
+            <!-- Section Header -->
+            <div class="testimonials-header">
+                <img src="images/emlak1.png" alt="Emlak" class="testimonial-header-icon">
+                <h2 class="testimonials-title">Müşterilerimizden Yorumlar</h2>
+            </div>
+
+            <!-- Testimonials Slider -->
+            <div class="testimonials-slider-container">
+                <div class="testimonials-slider" id="testimonialsSlider">
+                    <!-- Testimonial Card 1 -->
+                    <div class="testimonial-card" data-testimonial="1">
+                        <img src="images/people.png" alt="People" class="testimonial-bg-image">
+                        <div class="card-logo">
+                            <img src="images/emlak.png" alt="EMLAKSENDE" class="testimonial-logo">
+                        </div>
+                        <div class="customer-photo">
+                            <img src="images/e1.png" alt="Müşteri" class="photo-bg">
+                            <div class="photo-overlay"></div>
+                            <div class="play-button">
+                                <svg viewBox="0 0 24 24" fill="currentColor" class="play-icon">
+                                    <path d="M8 5V19L19 12L8 5Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="customer-info">
+                            <h3 class="customer-name">Osman Y.</h3>
+                            <p class="customer-job">Çiftçi</p>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Card 2 -->
+                    <div class="testimonial-card" data-testimonial="2">
+                        <img src="images/people.png" alt="People" class="testimonial-bg-image">
+                        <div class="card-logo">
+                            <img src="images/emlak.png" alt="EMLAKSENDE" class="testimonial-logo">
+                        </div>
+                        <div class="customer-photo">
+                            <img src="images/e2.png" alt="Müşteri" class="photo-bg">
+                            <div class="photo-overlay"></div>
+                            <div class="play-button">
+                                <svg viewBox="0 0 24 24" fill="currentColor" class="play-icon">
+                                    <path d="M8 5V19L19 12L8 5Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="customer-info">
+                            <h3 class="customer-name">Ayşe K.</h3>
+                            <p class="customer-job">İş Kadını</p>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Card 3 -->
+                    <div class="testimonial-card" data-testimonial="3">
+                        <img src="images/people.png" alt="People" class="testimonial-bg-image">
+                        <div class="card-logo">
+                            <img src="images/emlak.png" alt="EMLAKSENDE" class="testimonial-logo">
+                        </div>
+                        <div class="customer-photo">
+                            <img src="images/e3.png" alt="Müşteri" class="photo-bg">
+                            <div class="photo-overlay"></div>
+                            <div class="play-button">
+                                <svg viewBox="0 0 24 24" fill="currentColor" class="play-icon">
+                                    <path d="M8 5V19L19 12L8 5Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="customer-info">
+                            <h3 class="customer-name">Mehmet T.</h3>
+                            <p class="customer-job">Mühendis</p>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Card 4 -->
+                    <div class="testimonial-card" data-testimonial="4">
+                        <img src="images/people.png" alt="People" class="testimonial-bg-image">
+                        <div class="card-logo">
+                            <img src="images/emlak.png" alt="EMLAKSENDE" class="testimonial-logo">
+                        </div>
+                        <div class="customer-photo">
+                            <img src="images/e4.png" alt="Müşteri" class="photo-bg">
+                            <div class="photo-overlay"></div>
+                            <div class="play-button">
+                                <svg viewBox="0 0 24 24" fill="currentColor" class="play-icon">
+                                    <path d="M8 5V19L19 12L8 5Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="customer-info">
+                            <h3 class="customer-name">Fatma S.</h3>
+                            <p class="customer-job">Öğretmen</p>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Card 5 -->
+                    <div class="testimonial-card" data-testimonial="5">
+                        <img src="images/people.png" alt="People" class="testimonial-bg-image">
+                        <div class="card-logo">
+                            <img src="images/emlak.png" alt="EMLAKSENDE" class="testimonial-logo">
+                        </div>
+                        <div class="customer-photo">
+                            <img src="images/e5.png" alt="Müşteri" class="photo-bg">
+                            <div class="photo-overlay"></div>
+                            <div class="play-button">
+                                <svg viewBox="0 0 24 24" fill="currentColor" class="play-icon">
+                                    <path d="M8 5V19L19 12L8 5Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="customer-info">
+                            <h3 class="customer-name">Ali R.</h3>
+                            <p class="customer-job">Avukat</p>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Card 6 -->
+                    <div class="testimonial-card" data-testimonial="6">
+                        <div class="card-logo">
+                            <img src="images/emlaksendelogo.png" alt="EMLAKSENDE" class="testimonial-logo">
+                        </div>
+                        <div class="customer-photo">
+                            <img src="images/e6.png" alt="Müşteri" class="photo-bg">
+                            <div class="photo-overlay"></div>
+                            <div class="play-button">
+                                <svg viewBox="0 0 24 24" fill="currentColor" class="play-icon">
+                                    <path d="M8 5V19L19 12L8 5Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="customer-info">
+                            <h3 class="customer-name">Zeynep D.</h3>
+                            <p class="customer-job">Doktor</p>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Card 7 -->
+                    <div class="testimonial-card" data-testimonial="7">
+                        <div class="card-logo">
+                            <img src="images/emlaksendelogo.png" alt="EMLAKSENDE" class="testimonial-logo">
+                        </div>
+                        <div class="customer-photo">
+                            <img src="images/e7.png" alt="Müşteri" class="photo-bg">
+                            <div class="photo-overlay"></div>
+                            <div class="play-button">
+                                <svg viewBox="0 0 24 24" fill="currentColor" class="play-icon">
+                                    <path d="M8 5V19L19 12L8 5Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="customer-info">
+                            <h3 class="customer-name">Hasan M.</h3>
+                            <p class="customer-job">İnşaat Müteahhidi</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="testimonials-navigation">
+                <button class="slider-arrow slider-arrow-left" id="sliderPrev" aria-label="Önceki">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.41 7.41L14 6L8 12L14 18L15.41 16.59L10.83 12Z"/>
+                    </svg>
+                </button>
+                
+                <!-- Slider Dots -->
+                <div class="slider-dots" id="sliderDots">
+                    <button class="dot active" data-slide="0" aria-label="Slayt 1"></button>
+                    <button class="dot" data-slide="1" aria-label="Slayt 2"></button>
+                    <button class="dot" data-slide="2" aria-label="Slayt 3"></button>
+                    <button class="dot" data-slide="3" aria-label="Slayt 4"></button>
+                    <button class="dot" data-slide="4" aria-label="Slayt 5"></button>
+                </div>
+
+                <button class="slider-arrow slider-arrow-right" id="sliderNext" aria-label="Sonraki">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8.59 16.59L10 18L16 12L10 6L8.59 7.41L13.17 12Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faqSection">
+        <div class="container">
+            <div class="faq-container">
+                <!-- Section Header -->
+                <div class="faq-header">
+                    <h2 class="faq-title">Sıkça Sorulan Sorular</h2>
+                    <button class="faq-search-toggle" id="faqSearchToggle" aria-label="Arama">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="search-icon">
+                            <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14Z"/>
+                        </svg>
+                    </button>
+                </div>
+
+            <!-- Search Input (hidden by default) -->
+            <div class="faq-search-container" id="faqSearchContainer">
+                <input type="text" class="faq-search-input" id="faqSearchInput" placeholder="Sorularda ara...">
+            </div>
+
+            <!-- FAQ Tabs -->
+            <div class="faq-tabs">
+                <button class="faq-tab active" data-tab="general">Genel</button>
+                <button class="faq-tab" data-tab="setup">Kurulum</button>
+                <button class="faq-tab" data-tab="support">Destek</button>
+            </div>
+
+            <!-- FAQ Content -->
+            <div class="faq-content">
+                <!-- General Tab -->
+                <div class="faq-tab-content active" id="general">
+                    <div class="faq-columns">
+                        <div class="faq-column">
+                            <!-- FAQ Item 1 -->
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Emlaksende platformu nasıl çalışır?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Emlaksende, emlak arayanlar ile satıcıları buluşturan modern bir platformdur. Kullanıcılar istedikleri kriterlere göre arama yapabilir, favori ilanları kaydedebilir ve doğrudan iletişime geçebilirler.</p>
+                                </div>
+                            </div>
+
+                            <!-- FAQ Item 2 -->
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Üyelik ücretsiz mi?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Evet, temel üyelik tamamen ücretsizdir. Premium özellikler için farklı paket seçeneklerimiz bulunmaktadır.</p>
+                                </div>
+                            </div>
+
+                            <!-- FAQ Item 3 -->
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>İlan vermek için ne yapmam gerekiyor?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Öncelikle üye olmanız gerekiyor. Ardından "İlan Ver" butonuna tıklayarak emlak bilgilerinizi ve fotoğraflarınızı yükleyebilirsiniz. İlanınız onaylandıktan sonra yayınlanacaktır.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-column">
+                            <!-- FAQ Item 4 -->
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Güvenlik konusunda ne tür önlemler alıyorsunuz?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Tüm ilanlarımız manuel olarak kontrol edilir. Kimlik doğrulama sistemi kullanırız ve şüpheli aktiviteleri takip ederiz. Ayrıca SSL sertifikası ile verilerinizi koruruz.</p>
+                                </div>
+                            </div>
+
+                            <!-- FAQ Item 5 -->
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Mobil uygulama var mı?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Şu anda mobil responsive web sitemiz bulunmaktadır. iOS ve Android uygulamalarımız geliştirme aşamasındadır.</p>
+                                </div>
+                            </div>
+
+                            <!-- FAQ Item 6 -->
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>İletişim bilgileri nasıl paylaşılıyor?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>İletişim bilgileri sadece kayıtlı üyelerle paylaşılır. Platform üzerinden güvenli mesajlaşma sistemini de kullanabilirsiniz.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Setup Tab -->
+                <div class="faq-tab-content" id="setup">
+                    <div class="faq-columns">
+                        <div class="faq-column">
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Hesap nasıl oluşturabilirim?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>"Üye Ol" butonuna tıklayarak e-posta adresinizi ve şifrenizi girmeniz yeterlidir. E-posta doğrulama linkini takip ederek hesabınızı aktifleştirebilirsiniz.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Profil bilgilerimi nasıl güncellerim?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Giriş yaptıktan sonra sağ üst köşedeki profil menüsünden "Hesap Ayarları" seçeneğini kullanarak bilgilerinizi güncelleyebilirsiniz.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-column">
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Şifremi unuttum, ne yapmalıyım?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Giriş sayfasındaki "Şifremi Unuttum" linkine tıklayarak e-posta adresinizi girin. Size şifre sıfırlama linki gönderilecektir.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Hesabımı nasıl silerim?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Hesap silme işlemi için müşteri hizmetleri ile iletişime geçmeniz gerekmektedir. Bu işlem geri alınamaz.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Tab -->
+                <div class="faq-tab-content" id="support">
+                    <div class="faq-columns">
+                        <div class="faq-column">
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Müşteri hizmetleri ile nasıl iletişime geçerim?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>E-posta: destek@emlaksende.com<br>Telefon: 0850 123 45 67<br>Canlı destek: Web sitesi üzerinden 09:00-18:00 arası</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Teknik sorun bildirimi nasıl yaparım?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Sayfa altındaki "Sorun Bildir" linkini kullanabilir veya destek@emlaksende.com adresine detaylı bilgi gönderebilirsiniz.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-column">
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Destek saatleri nelerdir?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Hafta içi 09:00-18:00 arası canlı destek mevcuttur. E-posta desteği 7/24 aktiftir ve 24 saat içinde yanıtlanır.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question" aria-expanded="false">
+                                    <span>Geri bildirim nasıl verebilirim?</span>
+                                    <span class="faq-icon">▶</span>
+                                </button>
+                                <div class="faq-answer">
+                                    <p>Görüş ve önerilerinizi geri-bildirim@emlaksende.com adresine gönderebilir veya platform üzerindeki değerlendirme formunu kullanabilirsiniz.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="aboutSection">
+        <div class="container">
+            <div class="about-content">
+                <!-- Left Side - Text Content -->
+                <div class="about-text">
+                    <div class="about-logo">
+                        <img src="images/hakkımızda.png" alt="EMLAKSENDE" class="about-logo-img">
+                    </div>
+                    
+                    <div class="about-description">
+                        <p class="about-intro">
+                            2015 yılında kurulan Emlaksende, Türkiye'nin en güvenilir emlak platformlarından biridir. 
+                            Müşterilerimize en kaliteli hizmeti sunmak için sürekli olarak teknolojimizi geliştiriyor 
+                            ve yenilikçi çözümler üretiyoruz.
+                        </p>
+                        
+                        <div class="about-full-text" id="aboutFullText">
+                            <p>
+                                Emlak sektöründe 8 yıllık deneyimimizle, binlerce ailenin hayalindeki eve kavuşmasına 
+                                yardımcı olduk. Profesyonel ekibimiz, geniş emlak portföyümüz ve müşteri odaklı 
+                                yaklaşımımızla sektörde fark yaratıyoruz.
+                            </p>
+                            <p>
+                                Platform üzerinde satılık, kiralık konut, işyeri, arsa ve yatırımlık gayrimenkul 
+                                seçenekleri bulunmaktadır. Gelişmiş filtreleme sistemi sayesinde aradığınız kriterlere 
+                                uygun emlakları kolayca bulabilirsiniz.
+                            </p>
+                            <p>
+                                Güvenilirlik, şeffaflık ve müşteri memnuniyeti temel değerlerimizdir. Her adımda 
+                                yanınızda olan uzman ekibimizle, emlak alım-satım sürecinizi güvenle tamamlayabilirsiniz.
+                            </p>
+                        </div>
+                        
+                        <button class="read-more-btn" id="readMoreBtn">
+                            <span class="btn-text">Devamını Oku</span>
+                            <svg class="btn-arrow" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7.41 8.59L12 13.17L16.59 8.59L18 10L12 16L6 10L7.41 8.59Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Side - Image -->
+                <div class="about-image">
+                    <div class="image-container">
+                        <img src="images/background.jpg" alt="Emlaksende Hakkında" class="about-img">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Newsletter Section -->
+        <div class="newsletter-section">
+            <div class="container">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <h3 class="newsletter-title">Gelişmelerden Haberdar Ol</h3>
+                        <p class="newsletter-subtitle">Bültenimize kayıt olarak gayrimenkul dünyasındaki gelişmelerden haberdar olabilirsin.</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <div class="email-input-container">
+                            <input type="email" class="newsletter-email" placeholder="Mail" id="newsletterEmail">
+                            <button class="newsletter-btn" id="newsletterBtn">Abone Ol</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Footer -->
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Logo and Brand -->
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <img src="images/emlakmavi.png" alt="EMLAKSENDE" class="footer-logo-img">
+                        </div>
+                    </div>
+
+                    <!-- Footer Links -->
+                    <div class="footer-links">
+                        <!-- Kurumsal -->
+                        <div class="footer-column">
+                            <h4 class="footer-column-title">Kurumsal</h4>
+                            <ul class="footer-list">
+                                <li><a href="#" class="footer-link">Hakkımızda</a></li>
+                                <li><a href="#" class="footer-link">Misyon</a></li>
+                                <li><a href="#" class="footer-link">Vizyon</a></li>
+                                <li><a href="#" class="footer-link">Nasıl Çalışır?</a></li>
+                                <li><a href="#" class="footer-link">İletişim</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Hizmetler -->
+                        <div class="footer-column">
+                            <h4 class="footer-column-title">Hizmetler</h4>
+                            <ul class="footer-list">
+                                <li><a href="#" class="footer-link">İlanlar</a></li>
+                                <li><a href="#" class="footer-link">Projeler</a></li>
+                                <li><a href="#" class="footer-link">Danışmanlık</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Destek -->
+                        <div class="footer-column">
+                            <h4 class="footer-column-title">Destek</h4>
+                            <ul class="footer-list">
+                                <li><a href="#" class="footer-link">Destek Alın</a></li>
+                                <li><a href="#" class="footer-link">Kullanım Koşulları</a></li>
+                                <li><a href="#" class="footer-link">Gizlilik & Çerez Politikası</a></li>
+                                <li><a href="#" class="footer-link">KVKK Aydınlat Metni</a></li>
+                                <li><a href="#" class="footer-link">Üyelik Sözleşmesi</a></li>
+                                <li><a href="#" class="footer-link">SSS</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Right Side Contact -->
+                    <div class="footer-contact">
+                        <!-- Social Media -->
+                        <div class="footer-social">
+                            <h4 class="footer-social-title">Takipte Kalın</h4>
+                            <div class="social-media-icons">
+                                <a href="#" class="social-icon" aria-label="Instagram">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-icon" aria-label="Facebook">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-icon" aria-label="LinkedIn">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-icon" aria-label="X (Twitter)">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-icon" aria-label="YouTube">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="footer-contact-info">
+                            <h4 class="footer-contact-title">Bize Ulaşın</h4>
+                            
+                            <!-- Phone -->
+                            <div class="contact-item phone-item">
+                                <div class="contact-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                    </svg>
+                                </div>
+                                <span class="contact-text">444 02 03</span>
+                            </div>
+
+                            <!-- WhatsApp -->
+                            <div class="contact-item whatsapp-item">
+                                <button class="whatsapp-btn">
+                                    <div class="whatsapp-icon">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.051 3.488"/>
+                                        </svg>
+                                    </div>
+                                    <span>WhatsApp Destek</span>
+                                </button>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="contact-item email-item">
+                                <div class="contact-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                    </svg>
+                                </div>
+                                <span class="contact-text">info@emlaksende.com</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <!-- Left Side - Copyright -->
+                    <div class="footer-left">
+                        <p class="copyright">© 2024 Emlaksende. Tüm hakları saklıdır.</p>
+                        <p class="footer-note">Emlaksende.com sitesi Yamanof tarafından kurulup tasarlanmıştır</p>
+                    </div>
+
+                    <!-- Center - Payment Cards -->
+                    <div class="footer-center">
+                        <div class="payment-cards">
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzAwNTZkMiIvPjx0ZXh0IHg9IjUiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPkJPTlVTPC90ZXh0Pjwvc3ZnPg==" alt="Bonus Card">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iI2ZmMDA0NCI+PC9yZWN0Pjx0ZXh0IHg9IjMiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPk1BWElNVU08L3RleHQ+PC9zdmc+" alt="Maximum">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzAwODBmZiI+PC9yZWN0Pjx0ZXh0IHg9IjgiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPldPUkxEPC90ZXh0Pjwvc3ZnPg==" alt="World">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzZjNzU3ZCI+PC9yZWN0Pjx0ZXh0IHg9IjEiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjciPkJBTktLQVJUPC90ZXh0Pjwvc3ZnPg==" alt="Bankkart">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzJiOWJkNCI+PC9yZWN0Pjx0ZXh0IHg9IjQiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPkFYRVNTPC90ZXh0Pjwvc3ZnPg==" alt="Axess">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzFlNmU4ZCI+PC9yZWN0Pjx0ZXh0IHg9IjgiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjciPlRST1k8L3RleHQ+PC9zdmc+" alt="Troy">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzAwNTZkMiI+PC9yZWN0Pjx0ZXh0IHg9IjEwIiB5PSIxNiIgZmlsbD0iI2ZmZiIgZm9udC1zaXplPSI4Ij5WSVNBIDwvdGV4dD48L3N2Zz4=" alt="Visa">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iI2ViMDAxYiI+PC9yZWN0Pjx0ZXh0IHg9IjUiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjciPk1BU1RFUjwvdGV4dD48L3N2Zz4=" alt="Mastercard">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side - Yamanof Logo -->
+                    <div class="footer-right">
+                        <div class="yamanof-logo">
+                            <div class="yamanof-icon">Y</div>
+                            <div class="yamanof-text">
+                                <div class="yamanof-title">Yamanof</div>
+                                <div class="yamanof-subtitle">Consultancy</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

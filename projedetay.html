@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje Detayı - EMLAKSENDE</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        :root {
+            --bg: #F3F6F9;
+            --ink: #0F2947;
+            --muted: #6B7A8C;
+            --primary: #142A45;
+            --primary-ink: #FFFFFF;
+            --chip-green: #86B98A;
+            --price-mint: #A7D4B7;
+            --card: #FFFFFF;
+            --stroke: #E3E8EF;
+            --shadow: 0 20px 40px rgba(15,41,71,.08);
+            --soft: #F1F5F9;
+            --success: #5FB487;
+            --danger: #D94B4B;
+            --tab-green-bg: #E7F5ED;
+            --tab-green-border: #A7D6BD;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            line-height: 1.7;
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            font-size: 12px;
+            color: #666;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.4;
+        }
+
+        .breadcrumb i {
+            font-size: 14px;
+            color: #666;
+            margin-right: 4px;
+        }
+
+        .breadcrumb span {
+            white-space: nowrap;
+        }
+
+        .breadcrumb span:last-child {
+            color: #999;
+            font-weight: 500;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Project Header */
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .project-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 10px;
+        }
+
+        .project-subtitle {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Full Width Project Image */
+        .project-image-section {
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .project-main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Properties Table */
+        .properties-table-section {
+            margin-bottom: 40px;
+        }
+
+        .properties-table-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .properties-table {
+            width: 100%;
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .properties-table-header {
+            background: var(--primary);
+            color: var(--primary-ink);
+            padding: 16px 20px;
+        }
+
+        .properties-table-header-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .properties-table-body {
+            padding: 0;
+        }
+
+        .property-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--stroke);
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .property-row:hover {
+            background: var(--soft);
+        }
+
+        .property-row:last-child {
+            border-bottom: none;
+        }
+
+        .property-cell {
+            font-size: 14px;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+        }
+
+        .property-cell.ada-parsel {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .property-cell.metrekare {
+            color: var(--muted);
+        }
+
+        .property-cell.fiyat {
+            font-weight: 600;
+            color: var(--chip-green);
+        }
+
+        .property-cell.durum {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.aktif {
+            background: #e7f5ed;
+            color: #10b981;
+        }
+
+        .status-badge.pasif {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        /* Project Description */
+        .project-description-section {
+            margin-bottom: 40px;
+        }
+
+        .description-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 20px;
+        }
+
+        .description-content {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            line-height: 1.7;
+            color: var(--ink);
+            font-size: 16px;
+        }
+
+        /* Features Section */
+        .features-section {
+            margin-bottom: 40px;
+        }
+
+        .features-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-category {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .feature-category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .feature-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .feature-icon.available {
+            background: #10b981;
+        }
+
+        .feature-icon.unavailable {
+            background: #e5e7eb;
+        }
+
+        .feature-name {
+            font-size: 14px;
+            color: var(--ink);
+        }
+
+        /* Responsive */
+        @media (max-width: 767px) {
+            .container {
+                padding: 0 16px;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .project-main-image {
+                height: 250px;
+            }
+
+            .properties-table-header-row,
+            .property-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .properties-table-header {
+                display: none;
+            }
+
+            .property-row {
+                padding: 12px 16px;
+                border: 1px solid var(--stroke);
+                border-radius: 8px;
+                margin-bottom: 8px;
+            }
+
+            .property-cell {
+                font-size: 13px;
+            }
+
+            .property-cell.ada-parsel::before {
+                content: "Ada/Parsel: ";
+                font-weight: 600;
+                color: var(--primary);
+            }
+
+            .property-cell.metrekare::before {
+                content: "Metrekare: ";
+                font-weight: 600;
+                color: var(--muted);
+            }
+
+            .property-cell.fiyat::before {
+                content: "Fiyat: ";
+                font-weight: 600;
+                color: var(--chip-green);
+            }
+
+            .property-cell.durum::before {
+                content: "Durum: ";
+                font-weight: 600;
+                color: var(--ink);
+            }
+
+            .description-content {
+                padding: 20px;
+                font-size: 14px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-category {
+                padding: 20px;
+            }
+
+            .breadcrumb {
+                font-size: 11px;
+                flex-wrap: wrap;
+                gap: 4px;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            .breadcrumb span {
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 12px;
+            }
+
+            .project-title {
+                font-size: 1.8rem;
+            }
+
+            .project-main-image {
+                height: 200px;
+            }
+
+            .property-row {
+                padding: 10px 12px;
+            }
+
+            .property-cell {
+                font-size: 12px;
+            }
+
+            .description-content {
+                padding: 16px;
+                font-size: 13px;
+            }
+
+            .feature-category {
+                padding: 16px;
+            }
+
+            .breadcrumb {
+                font-size: 10px;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <nav class="nav">
+                <!-- Left Side - Logo and Search -->
+                <div class="nav-left">
+                    <!-- Logo Section -->
+                    <div class="nav-logo">
+                        <img src="images/emlaknew.png" alt="EMLAKSENDE Logo" class="logo-image">
+                    </div>
+
+                    <!-- Search Section -->
+                    <div class="nav-search">
+                        <div class="search-box">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="search-icon">
+                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
+                            </svg>
+                            <input type="text" placeholder="Arsanı Ara" class="search-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Menu - Right -->
+                <ul class="nav-menu" id="navMenu">
+                    <!-- Mobile Search -->
+                    <li class="nav-item mobile-search-item">
+                        <div class="mobile-search">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="mobile-search-icon">
+                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
+                            </svg>
+                            <input type="text" placeholder="Arsanı Ara" class="mobile-search-input">
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="ilanlar.html" class="nav-link">İlanlar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="projeler.html" class="nav-link">Projeler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-user user-icon"></i>
+                            Giriş
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Menü">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-layout">
+        <div class="breadcrumb">
+            <i class="fas fa-home"></i>
+            <span>Projeler</span> > 
+            <span id="breadcrumbTitle">Proje detayları yükleniyor...</span>
+        </div>
+        
+        <!-- Project Header -->
+        <div class="project-header">
+            <h1 class="project-title" id="projectTitle">Yükleniyor...</h1>
+            <p class="project-subtitle" id="projectSubtitle">Proje bilgileri yükleniyor...</p>
+        </div>
+        
+        <!-- Full Width Project Image -->
+        <div class="project-image-section">
+            <img id="projectMainImage" class="project-main-image" src="images/arsa1.jpg" alt="Proje Görseli">
+        </div>
+        
+        <!-- Properties Table -->
+        <div class="properties-table-section">
+            <h2 class="properties-table-title">Proje İlanları</h2>
+            <div class="properties-table">
+                <div class="properties-table-header">
+                    <div class="properties-table-header-row">
+                        <div>Ada/Parsel</div>
+                        <div>Metrekare</div>
+                        <div>Fiyat</div>
+                        <div>Durum</div>
+                    </div>
+                </div>
+                <div class="properties-table-body" id="propertiesTableBody">
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        İlanlar yükleniyor...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project Description -->
+        <div class="project-description-section">
+            <h2 class="description-title">Proje Açıklaması</h2>
+            <div class="description-content" id="projectDescription">
+                Proje açıklaması yükleniyor...
+            </div>
+        </div>
+        
+        <!-- Features Section -->
+        <div class="features-section">
+            <h2 class="features-title">Proje Özellikleri</h2>
+            <div class="features-grid">
+                <div class="feature-category">
+                    <h3 class="feature-category-title">Altyapı Özellikleri</h3>
+                    <div class="feature-list" id="altyapiOzellikleri">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3 class="feature-category-title">Konum Özellikleri</h3>
+                    <div class="feature-list" id="konumOzellikleri">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+                
+                <div class="feature-category">
+                    <h3 class="feature-category-title">Genel Özellikler</h3>
+                    <div class="feature-list" id="genelOzellikler">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhY-cgBNBGFd5o9e6l4_L4xYjOFAhyH0M",
+            authDomain: "emlaksende-8646a.firebaseapp.com",
+            databaseURL: "https://emlaksende-8646a-default-rtdb.firebaseio.com",
+            projectId: "emlaksende-8646a",
+            storageBucket: "emlaksende-8646a.firebasestorage.app",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abc123def456ghi789"
+        };
+
+        // Global variables
+        let database;
+        let currentProject = null;
+        let projectProperties = [];
+
+        // Initialize Firebase and load project
+        setTimeout(() => {
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                
+                database = firebase.database();
+                loadProjectDetails();
+            } else {
+                console.error('Firebase SDK not loaded');
+            }
+        }, 100);
+
+        // Get project ID from URL parameters
+        function getProjectIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Load project details from Firebase
+        function loadProjectDetails() {
+            const projectId = getProjectIdFromUrl();
+            
+            if (!projectId) {
+                console.error('Project ID not found in URL');
+                document.body.innerHTML = '<h1>Proje bulunamadı</h1><p>Proje ID\'si bulunamadı.</p>';
+                return;
+            }
+            
+            console.log('Loading project details for ID:', projectId);
+            
+            database.ref(`projeler/${projectId}`).once('value')
+                .then(snapshot => {
+                    if (!snapshot.exists()) {
+                        document.body.innerHTML = '<h1>Proje bulunamadı</h1><p>Bu proje artık mevcut değil.</p>';
+                        return;
+                    }
+                    
+                    const projectData = snapshot.val();
+                    projectData.id = projectId;
+                    currentProject = projectData;
+                    
+                    console.log('Loaded project data:', projectData);
+                    updatePageWithProjectData(projectData);
+                    loadProjectProperties(projectData);
+                })
+                .catch(error => {
+                    console.error('Error loading project details:', error);
+                    document.body.innerHTML = '<h1>Hata</h1><p>Proje yüklenirken bir hata oluştu.</p>';
+                });
+        }
+
+        // Update page content with project data
+        function updatePageWithProjectData(project) {
+            // Update page title
+            const pageTitle = document.querySelector('title');
+            if (pageTitle) {
+                pageTitle.textContent = `${project.baslik || 'Proje Detayı'} - EMLAKSENDE`;
+            }
+            
+            // Update breadcrumb
+            const breadcrumbTitle = document.getElementById('breadcrumbTitle');
+            if (breadcrumbTitle) {
+                breadcrumbTitle.textContent = project.baslik || 'Proje Detayı';
+            }
+            
+            // Update project title and subtitle
+            const projectTitle = document.getElementById('projectTitle');
+            const projectSubtitle = document.getElementById('projectSubtitle');
+            
+            if (projectTitle) {
+                projectTitle.textContent = project.baslik || 'Başlık Yok';
+            }
+            
+            if (projectSubtitle) {
+                const ilanSayisi = project.ilanlar ? Object.keys(project.ilanlar).length : 0;
+                projectSubtitle.textContent = `${ilanSayisi} ilan içeren proje`;
+            }
+            
+            // Update project description
+            const projectDescription = document.getElementById('projectDescription');
+            if (projectDescription) {
+                projectDescription.textContent = project.aciklama || 'Bu proje için açıklama bulunmuyor.';
+            }
+            
+            // Update project features
+            updateProjectFeatures(project);
+        }
+
+        // Update project features in the features section
+        function updateProjectFeatures(project) {
+            // Altyapı Özellikleri
+            const altyapiContainer = document.getElementById('altyapiOzellikleri');
+            if (altyapiContainer && project.altyapi_ozellikleri) {
+                const altyapiHTML = Object.entries(project.altyapi_ozellikleri)
+                    .map(([key, value]) => {
+                        const featureName = getFeatureName(key);
+                        const iconClass = value ? 'available' : 'unavailable';
+                        return `
+                            <div class="feature-item">
+                                <div class="feature-icon ${iconClass}"></div>
+                                <span class="feature-name">${featureName}</span>
+                            </div>
+                        `;
+                    })
+                    .join('');
+                altyapiContainer.innerHTML = altyapiHTML;
+            }
+            
+            // Konum Özellikleri
+            const konumContainer = document.getElementById('konumOzellikleri');
+            if (konumContainer && project.konum_ozellikleri) {
+                const konumHTML = Object.entries(project.konum_ozellikleri)
+                    .map(([key, value]) => {
+                        const featureName = getFeatureName(key);
+                        const iconClass = value ? 'available' : 'unavailable';
+                        return `
+                            <div class="feature-item">
+                                <div class="feature-icon ${iconClass}"></div>
+                                <span class="feature-name">${featureName}</span>
+                            </div>
+                        `;
+                    })
+                    .join('');
+                konumContainer.innerHTML = konumHTML;
+            }
+            
+            // Genel Özellikler
+            const genelContainer = document.getElementById('genelOzellikler');
+            if (genelContainer && project.genel_ozellikler) {
+                const genelHTML = Object.entries(project.genel_ozellikler)
+                    .map(([key, value]) => {
+                        const featureName = getFeatureName(key);
+                        const iconClass = value ? 'available' : 'unavailable';
+                        return `
+                            <div class="feature-item">
+                                <div class="feature-icon ${iconClass}"></div>
+                                <span class="feature-name">${featureName}</span>
+                            </div>
+                        `;
+                    })
+                    .join('');
+                genelContainer.innerHTML = genelHTML;
+            }
+        }
+
+        // Get feature name in Turkish
+        function getFeatureName(key) {
+            const featureNames = {
+                'elektrik': 'Elektrik',
+                'sanayi_elektrik': 'Sanayi Elektriği',
+                'su': 'Su',
+                'telefon': 'Telefon',
+                'dogalgaz': 'Doğalgaz',
+                'kanalizasyon': 'Kanalizasyon',
+                'aritma': 'Arıtma',
+                'sondaj_kuyu': 'Sondaj & Kuyu',
+                'zemin_etudu': 'Zemin Etüdü',
+                'yolu_acilmis': 'Yolu Açılmış',
+                'ana_yola_yakin': 'Anayola Yakın',
+                'denize_sifir': 'Denize Sıfır',
+                'itfaiyeye_yakin': 'İtfaiye Yakın',
+                'havalimanina_yakin': 'Havalimanı Yakın',
+                'toplu_tasimaya_yakin': 'Toplu Ulaşıma Yakın',
+                'denize_yakin': 'Denize Yakın',
+                'hastaneye_yakin': 'Hastane Yakın',
+                'su_kaynagina_yakin': 'Su Kaynağına Yakın',
+                'ifrazli': 'İfrazlı',
+                'parselli': 'Parselli',
+                'projeli': 'Projeli',
+                'kose_parselli': 'Köşe Parselli'
+            };
+            
+            return featureNames[key] || key;
+        }
+
+        // Load project properties (ilanlar)
+        function loadProjectProperties(project) {
+            const propertiesTableBody = document.getElementById('propertiesTableBody');
+            
+            if (!project.ilanlar || Object.keys(project.ilanlar).length === 0) {
+                propertiesTableBody.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <p>Bu projede henüz ilan bulunmamaktadır.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Get all property IDs from project
+            const propertyIds = Object.keys(project.ilanlar);
+            
+            // Load each property from Firebase
+            Promise.all(
+                propertyIds.map(propertyId => 
+                    database.ref(`ilanlar/${propertyId}`).once('value')
+                        .then(snapshot => ({
+                            id: propertyId,
+                            data: snapshot.val()
+                        }))
+                        .catch(error => {
+                            console.error(`Error loading property ${propertyId}:`, error);
+                            return null;
+                        })
+                )
+            ).then(properties => {
+                // Filter out null values (failed loads)
+                const validProperties = properties.filter(prop => prop && prop.data);
+                
+                if (validProperties.length === 0) {
+                    propertiesTableBody.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #666;">
+                            <p>Bu projede yüklenebilir ilan bulunamadı.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Render properties table
+                const propertiesHTML = validProperties.map(property => 
+                    createPropertyRow(property.id, property.data)
+                ).join('');
+                
+                propertiesTableBody.innerHTML = propertiesHTML;
+            });
+        }
+
+        // Create property row HTML
+        function createPropertyRow(propertyId, propertyData) {
+            const adaParsel = `${propertyData.adaNo || 'N/A'}/${propertyData.parselNo || 'N/A'}`;
+            const metrekare = propertyData.metrekare ? `${propertyData.metrekare.toLocaleString('tr-TR')} m²` : 'N/A';
+            const fiyat = propertyData.toplamFiyat ? 
+                new Intl.NumberFormat('tr-TR').format(propertyData.toplamFiyat) + '₺' : 'Fiyat belirtilmemiş';
+            
+            // Determine status from propertyData.status
+            let durum = 'Müsait';
+            let statusClass = 'aktif';
+            
+            if (propertyData.status) {
+                switch (propertyData.status.toLowerCase()) {
+                    case 'satildi':
+                    case 'sold':
+                        durum = 'Satıldı';
+                        statusClass = 'pasif';
+                        break;
+                    case 'rezerve':
+                    case 'reserved':
+                        durum = 'Rezerve';
+                        statusClass = 'pasif';
+                        break;
+                    case 'aktif':
+                    case 'available':
+                        durum = 'Müsait';
+                        statusClass = 'aktif';
+                        break;
+                    default:
+                        durum = 'Müsait';
+                        statusClass = 'aktif';
+                }
+            }
+            
+            return `
+                <div class="property-row" onclick="goToPropertyDetail('${propertyId}')">
+                    <div class="property-cell ada-parsel">${adaParsel}</div>
+                    <div class="property-cell metrekare">${metrekare}</div>
+                    <div class="property-cell fiyat">${fiyat}</div>
+                    <div class="property-cell durum">
+                        <span class="status-badge ${statusClass}">${durum}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Navigate to property detail
+        function goToPropertyDetail(propertyId) {
+            window.location.href = `detay.html?id=${propertyId}`;
+        }
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        if (mobileToggle && navMenu) {
+            mobileToggle.addEventListener('click', () => {
+                mobileToggle.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

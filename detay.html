@@ -1,0 +1,3331 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balıkesir Edremit Zeytinli'de Geleceğe Yatırım 240m2 Fırsat Arsa - EMLAKSENDE</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        :root {
+            --bg: #F3F6F9;
+            --ink: #0F2947;
+            --muted: #6B7A8C;
+            --primary: #142A45;
+            --primary-ink: #FFFFFF;
+            --chip-green: #86B98A;
+            --price-mint: #A7D4B7;
+            --card: #FFFFFF;
+            --stroke: #E3E8EF;
+            --shadow: 0 20px 40px rgba(15,41,71,.08);
+            --soft: #F1F5F9;
+            --success: #5FB487;
+            --danger: #D94B4B;
+            --tab-green-bg: #E7F5ED;
+            --tab-green-border: #A7D6BD;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            line-height: 1.7;
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
+        }
+
+
+
+        /* Breadcrumb */
+        .breadcrumb {
+            font-size: 12px;
+            color: #666;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.4;
+        }
+
+        .breadcrumb i {
+            font-size: 14px;
+            color: #666;
+            margin-right: 4px;
+        }
+
+        .breadcrumb span {
+            white-space: nowrap;
+        }
+
+        .breadcrumb span:last-child {
+            color: #999;
+            font-weight: 500;
+        }
+
+        /* Main Grid */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 380px 420px 1fr;
+            gap: 72px;
+            align-items: start;
+            justify-content: start;
+            max-width: 1400px;
+            padding-left: 40px; /* Sol taraftan 40px boşluk ekledik */
+        }
+
+        /* Icon Rail */
+        .icon-rail {
+            position: absolute;
+            left: -80px;
+            top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 5;
+        }
+
+        /* Gallery */
+        .gallery {
+            position: relative;
+        }
+
+        .icon-btn {
+            width: 48px;
+            height: 48px;
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary);
+        }
+
+        .icon-btn:hover {
+            opacity: 0.8;
+            transform: translateX(1px);
+            box-shadow: var(--shadow);
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .main-image-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 32px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 343px; /* Desktop için %20 arttırıldı (286px * 1.2 = 343px) */
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
+        }
+
+        .tapview-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: var(--chip-green);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tapview-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(134, 185, 138, 0.3);
+        }
+
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary);
+        }
+
+        .gallery-nav:hover {
+            background: white;
+            box-shadow: var(--shadow);
+        }
+
+        .gallery-nav.prev {
+            left: 16px;
+        }
+
+        .gallery-nav.next {
+            right: 16px;
+        }
+
+        .gallery-nav svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .thumbnails {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 4px 0;
+            margin-bottom: 24px;
+        }
+
+        .thumbnail {
+            flex-shrink: 0;
+            width: 88px;
+            height: 88px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .thumbnail.active {
+            border-color: var(--primary);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Property Details */
+        .property-details {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-left: 100px; /* 80px'den 100px'e arttırdık */
+        }
+
+        .location {
+            font-size: clamp(15px, 1.66vw, 18.2px);
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .price {
+            font-size: clamp(18.2px, 2.15vw, 26.5px);
+            font-weight: 700;
+            color: var(--price-mint);
+        }
+
+        .features-table {
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
+        }
+
+        .features-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--ink);
+        }
+
+        .feature-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .feature-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-label {
+            color: var(--muted);
+            font-size: 11.5px;
+        }
+
+        .feature-value {
+            color: var(--ink);
+            font-size: 11.5px;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: var(--primary);
+            color: var(--primary-ink);
+            border: none;
+            padding: 11.5px 17.3px;
+            border-radius: 12px;
+            font-size: 12.4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(20, 42, 69, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(20, 42, 69, 0.3);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: var(--card);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 11.5px 17.3px;
+            border-radius: 12px;
+            font-size: 12.4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--primary-ink);
+        }
+
+        .btn-secondary svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-secondary.active svg {
+            transform: rotate(180deg);
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .contact-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(20, 42, 69, 0.1);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--chip-green);
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(20, 42, 69, 0.15);
+        }
+
+        .contact-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Details Dropdown */
+        .details-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .details-dropdown.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .details-dropdown ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .details-dropdown li {
+            padding: 8px 0;
+            color: var(--muted);
+            font-size: 13px;
+            border-bottom: 1px solid var(--stroke);
+        }
+
+        .details-dropdown li:last-child {
+            border-bottom: none;
+        }
+
+        /* Right Panel */
+        .valuation-panel {
+            background: var(--primary);
+            color: var(--primary-ink);
+            border-radius: 28px;
+            padding: 32px 28px;
+            box-shadow: 0 24px 48px rgba(20, 42, 69, 0.2);
+            position: sticky;
+            top: 32px;
+            margin-left: 160px; /* 140px'den 160px'e arttırdık */
+            width: 300px;
+            justify-self: start;
+        }
+
+        .valuation-title {
+            text-align: center;
+            font-size: 20.7px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .chart-placeholder {
+            width: 120px;
+            height: 120px;
+            background: #ffffff;
+            border-radius: 20px;
+            margin: 0 auto 24px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #666;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .fake-chart {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 20px 30px;
+        }
+
+        .chart-bar {
+            width: 16px;
+            background: #007AFF;
+            border-radius: 4px 4px 0 0;
+            animation: growUp 2s ease-out;
+            box-shadow: 0 2px 4px rgba(0, 122, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chart-bar:hover {
+            background: #0056CC;
+            transform: scale(1.1);
+        }
+
+        .chart-bar:nth-child(1) { height: 60%; }
+        .chart-bar:nth-child(2) { height: 75%; }
+        .chart-bar:nth-child(3) { height: 90%; }
+
+        @keyframes growUp {
+            from { height: 0; }
+            to { height: var(--final-height); }
+        }
+
+        .forecast-title {
+            font-size: 17.3px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .forecast-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .forecast-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16.1px;
+        }
+
+        .forecast-period {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .forecast-price {
+            font-weight: 600;
+        }
+
+        /* Desktop Header Fix */
+        @media (min-width: 1200px) {
+            .nav-logo {
+                margin-left: 0;
+            }
+            
+            .nav-search {
+                margin-left: 0;
+                justify-content: center;
+            }
+            
+            .nav-menu {
+                margin-left: 0px;
+            }
+            
+            .nav {
+                padding: 0 40px;
+            }
+        }
+
+        /* Header responsive */
+        @media (max-width: 1199px) {
+            .nav-right {
+                gap: 32px;
+            }
+            
+            .nav-search {
+                display: none;
+            }
+            
+            .nav-menu {
+                gap: 24px;
+            }
+            
+            /* Header fixes for tablet */
+            .nav-logo {
+                margin-left: 0;
+            }
+            
+            .nav {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .mobile-toggle {
+                display: flex;
+            }
+            
+            /* Header fixes for mobile */
+            .nav-logo {
+                margin-left: 0 !important;
+                flex-shrink: 0;
+            }
+            
+            .nav-search {
+                display: none !important;
+            }
+            
+            .nav {
+                justify-content: space-between !important;
+                padding: 0 16px !important;
+            }
+            
+            .logo-image {
+                height: 50px !important;
+            }
+            
+            /* Mobile Navigation Menu */
+            .nav-menu {
+                position: fixed !important;
+                top: 80px !important;
+                left: 0 !important;
+                width: 100% !important;
+                background-color: #14274e !important;
+                flex-direction: column !important;
+                padding: 20px !important;
+                gap: 16px !important;
+                transform: translateX(-100%) !important;
+                transition: transform 0.3s ease !important;
+                border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+                display: flex !important;
+                z-index: 999 !important;
+            }
+            
+            .nav-menu.active {
+                transform: translateX(0) !important;
+            }
+            
+            .nav-link {
+                padding: 12px 20px !important;
+                font-size: 16px !important;
+                border-radius: 8px !important;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1279px) {
+            .detail-grid {
+                grid-template-columns: 1fr 460px;
+                gap: 36px;
+                padding-left: 20px; /* Tablet'te daha az padding */
+            }
+
+            .icon-rail {
+                left: -70px;
+            }
+
+            .valuation-panel {
+                grid-column: 1 / -1;
+                margin-top: 40px;
+                margin-left: 0; /* Tablet'te margin sıfırla */
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .icon-rail {
+                position: static;
+                flex-direction: row;
+                justify-content: center;
+                order: 4;
+                left: auto;
+                top: auto;
+            }
+
+            .gallery {
+                order: 1;
+            }
+
+            .property-details {
+                order: 2;
+            }
+
+            .valuation-panel {
+                order: 3;
+                position: static;
+                margin-top: 0;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                padding: 0 16px;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            .page-title {
+                margin: 20px 0 16px 0;
+                font-size: 0.1em;
+            }
+
+            .detail-grid {
+                gap: 20px;
+                grid-template-columns: 1fr !important;
+                max-width: 100%;
+                overflow: visible !important;
+                padding-left: 0; /* Mobile'da padding sıfırla */
+            }
+
+            .gallery {
+                max-width: 100%;
+                overflow: hidden;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            .main-image-container {
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            .main-image {
+                height: 300px; /* Mobile'da 4:3 oran için ayarlandı */
+                width: 100%;
+                max-width: 100%;
+                aspect-ratio: 4 / 3;
+                object-fit: cover;
+            }
+
+            .property-details {
+                margin-left: 0 !important;
+                max-width: 100%;
+                overflow: visible !important;
+            }
+
+            .action-buttons {
+                flex-direction: row;
+                justify-content: center;
+                gap: 12px;
+                max-width: 100%;
+                margin-bottom: 80px; /* Sabit menü için boşluk */
+            }
+
+            .action-buttons .btn-primary,
+            .action-buttons .btn-secondary {
+                flex: 1;
+                max-width: 150px;
+            }
+
+            .contact-buttons {
+                display: none; /* Mobilde gizle, sabit menü kullan */
+            }
+
+            .mobile-contact-menu {
+                display: block !important; /* Mobilde göster */
+            }
+
+            body {
+                padding-bottom: 80px; /* Sabit menü için ekstra alan */
+            }
+
+            .features-table {
+                padding: 20px;
+                max-width: 100%;
+                overflow: visible !important;
+            }
+
+            .valuation-panel {
+                padding: 24px 20px;
+                margin-left: 0 !important;
+                width: 100% !important;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            .thumbnails {
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
+                max-width: 100%;
+            }
+
+            .icon-rail {
+                position: static !important;
+                left: auto !important;
+                top: auto !important;
+                flex-direction: row !important;
+                justify-content: center !important;
+                margin: 20px 0;
+                max-width: 100%;
+                order: 4; /* Thumbnails'in altına taşı */
+            }
+
+            .main-image-container {
+                order: 1; /* Görseli üste al */
+            }
+
+            .thumbnails {
+                order: 3; /* Thumbnails en alta */
+            }
+
+            .breadcrumb {
+                font-size: 11px;
+                flex-wrap: wrap;
+                gap: 4px;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            .breadcrumb span {
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+
+        /* Additional mobile responsive fixes */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 12px;
+            }
+
+            .detail-grid {
+                gap: 16px;
+            }
+
+            .main-image {
+                height: 225px; /* 4:3 oran için düzenlendi (300px * 0.75) */
+                aspect-ratio: 4 / 3;
+            }
+
+            .valuation-panel {
+                padding: 20px 16px;
+                border-radius: 20px;
+            }
+
+            .chart-placeholder {
+                width: 100px;
+                height: 100px;
+            }
+
+            .page-title {
+                font-size: 16px !important;
+                margin-bottom: 20px;
+            }
+
+            .breadcrumb {
+                font-size: 10px;
+                margin-top: 20px;
+            }
+
+            .property-details {
+                gap: 20px;
+            }
+
+            .features-table {
+                padding: 16px;
+            }
+
+            .feature-row {
+                margin-bottom: 10px;
+            }
+
+            .action-buttons {
+                gap: 10px;
+            }
+
+            .contact-buttons {
+                gap: 10px;
+            }
+        }
+
+        /* ===== DESCRIPTION SECTION ===== */
+        .description-section {
+            padding: 80px 0;
+            background-color: var(--bg);
+        }
+
+        .description-title {
+            text-align: left;
+            font-size: clamp(16.9px, 2.31vw, 18.5px);
+            font-weight: 700;
+            color: #0B2447;
+            margin-bottom: 30px;
+        }
+
+        .description-card {
+            width: 100%;
+            margin: 0;
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .description-heading {
+            font-size: 15.4px;
+            font-weight: 600;
+            color: #0B2447;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .description-intro {
+            font-size: 11.6px;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .description-subtitle {
+            font-size: 12.3px;
+            font-weight: 700;
+            color: #0B2447;
+            margin: 30px 0 15px 0;
+            line-height: 1.4;
+        }
+
+        .description-text {
+            font-size: 10.8px;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .description-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
+        }
+
+        .description-list li {
+            font-size: 10.8px;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .description-list li::before {
+            content: "·";
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: bold;
+            color: #0B2447;
+            font-size: 18px;
+        }
+
+        /* Description responsive */
+        @media (max-width: 767px) {
+            .description-section {
+                padding: 60px 0;
+            }
+
+            .description-card {
+                margin: 0;
+                padding: 30px 24px;
+                border-radius: 16px;
+                max-width: 100%;
+                box-sizing: border-box;
+                overflow-x: hidden;
+            }
+
+            .description-heading {
+                font-size: 18px;
+                word-wrap: break-word;
+            }
+
+            .description-subtitle {
+                font-size: 16px;
+                margin: 25px 0 12px 0;
+                word-wrap: break-word;
+            }
+
+            .description-text,
+            .description-list li {
+                font-size: 13px;
+                word-wrap: break-word;
+            }
+
+            .description-list li {
+                padding-left: 16px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* ===== ÖZELLIKLER SECTION ===== */
+        .ozellikler-section {
+            padding: 80px 0;
+            background-color: var(--bg);
+        }
+
+        .ozellikler-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            margin: 0 auto;
+        }
+
+        .ozellikler-container {
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .ozellikler-title {
+            font-size: clamp(16px, 1.76vw, 22.4px);
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 40px;
+        }
+
+        .ozellikler-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .ozellikler-left {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .feature-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .feature-group-title {
+            font-size: clamp(12.8px, 1.28vw, 14.4px);
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .feature-panel {
+            background: var(--soft);
+            border: 1px solid var(--stroke);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--ink);
+        }
+
+        .feature-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .feature-icon.available {
+            color: #10b981; /* Yeşil - True için */
+        }
+
+        .feature-icon.unavailable {
+            color: #9ca3af; /* Gri - False için */
+        }
+
+        /* Map Card */
+        .map-card {
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            border-radius: 18px;
+            padding: 12px;
+            box-shadow: 0 10px 24px rgba(15,41,71,.06);
+            position: sticky;
+            top: 32px;
+        }
+
+        .map-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .map-tab {
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: 11.2px;
+            font-weight: 500;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .map-tab.active {
+            background: var(--tab-green-bg);
+            border-color: var(--tab-green-border);
+            color: var(--ink);
+        }
+
+        .map-container {
+            position: relative;
+            height: 280px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .map-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+
+        /* Tabs Section */
+        .tabs-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .feature-tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .feature-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .feature-tab.active {
+            background: var(--tab-green-bg);
+            border-color: var(--tab-green-border);
+        }
+
+        .feature-tab-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .tab-content {
+            background: var(--soft);
+            border: 1px solid var(--stroke);
+            border-radius: 16px;
+            padding: 24px;
+            min-height: 120px;
+        }
+
+        .distance-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .distance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--ink);
+            border-bottom: 1px dotted var(--stroke);
+            padding-bottom: 8px;
+        }
+
+        .distance-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .distance-label {
+            font-weight: 500;
+        }
+
+        .distance-value {
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 1279px) {
+            .ozellikler-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .map-card {
+                position: static;
+                order: 1;
+            }
+
+            .ozellikler-left {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .ozellikler-container {
+                padding: 0 16px;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            .ozellikler-section {
+                padding: 60px 0;
+            }
+
+            .ozellikler-card {
+                max-width: 100%;
+                box-sizing: border-box;
+                overflow-x: hidden;
+            }
+
+            .ozellikler-title {
+                margin-bottom: 32px;
+                word-wrap: break-word;
+            }
+
+            .ozellikler-grid {
+                grid-template-columns: 1fr !important;
+                gap: 24px;
+                max-width: 100%;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+                max-width: 100%;
+            }
+
+            .feature-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                max-width: 100%;
+            }
+
+            .feature-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .feature-tab {
+                flex-shrink: 0;
+                white-space: nowrap;
+            }
+
+            .map-card {
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            .map-container {
+                height: 220px;
+                max-width: 100%;
+            }
+
+            .map-iframe {
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            .tab-content {
+                max-width: 100%;
+                overflow-x: hidden;
+                box-sizing: border-box;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        .whatsapp-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            background: linear-gradient(135deg, #128c7e 0%, #075e54 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .whatsapp-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+
+        .yamanof-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .yamanof-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .yamanof-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .yamanof-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.2;
+        }
+
+        /* Description Loading State */
+        .description-loading {
+            padding: 60px 20px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* Map Title */
+        .map-title {
+            font-size: clamp(12.8px, 1.28vw, 14.4px);
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        /* Image Modal */
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .image-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .modal-image {
+                width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary);
+        }
+
+        .modal-nav:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-nav.prev {
+            left: 20px;
+        }
+
+        .modal-nav.next {
+            right: 20px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+                justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .modal-close:hover {
+            background: white;
+        }
+
+        /* Mobile Fixed Contact Menu */
+        .mobile-contact-menu {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            z-index: 1000;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .mobile-contact-buttons {
+            display: flex;
+            gap: 12px;
+            max-width: 100%;
+        }
+
+        .mobile-contact-btn {
+            flex: 1;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .mobile-contact-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .mobile-contact-btn.whatsapp {
+            background: #25d366;
+            color: white;
+        }
+
+        .mobile-contact-btn.phone {
+            background: #007AFF;
+            color: white;
+        }
+
+        .mobile-contact-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Desktop için mobil menüyü gizle */
+        @media (min-width: 768px) {
+            .mobile-contact-menu {
+                display: none !important;
+            }
+            
+            body {
+                padding-bottom: 0;
+            }
+        }
+    </style>
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <nav class="nav">
+                <!-- Left Side - Logo and Search -->
+                <div class="nav-left">
+                <!-- Logo Section -->
+                <div class="nav-logo">
+                        <img src="images/emlaknew.png" alt="EMLAKSENDE Logo" class="logo-image">
+                </div>
+
+                    <!-- Search Section -->
+                    <div class="nav-search">
+                        <div class="search-box">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="search-icon">
+                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
+                            </svg>
+                            <input type="text" placeholder="Arsanı Ara" class="search-input">
+                        </div>
+                    </div>
+                    </div>
+
+                <!-- Navigation Menu - Right -->
+                    <ul class="nav-menu" id="navMenu">
+                    <!-- Mobile Search -->
+                    <li class="nav-item mobile-search-item">
+                        <div class="mobile-search">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="mobile-search-icon">
+                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
+                            </svg>
+                            <input type="text" placeholder="Arsanı Ara" class="mobile-search-input">
+                        </div>
+                        </li>
+                        <li class="nav-item">
+                        <a href="ilanlar.html" class="nav-link">İlanlar</a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="projeler.html" class="nav-link">Projeler</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            <i class="fas fa-user user-icon"></i>
+                                Giriş
+                            </a>
+                        </li>
+                    </ul>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Menü">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+
+
+    <main class="container">
+        <div class="breadcrumb">
+            <i class="fas fa-home"></i>
+            <span>İlanlar</span> > 
+            <span id="breadcrumbCity">Yükleniyor...</span> > 
+            <span id="breadcrumbDistrict">...</span> > 
+            <span id="breadcrumbNeighborhood">...</span> > 
+            <span id="breadcrumbTitle">İlan detayları yükleniyor...</span>
+        </div>
+        <h1 class="page-title" style="font-size: 23px; margin-bottom: 40px;" id="pageTitle">Yükleniyor...</h1>
+        
+        <div class="detail-grid">
+            <!-- Gallery -->
+            <div class="gallery">
+                <!-- Icon Rail -->
+                <div class="icon-rail">
+                    <button class="icon-btn" aria-label="Favorilere Ekle">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                        </svg>
+                    </button>
+                    <button class="icon-btn" aria-label="Yazdır">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 8H5C3.34 8 2 9.34 2 11V17H6V21H18V17H22V11C22 9.34 20.66 8 19 8ZM16 19H8V14H16V19ZM19 12C18.45 12 18 11.55 18 11S18.45 10 19 10 20 10.45 20 11 19.55 12 19 12ZM18 3H6V7H18V3Z"/>
+                        </svg>
+                    </button>
+                    <button class="icon-btn" aria-label="Paylaş">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12S8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5S19.66 2 18 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12S4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.34C15.11 18.55 15.08 18.77 15.08 19C15.08 20.61 16.39 21.92 18 21.92S20.92 20.61 20.92 19C20.92 17.39 19.61 16.08 18 16.08Z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="main-image-container">
+                    <img id="mainImage" class="main-image" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNGNUY1RjUiLz48dGV4dCB4PSIyMDAiIHk9IjE1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+R8O2cnNlbCBZw7xrbGVuaXlvci4uLjwvdGV4dD48L3N2Zz4=" alt="Görsel Yükleniyor">
+                    <button class="tapview-btn">Tapuyu Görüntüle</button>
+                    <button class="gallery-nav prev" aria-label="Önceki Görsel">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.41 7.41L14 6L8 12L14 18L15.41 16.59L10.83 12Z"/>
+                        </svg>
+                    </button>
+                    <button class="gallery-nav next" aria-label="Sonraki Görsel">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8.59 16.59L10 18L16 12L10 6L8.59 7.41L13.17 12Z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="thumbnails" id="thumbnailsContainer">
+                    <div style="padding: 20px; text-align: center; color: #999; font-size: 14px;">
+                        Görseller yükleniyor...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Details -->
+            <div class="property-details">
+                <div>
+                    <h2 class="location" id="propertyLocation">Konum yükleniyor...</h2>
+                    <div class="price" id="propertyPrice">Fiyat yükleniyor...</div>
+                </div>
+
+                <div class="features-table">
+                    <h3 class="features-title">İlan Bilgileri</h3>
+                    <div class="feature-row">
+                        <span class="feature-label">İlan No</span>
+                        <span class="feature-value">Yükleniyor...</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-label">İmar Durumu</span>
+                        <span class="feature-value">Yükleniyor...</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-label">Metrekare</span>
+                        <span class="feature-value">Yükleniyor...</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-label">Metrekare Fiyat</span>
+                        <span class="feature-value">Yükleniyor...</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-label">Ada No</span>
+                        <span class="feature-value">Yükleniyor...</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-label">Parsel No</span>
+                        <span class="feature-value">Yükleniyor...</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-label">Kaks</span>
+                        <span class="feature-value">Yükleniyor...</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-label">Gabari</span>
+                        <span class="feature-value">Yükleniyor...</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-label">Tapu Durumu</span>
+                        <span class="feature-value">Yükleniyor...</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-primary">İletişime Geç</button>
+                    <div style="position: relative;">
+                        <button class="btn-secondary" id="detailsBtn">
+                            Detayları Gör
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7.41 8.59L12 13.17L16.59 8.59L18 10L12 16L6 10L7.41 8.59Z"/>
+                            </svg>
+                        </button>
+                        <div class="details-dropdown" id="detailsDropdown">
+                            <ul>
+                                <li>Kat Planları</li>
+                                <li>Çevre Analizi</li>
+                                <li>Yasal Durumlar</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-buttons">
+                    <button class="contact-btn" aria-label="Telefon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6.62 10.79C8.06 13.62 10.38 15.94 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z"/>
+                        </svg>
+                    </button>
+                    <button class="contact-btn" aria-label="WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382C17.175 14.233 15.714 13.515 15.442 13.415C15.171 13.316 14.973 13.267 14.774 13.565C14.576 13.862 14.009 14.531 13.836 14.729C13.663 14.928 13.49 14.952 13.193 14.803C12.896 14.654 11.939 14.341 10.747 13.266C9.83 12.428 9.233 11.407 9.06 11.11C8.887 10.812 9.042 10.653 9.191 10.505C9.326 10.37 9.49 10.154 9.639 9.981C9.787 9.807 9.836 9.685 9.935 9.486C10.034 9.288 9.985 9.115 9.91 8.966C9.836 8.817 9.239 7.355 8.984 6.759C8.737 6.18 8.487 6.259 8.305 6.249C8.132 6.24 7.934 6.238 7.736 6.238C7.538 6.238 7.218 6.312 6.946 6.61C6.675 6.907 5.935 7.625 5.935 9.087C5.935 10.549 7 11.961 7.148 12.159C7.297 12.358 9.393 15.359 12.47 16.646C13.179 16.952 13.731 17.135 14.163 17.261C14.875 17.488 15.53 17.456 16.041 17.371C16.612 17.277 17.77 16.645 18.018 15.951C18.266 15.257 18.266 14.666 18.192 14.517C18.118 14.368 17.92 14.293 17.622 14.145L17.472 14.382ZM12.05 21.785H12.046C10.171 21.784 8.334 21.281 6.741 20.336L6.38 20.125L2.639 21.107L3.633 17.469L3.403 17.094C2.378 15.455 1.833 13.543 1.834 11.582C1.836 6.085 6.172 1.75 11.67 1.75C14.339 1.751 16.84 2.781 18.707 4.648C20.574 6.516 21.603 9.017 21.602 11.686C21.6 17.183 17.264 21.518 11.767 21.518L12.05 21.785Z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Valuation Panel -->
+            <div class="valuation-panel">
+                <h3 class="valuation-title">Mülk Değerlendirmesi</h3>
+                <div class="chart-placeholder">
+                    <div class="fake-chart">
+                        <div class="chart-bar" data-year="1"></div>
+                        <div class="chart-bar" data-year="2"></div>
+                        <div class="chart-bar" data-year="3"></div>
+                    </div>
+                </div>
+                <h4 class="forecast-title">Ön Görülen Fiyat Artışı</h4>
+                <div class="forecast-list">
+                    <div class="forecast-item">
+                        <span class="forecast-period">3. Ay</span>
+                        <span class="forecast-price">Yükleniyor...</span>
+                    </div>
+                    <div class="forecast-item">
+                        <span class="forecast-period">6. Ay</span>
+                        <span class="forecast-price">Yükleniyor...</span>
+                    </div>
+                    <div class="forecast-item">
+                        <span class="forecast-period">12. Ay</span>
+                        <span class="forecast-price">Yükleniyor...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Description Section -->
+    <section class="description-section">
+        <div class="container">
+            <div class="description-card">
+                <h2 class="description-title">Açıklama</h2>
+                <div id="dynamicDescription">
+                    <!-- Dynamic content will be loaded here from Firebase -->
+                    <div class="description-loading">
+                        <p>Açıklama yükleniyor...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Özellikler Section -->
+    <section id="ozellikler" class="ozellikler-section">
+        <div class="ozellikler-container">
+            <div class="ozellikler-card">
+            <h2 class="ozellikler-title">Özellikler</h2>
+            
+            <div class="ozellikler-grid">
+                <!-- Left Content -->
+                <div class="ozellikler-left">
+                    <!-- Alt yapı -->
+                    <div class="feature-group">
+                        <h3 class="feature-group-title">Alt yapı</h3>
+                        <div class="feature-panel">
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Elektrik</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Sanayi Elektriği</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Su</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Telefon</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Doğalgaz</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Kanalizasyon</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Arıtma</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Sondaj & Kuyu</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon available" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m5 9 2 2 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    </svg>
+                                    <span>Zemin Etüdü</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon available" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m5 9 2 2 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    </svg>
+                                    <span>Yolu Açılmış</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Yolu Açılmamış</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Yolu Yok</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konum -->
+                    <div class="feature-group">
+                        <h3 class="feature-group-title">Konum</h3>
+                        <div class="feature-panel">
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Anayola Yakın</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Denize Sıfır</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>İtfaiye Yakın</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Havalimanı Yakın</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Toplu Ulaşıma Yakın</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Denize Yakın</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Hastane Yakın</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Su Kaynağına Yakın</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Genel Özellikler -->
+                    <div class="feature-group">
+                        <h3 class="feature-group-title">Genel Özellikler</h3>
+                        <div class="feature-panel">
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>İfrazlı</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon unavailable" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span>Parselli</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon available" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m5 9 2 2 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    </svg>
+                                    <span>Projeli</span>
+                                </div>
+                                <div class="feature-item">
+                                    <svg class="feature-icon available" aria-hidden="true" viewBox="0 0 18 18" fill="currentColor">
+                                        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="m5 9 2 2 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    </svg>
+                                    <span>Köşe Parselli</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Çevre -->
+                    <div class="feature-group">
+                        <h3 class="feature-group-title">Çevre</h3>
+                        <div class="tabs-section">
+                            <div class="feature-tabs">
+                                <button class="feature-tab active" role="tab" aria-selected="true" data-tab="ulasim">
+                                    <svg class="feature-tab-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM4.5 8a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
+                                    </svg>
+                                    <span>Ulaşım</span>
+                                </button>
+                                <button class="feature-tab" role="tab" aria-selected="false" data-tab="egitim">
+                                    <svg class="feature-tab-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M8.5 1a.5.5 0 0 0-1 0v1.293l-6.146 6.147a.5.5 0 0 0 .708.708L8 3.207l5.938 5.941a.5.5 0 0 0 .708-.708L8.5 2.293V1z"/>
+                                    </svg>
+                                    <span>Eğitim Kurumları</span>
+                                </button>
+                                <button class="feature-tab" role="tab" aria-selected="false" data-tab="saglik">
+                                    <svg class="feature-tab-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM4.5 8a.5.5 0 0 1 .5-.5h2.5V5a.5.5 0 0 1 1 0v2.5H11a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V8.5H5a.5.5 0 0 1-.5-.5z"/>
+                                    </svg>
+                                    <span>Sağlık Kurumları</span>
+                                </button>
+                                <button class="feature-tab" role="tab" aria-selected="false" data-tab="alisveris">
+                                    <svg class="feature-tab-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                                    </svg>
+                                    <span>Alışveriş</span>
+                                </button>
+                            </div>
+                            <div class="tab-content" id="tabContent">
+                                <div class="distance-list" id="ulasimContent">
+                                    <div class="distance-item">
+                                        <span class="distance-label">Otogar</span>
+                                        <span class="distance-value">10 Km</span>
+                                    </div>
+                                    <div class="distance-item">
+                                        <span class="distance-label">Havalimanı</span>
+                                        <span class="distance-value">19 Km</span>
+                                    </div>
+                                </div>
+                                <div class="distance-list" id="egitimContent" style="display: none;">
+                                    <div style="padding: 20px; text-align: center; color: var(--muted);">
+                                        Eğitim kurumları bilgisi yükleniyor...
+                                    </div>
+                                </div>
+                                <div class="distance-list" id="saglikContent" style="display: none;">
+                                    <div style="padding: 20px; text-align: center; color: var(--muted);">
+                                        Sağlık kurumları bilgisi yükleniyor...
+                                    </div>
+                                </div>
+                                <div class="distance-list" id="alisverisContent" style="display: none;">
+                                    <div style="padding: 20px; text-align: center; color: var(--muted);">
+                                        Alışveriş merkezleri bilgisi yükleniyor...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Map -->
+                <div class="map-card">
+                    <h3 class="map-title" style="margin-bottom: 16px;">Konum Haritası</h3>
+                    <div class="map-tabs">
+                        <button class="map-tab active" data-map="satellite">Harita</button>
+                        <button class="map-tab" data-map="roadmap">Uydu</button>
+                    </div>
+                    <div class="map-container">
+                        <iframe 
+                            id="mapFrame" 
+                            class="map-iframe"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAw3Z28goiYhTyQxY_zx5eEcx_9I9wMkR4&q=40.7128,-74.0060&zoom=15&maptype=roadmap"
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Newsletter Section -->
+        <div class="newsletter-section">
+            <div class="container">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <h3 class="newsletter-title">Gelişmelerden Haberdar Ol</h3>
+                        <p class="newsletter-subtitle">Bültenimize kayıt olarak gayrimenkul dünyasındaki gelişmelerden haberdar olabilirsin.</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <div class="email-input-container">
+                            <input type="email" class="newsletter-email" placeholder="Mail" id="newsletterEmail">
+                            <button class="newsletter-btn" id="newsletterBtn">Abone Ol</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Footer -->
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Logo and Brand -->
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <img src="images/emlakmavi.png" alt="EMLAKSENDE" class="footer-logo-img">
+                        </div>
+                    </div>
+
+                    <!-- Footer Links -->
+                    <div class="footer-links">
+                        <!-- Kurumsal -->
+                        <div class="footer-column">
+                            <h4 class="footer-column-title">Kurumsal</h4>
+                            <ul class="footer-list">
+                                <li><a href="#" class="footer-link">Hakkımızda</a></li>
+                                <li><a href="#" class="footer-link">Misyon</a></li>
+                                <li><a href="#" class="footer-link">Vizyon</a></li>
+                                <li><a href="#" class="footer-link">Nasıl Çalışır?</a></li>
+                                <li><a href="#" class="footer-link">İletişim</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Hizmetler -->
+                        <div class="footer-column">
+                            <h4 class="footer-column-title">Hizmetler</h4>
+                            <ul class="footer-list">
+                                <li><a href="#" class="footer-link">İlanlar</a></li>
+                                <li><a href="#" class="footer-link">Projeler</a></li>
+                                <li><a href="#" class="footer-link">Danışmanlık</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Destek -->
+                        <div class="footer-column">
+                            <h4 class="footer-column-title">Destek</h4>
+                            <ul class="footer-list">
+                                <li><a href="#" class="footer-link">Destek Alın</a></li>
+                                <li><a href="#" class="footer-link">Kullanım Koşulları</a></li>
+                                <li><a href="#" class="footer-link">Gizlilik & Çerez Politikası</a></li>
+                                <li><a href="#" class="footer-link">KVKK Aydınlat Metni</a></li>
+                                <li><a href="#" class="footer-link">Üyelik Sözleşmesi</a></li>
+                                <li><a href="#" class="footer-link">SSS</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Right Side Contact -->
+                    <div class="footer-contact">
+                        <!-- Social Media -->
+                        <div class="footer-social">
+                            <h4 class="footer-social-title">Takipte Kalın</h4>
+                            <div class="social-media-icons">
+                                <a href="#" class="social-icon" aria-label="Instagram">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-icon" aria-label="Facebook">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-icon" aria-label="LinkedIn">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-icon" aria-label="X (Twitter)">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-icon" aria-label="YouTube">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="footer-contact-info">
+                            <h4 class="footer-contact-title">Bize Ulaşın</h4>
+                            
+                            <!-- Phone -->
+                            <div class="contact-item phone-item">
+                                <div class="contact-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                    </svg>
+                                </div>
+                                <span class="contact-text">444 02 03</span>
+                            </div>
+
+                            <!-- WhatsApp -->
+                            <div class="contact-item whatsapp-item">
+                                <button class="whatsapp-btn">
+                                    <div class="whatsapp-icon">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.051 3.488"/>
+                                        </svg>
+                                    </div>
+                                    <span>WhatsApp Destek</span>
+                                </button>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="contact-item email-item">
+                                <div class="contact-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                    </svg>
+                                </div>
+                                <span class="contact-text">info@emlaksende.com</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <!-- Left Side - Copyright -->
+                    <div class="footer-left">
+                        <p class="copyright">© 2024 Emlaksende. Tüm hakları saklıdır.</p>
+                        <p class="footer-note">Emlaksende.com sitesi Yamanof tarafından kurulup tasarlanmıştır</p>
+                    </div>
+
+                    <!-- Center - Payment Cards -->
+                    <div class="footer-center">
+                        <div class="payment-cards">
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzAwNTZkMiIvPjx0ZXh0IHg9IjUiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPkJPTlVTPC90ZXh0Pjwvc3ZnPg==" alt="Bonus Card">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iI2ZmMDA0NCI+PC9yZWN0Pjx0ZXh0IHg9IjMiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPk1BWElNVU08L3RleHQ+PC9zdmc+" alt="Maximum">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzAwODBmZiI+PC9yZWN0Pjx0ZXh0IHg9IjgiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPldPUkxEPC90ZXh0Pjwvc3ZnPg==" alt="World">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzZjNzU3ZCI+PC9yZWN0Pjx0ZXh0IHg9IjEiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjciPkJBTktLQVJUPC90ZXh0Pjwvc3ZnPg==" alt="Bankkart">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzJiOWJkNCI+PC9yZWN0Pjx0ZXh0IHg9IjQiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPkFYRVNTPC90ZXh0Pjwvc3ZnPg==" alt="Axess">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzFlNmU4ZCI+PC9yZWN0Pjx0ZXh0IHg9IjgiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjciPlRST1k8L3RleHQ+PC9zdmc+" alt="Troy">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzAwNTZkMiI+PC9yZWN0Pjx0ZXh0IHg9IjEwIiB5PSIxNiIgZmlsbD0iI2ZmZiIgZm9udC1zaXplPSI4Ij5WSVNBIDwvdGV4dD48L3N2Zz4=" alt="Visa">
+                            </div>
+                            <div class="payment-card">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iI2ViMDAxYiI+PC9yZWN0Pjx0ZXh0IHg9IjUiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjciPk1BU1RFUjwvdGV4dD48L3N2Zz4=" alt="Mastercard">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side - Yamanof Logo -->
+                    <div class="footer-right">
+                        <div class="yamanof-logo">
+                            <div class="yamanof-icon">Y</div>
+                            <div class="yamanof-text">
+                                <div class="yamanof-title">Yamanof</div>
+                                <div class="yamanof-subtitle">Consultancy</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <img class="modal-image" id="modalImage" src="" alt="Büyük Görsel">
+            <button class="modal-nav prev" id="modalPrev">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M15.41 7.41L14 6L8 12L14 18L15.41 16.59L10.83 12Z"/>
+                </svg>
+            </button>
+            <button class="modal-nav next" id="modalNext">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M8.59 16.59L10 18L16 12L10 6L8.59 7.41L13.17 12Z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Contact Menu -->
+    <div class="mobile-contact-menu" id="mobileContactMenu">
+        <div class="mobile-contact-buttons">
+            <button class="mobile-contact-btn primary" id="mobileContactBtn">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                    <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.2c.27-.27.35-.67.24-1.02C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/>
+                </svg>
+                İletişim
+            </button>
+            <button class="mobile-contact-btn whatsapp" id="mobileWhatsappBtn">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.051 3.488"/>
+                </svg>
+                WhatsApp
+            </button>
+            <button class="mobile-contact-btn phone" id="mobilePhoneBtn">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                </svg>
+                Ara
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Details dropdown and other non-gallery functionality
+        const detailsBtn = document.getElementById('detailsBtn');
+        const detailsDropdown = document.getElementById('detailsDropdown');
+
+        // Details dropdown
+        detailsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = detailsDropdown.classList.contains('show');
+            detailsDropdown.classList.toggle('show');
+            detailsBtn.classList.toggle('active');
+        });
+
+        document.addEventListener('click', () => {
+            detailsDropdown.classList.remove('show');
+            detailsBtn.classList.remove('active');
+        });
+
+        detailsDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Icon buttons
+        document.querySelectorAll('.icon-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const label = btn.getAttribute('aria-label');
+                console.log(`${label} tıklandı`);
+            });
+        });
+
+        // Contact buttons
+        document.querySelectorAll('.contact-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const label = btn.getAttribute('aria-label');
+                if (label === 'WhatsApp') {
+                    window.open('https://wa.me/905324444203?text=Merhaba, bu ilanla ilgili bilgi almak istiyorum.', '_blank');
+                } else if (label === 'Telefon') {
+                    window.location.href = 'tel:+905324444203';
+                }
+            });
+        });
+
+        // Action buttons
+        document.querySelector('.btn-primary').addEventListener('click', () => {
+            alert('İletişime geçme seçeneklerini görebilirsiniz.');
+        });
+
+        document.querySelector('.tapview-btn').addEventListener('click', () => {
+            alert('Tapu görüntüleme özelliği açılacak...');
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        if (mobileToggle && navMenu) {
+            mobileToggle.addEventListener('click', () => {
+                mobileToggle.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        // Özellikler Section Functionality
+        // Feature tabs functionality
+        const featureTabs = document.querySelectorAll('.feature-tab');
+        const tabContents = {
+            'ulasim': document.getElementById('ulasimContent'),
+            'egitim': document.getElementById('egitimContent'),
+            'saglik': document.getElementById('saglikContent'),
+            'alisveris': document.getElementById('alisverisContent')
+        };
+
+        featureTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                
+                // Update active tab
+                featureTabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                
+                // Show corresponding content
+                Object.values(tabContents).forEach(content => {
+                    content.style.display = 'none';
+                });
+                if (tabContents[tabId]) {
+                    tabContents[tabId].style.display = 'flex';
+                }
+            });
+        });
+
+        // Map tabs functionality
+        const mapTabs = document.querySelectorAll('.map-tab');
+        const mapFrame = document.getElementById('mapFrame');
+        
+        mapTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const mapType = tab.dataset.map;
+                
+                // Update active map tab
+                mapTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Switch map type (basic implementation)
+                if (mapType === 'satellite') {
+                    mapFrame.src = mapFrame.src.replace('&maptype=roadmap', '').replace('&maptype=satellite', '') + '&maptype=satellite';
+                } else {
+                    mapFrame.src = mapFrame.src.replace('&maptype=satellite', '').replace('&maptype=roadmap', '') + '&maptype=roadmap';
+                }
+            });
+        });
+
+        // Footer functionality
+        const newsletterBtn = document.getElementById('newsletterBtn');
+        const newsletterEmail = document.getElementById('newsletterEmail');
+        
+        if (newsletterBtn && newsletterEmail) {
+            newsletterBtn.addEventListener('click', () => {
+                const email = newsletterEmail.value.trim();
+                if (email) {
+                    console.log('Newsletter subscription:', email);
+                    alert('Başarıyla abone oldunuz!');
+                    newsletterEmail.value = '';
+                } else {
+                    alert('Lütfen geçerli bir email adresi girin.');
+                }
+            });
+        }
+
+        // WhatsApp button functionality
+        document.querySelectorAll('.whatsapp-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const whatsappUrl = 'https://wa.me/905324444203?text=Merhaba, emlak ilanı hakkında bilgi almak istiyorum.';
+                window.open(whatsappUrl, '_blank');
+            });
+        });
+
+        // Mobile contact menu functionality
+        const mobileContactBtn = document.getElementById('mobileContactBtn');
+        const mobileWhatsappBtn = document.getElementById('mobileWhatsappBtn');
+        const mobilePhoneBtn = document.getElementById('mobilePhoneBtn');
+
+        if (mobileContactBtn) {
+            mobileContactBtn.addEventListener('click', () => {
+                alert('İletişime geçme seçeneklerini görebilirsiniz.');
+            });
+        }
+
+        if (mobileWhatsappBtn) {
+            mobileWhatsappBtn.addEventListener('click', () => {
+                const whatsappUrl = 'https://wa.me/905324444203?text=Merhaba, emlak ilanı hakkında bilgi almak istiyorum.';
+                window.open(whatsappUrl, '_blank');
+            });
+        }
+
+        if (mobilePhoneBtn) {
+            mobilePhoneBtn.addEventListener('click', () => {
+                window.location.href = 'tel:+905324444203';
+            });
+        }
+
+        // Image modal functionality
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.getElementById('modalClose');
+        const modalPrev = document.getElementById('modalPrev');
+        const modalNext = document.getElementById('modalNext');
+        let modalPhotosArray = [];
+        let modalCurrentIndex = 0;
+
+        function openImageModal(imageUrl, photos, currentIndex) {
+            modalPhotosArray = photos;
+            modalCurrentIndex = currentIndex;
+            modalImage.src = imageUrl;
+            imageModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            imageModal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function showModalImage(index) {
+            if (index < 0 || index >= modalPhotosArray.length) return;
+            modalCurrentIndex = index;
+            modalImage.src = modalPhotosArray[index].url;
+        }
+
+        if (modalClose) {
+            modalClose.addEventListener('click', closeImageModal);
+        }
+
+        if (modalPrev) {
+            modalPrev.addEventListener('click', () => {
+                const newIndex = modalCurrentIndex === 0 ? modalPhotosArray.length - 1 : modalCurrentIndex - 1;
+                showModalImage(newIndex);
+            });
+        }
+
+        if (modalNext) {
+            modalNext.addEventListener('click', () => {
+                const newIndex = modalCurrentIndex === modalPhotosArray.length - 1 ? 0 : modalCurrentIndex + 1;
+                showModalImage(newIndex);
+            });
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+
+        // Close modal by clicking outside
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                closeImageModal();
+            }
+        });
+
+        // Social media tracking
+        document.querySelectorAll('.social-icon').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.preventDefault();
+                const platform = icon.getAttribute('aria-label');
+                console.log(`Social media click: ${platform}`);
+                // Here you would typically add analytics tracking
+            });
+        });
+
+        // Footer link tracking
+        document.querySelectorAll('.footer-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const linkText = link.textContent;
+                console.log(`Footer link click: ${linkText}`);
+                // Here you would typically handle navigation or analytics
+            });
+        });
+
+        // ===== FIREBASE INTEGRATION FOR DETAIL PAGE ===== //
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhY-cgBNBGFd5o9e6l4_L4xYjOFAhyH0M",
+            authDomain: "emlaksende-8646a.firebaseapp.com",
+            databaseURL: "https://emlaksende-8646a-default-rtdb.firebaseio.com",
+            projectId: "emlaksende-8646a",
+            storageBucket: "emlaksende-8646a.firebasestorage.app",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abc123def456ghi789"
+        };
+
+        // Initialize Firebase
+        if (typeof firebase !== 'undefined') {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            
+            const database = firebase.database();
+            
+            // Get property ID from URL parameters
+            function getPropertyIdFromUrl() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('id');
+            }
+            
+            // Load property details from Firebase
+            function loadPropertyDetails() {
+                const propertyId = getPropertyIdFromUrl();
+                
+                if (!propertyId) {
+                    console.error('Property ID not found in URL');
+                    document.body.innerHTML = '<h1>İlan bulunamadı</h1><p>İlan ID\'si bulunamadı.</p>';
+                    return;
+                }
+                
+                console.log('Loading property details for ID:', propertyId);
+                
+                database.ref(`ilanlar/${propertyId}`).once('value')
+                    .then(async (snapshot) => {
+                        if (!snapshot.exists()) {
+                            document.body.innerHTML = '<h1>İlan bulunamadı</h1><p>Bu ilan artık mevcut değil.</p>';
+                            return;
+                        }
+                        
+                        const propertyData = snapshot.val();
+                        propertyData.id = propertyId;
+                        
+                        console.log('Loaded property data:', propertyData);
+                        await updatePageWithPropertyData(propertyData);
+                    })
+                    .catch((error) => {
+                        console.error('Error loading property details:', error);
+                        document.body.innerHTML = '<h1>Hata</h1><p>İlan yüklenirken bir hata oluştu.</p>';
+                    });
+            }
+            
+            // Update page content with property data
+            async function updatePageWithPropertyData(property) {
+                // Update page title
+                const pageTitle = document.querySelector('.page-title');
+                if (pageTitle) {
+                    pageTitle.textContent = property.baslik || 'İlan Detayı';
+                }
+                
+                // Update breadcrumb
+                const breadcrumbCity = document.getElementById('breadcrumbCity');
+                const breadcrumbDistrict = document.getElementById('breadcrumbDistrict');
+                const breadcrumbNeighborhood = document.getElementById('breadcrumbNeighborhood');
+                const breadcrumbTitle = document.getElementById('breadcrumbTitle');
+                
+                if (breadcrumbCity) breadcrumbCity.textContent = property.sehir ? property.sehir.charAt(0).toUpperCase() + property.sehir.slice(1) : 'Şehir';
+                if (breadcrumbDistrict) breadcrumbDistrict.textContent = property.ilce ? property.ilce.charAt(0).toUpperCase() + property.ilce.slice(1) : 'İlçe';
+                if (breadcrumbNeighborhood) breadcrumbNeighborhood.textContent = property.mahalle ? property.mahalle.charAt(0).toUpperCase() + property.mahalle.slice(1) : 'Mahalle';
+                if (breadcrumbTitle) breadcrumbTitle.textContent = property.baslik || 'İlan Detayı';
+                
+                // Update main title
+                const h1Title = document.querySelector('h1.page-title');
+                if (h1Title) {
+                    h1Title.textContent = property.baslik || 'İlan Detayı';
+                }
+                
+                // Update location
+                const locationElement = document.getElementById('propertyLocation');
+                if (locationElement) {
+                    const location = `${property.sehir ? property.sehir.charAt(0).toUpperCase() + property.sehir.slice(1) : ''}, ${property.ilce ? property.ilce.charAt(0).toUpperCase() + property.ilce.slice(1) : ''}`;
+                    locationElement.textContent = location;
+                }
+                
+                // Update price
+                const priceElement = document.getElementById('propertyPrice');
+                if (priceElement) {
+                    const formattedPrice = new Intl.NumberFormat('tr-TR').format(property.toplamFiyat || 0);
+                    priceElement.textContent = `${formattedPrice}₺`;
+                }
+                
+                // Update property details
+                await updatePropertyFeatures(property);
+                
+                // Update images
+                updatePropertyImages(property);
+                
+                // Update valuation panel
+                updateValuationPanel(property);
+                
+                // Update description section
+                updateDescriptionSection(property);
+                
+                // Update features section  
+                updateFeaturesSection(property);
+                
+                // Update environment section (Çevre)
+                updateEnvironmentSection(property);
+                
+                // Update map with location
+                updateMapWithLocation(property);
+            }
+            
+            // Update property features
+            async function updatePropertyFeatures(property) {
+                const featureRows = document.querySelectorAll('.feature-row');
+                
+                for (const row of featureRows) {
+                    const label = row.querySelector('.feature-label');
+                    const value = row.querySelector('.feature-value');
+                    
+                    if (!label || !value) continue;
+                    
+                    const labelText = label.textContent.trim();
+                    
+                    switch (labelText) {
+                        case 'İlan No':
+                            value.textContent = property.ilanNo || 'N/A';
+                            break;
+                        case 'İmar Durumu':
+                            value.textContent = await getImarDurumuText(property.imarDurumuId);
+                            break;
+                        case 'Metrekare':
+                            value.textContent = property.metrekare ? `${property.metrekare.toLocaleString('tr-TR')} m²` : 'N/A';
+                            break;
+                        case 'Metrekare Fiyat':
+                            value.textContent = property.metrekareFiyat ? `${property.metrekareFiyat.toLocaleString('tr-TR')}₺` : 'N/A';
+                            break;
+                        case 'Ada No':
+                            value.textContent = property.adaNo || 'N/A';
+                            break;
+                        case 'Parsel No':
+                            value.textContent = property.parselNo || 'N/A';
+                            break;
+                        case 'Kaks':
+                            value.textContent = await getKaksText(property.kaksId);
+                            break;
+                        case 'Gabari':
+                            value.textContent = await getGabariText(property.gabariId);
+                            break;
+                        case 'Tapu Durumu':
+                            value.textContent = await getTapuDurumuText(property.tapuDurumuId);
+                            break;
+                    }
+                }
+            }
+            
+            // Update property images
+            function updatePropertyImages(property) {
+                let photosArray = [];
+                
+                // Handle both array and object formats
+                if (property.photos) {
+                    if (Array.isArray(property.photos)) {
+                        photosArray = property.photos;
+                    } else if (typeof property.photos === 'object') {
+                        // Convert object to array and sort by order
+                        photosArray = Object.values(property.photos).sort((a, b) => (a.order || 0) - (b.order || 0));
+                    }
+                }
+                
+                if (photosArray.length === 0) {
+                    console.log('No photos found for this property');
+                    return;
+                }
+                
+                const mainImage = document.getElementById('mainImage');
+                const prevBtn = document.querySelector('.gallery-nav.prev');
+                const nextBtn = document.querySelector('.gallery-nav.next');
+                
+                // Find primary photo or use first one
+                const primaryPhoto = photosArray.find(photo => photo && photo.isPrimary) || photosArray[0];
+                let currentImageIndex = 0;
+                
+                if (mainImage && primaryPhoto) {
+                    mainImage.src = primaryPhoto.url;
+                    // Find index of primary photo
+                    currentImageIndex = photosArray.findIndex(photo => photo === primaryPhoto);
+                    if (currentImageIndex === -1) currentImageIndex = 0;
+                    
+                    // Add click listener to main image for modal
+                    mainImage.addEventListener('click', () => {
+                        openImageModal(primaryPhoto.url, photosArray, currentImageIndex);
+                    });
+                }
+                
+                // Update thumbnails
+                const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+                if (thumbnailsContainer) {
+                    thumbnailsContainer.innerHTML = '';
+                    
+                    photosArray.forEach((photo, index) => {
+                        if (!photo || !photo.url) return;
+                        
+                        const thumbnailButton = document.createElement('button');
+                        thumbnailButton.className = `thumbnail ${index === currentImageIndex ? 'active' : ''}`;
+                        thumbnailButton.setAttribute('data-image', photo.url);
+                        thumbnailButton.setAttribute('aria-pressed', index === currentImageIndex ? 'true' : 'false');
+                        
+                        thumbnailButton.innerHTML = `<img src="${photo.url}" alt="Görsel ${index + 1}">`;
+                        
+                        thumbnailButton.addEventListener('click', () => {
+                            setActiveImage(index);
+                        });
+                        
+                        // Add double click for modal
+                        thumbnailButton.addEventListener('dblclick', () => {
+                            openImageModal(photo.url, photosArray, index);
+                        });
+                        
+                        thumbnailsContainer.appendChild(thumbnailButton);
+                    });
+                }
+                
+                // Set active image function
+                function setActiveImage(index) {
+                    if (index < 0 || index >= photosArray.length) return;
+                    
+                    currentImageIndex = index;
+                    
+                    if (mainImage) {
+                        mainImage.src = photosArray[index].url;
+                        // Update click listener for modal
+                        mainImage.onclick = () => {
+                            openImageModal(photosArray[index].url, photosArray, index);
+                        };
+                    }
+                    
+                    // Update active state
+                    document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+                        thumb.classList.toggle('active', i === index);
+                        thumb.setAttribute('aria-pressed', i === index ? 'true' : 'false');
+                    });
+                }
+                
+                // Update navigation buttons
+                if (prevBtn) {
+                    prevBtn.onclick = () => {
+                        const newIndex = currentImageIndex === 0 ? photosArray.length - 1 : currentImageIndex - 1;
+                        setActiveImage(newIndex);
+                    };
+                }
+                
+                if (nextBtn) {
+                    nextBtn.onclick = () => {
+                        const newIndex = currentImageIndex === photosArray.length - 1 ? 0 : currentImageIndex + 1;
+                        setActiveImage(newIndex);
+                    };
+                }
+                
+                // Update keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        const newIndex = currentImageIndex === 0 ? photosArray.length - 1 : currentImageIndex - 1;
+                        setActiveImage(newIndex);
+                    } else if (e.key === 'ArrowRight') {
+                        const newIndex = currentImageIndex === photosArray.length - 1 ? 0 : currentImageIndex + 1;
+                        setActiveImage(newIndex);
+                    }
+                });
+                
+                // Make setActiveImage available globally for thumbnail clicks
+                window.setActiveImageForGallery = setActiveImage;
+            }
+            
+            // Update valuation panel
+            function updateValuationPanel(property) {
+                const forecastItems = document.querySelectorAll('.forecast-item');
+                
+                if (property.priceProjections && forecastItems.length >= 3) {
+                    // Year 1
+                    if (property.priceProjections.year1 && forecastItems[0]) {
+                        const priceSpan = forecastItems[0].querySelector('.forecast-price');
+                        if (priceSpan) {
+                            const formattedPrice = new Intl.NumberFormat('tr-TR').format(property.priceProjections.year1.projectedPrice || 0);
+                            priceSpan.textContent = `${formattedPrice}₺`;
+                        }
+                    }
+                    
+                    // Year 2
+                    if (property.priceProjections.year2 && forecastItems[1]) {
+                        const priceSpan = forecastItems[1].querySelector('.forecast-price');
+                        if (priceSpan) {
+                            const formattedPrice = new Intl.NumberFormat('tr-TR').format(property.priceProjections.year2.projectedPrice || 0);
+                            priceSpan.textContent = `${formattedPrice}₺`;
+                        }
+                    }
+                    
+                    // Year 3
+                    if (property.priceProjections.year3 && forecastItems[2]) {
+                        const priceSpan = forecastItems[2].querySelector('.forecast-price');
+                        if (priceSpan) {
+                            const formattedPrice = new Intl.NumberFormat('tr-TR').format(property.priceProjections.year3.projectedPrice || 0);
+                            priceSpan.textContent = `${formattedPrice}₺`;
+                        }
+                    }
+                }
+                
+                // Update chart with real data
+                updateChart(property);
+            }
+            
+            // Update chart with real data
+            function updateChart(property) {
+                const chartBars = document.querySelectorAll('.chart-bar');
+                
+                if (!property.priceProjections || chartBars.length === 0) return;
+                
+                // Get price projections for 3 years
+                const currentPrice = property.toplamFiyat || 0;
+                const year1Price = property.priceProjections.year1?.projectedPrice || currentPrice;
+                const year2Price = property.priceProjections.year2?.projectedPrice || currentPrice;
+                const year3Price = property.priceProjections.year3?.projectedPrice || currentPrice;
+                
+                // Find the maximum price for scaling
+                const maxPrice = Math.max(currentPrice, year1Price, year2Price, year3Price);
+                
+                // Update each bar height based on year data
+                chartBars.forEach((bar, index) => {
+                    let price;
+                    switch(index) {
+                        case 0: // 1. Yıl
+                            price = year1Price;
+                            break;
+                        case 1: // 2. Yıl
+                            price = year2Price;
+                            break;
+                        case 2: // 3. Yıl
+                            price = year3Price;
+                            break;
+                        default:
+                            price = currentPrice;
+                    }
+                    
+                    // Calculate percentage height
+                    const percentage = maxPrice > 0 ? (price / maxPrice) * 100 : 0;
+                    // Ensure minimum 20% height and maximum 90% height
+                    const height = Math.max(20, Math.min(90, percentage));
+                    bar.style.height = `${height}%`;
+                    
+                    // Add tooltip with price information
+                    const formattedPrice = new Intl.NumberFormat('tr-TR').format(price);
+                    bar.title = `${index + 1}. Yıl: ${formattedPrice}₺`;
+                });
+            }
+            
+            // Helper functions for lookup values
+            function getImarDurumuText(id) {
+                if (!id) return 'Belirtilmemiş';
+                // Firebase'den imar durumu lookup
+                return new Promise((resolve) => {
+                    database.ref(`imar_durumu/${id}`).once('value')
+                        .then(snapshot => {
+                            const data = snapshot.val();
+                            resolve(data ? data.name : 'Belirtilmemiş');
+                        })
+                        .catch(() => resolve('Belirtilmemiş'));
+                });
+            }
+            
+            function getKaksText(id) {
+                if (!id) return 'Belirtilmemiş';
+                // Firebase'den kaks lookup
+                return new Promise((resolve) => {
+                    database.ref(`kaks/${id}`).once('value')
+                        .then(snapshot => {
+                            const data = snapshot.val();
+                            resolve(data ? data.value : 'Belirtilmemiş');
+                        })
+                        .catch(() => resolve('Belirtilmemiş'));
+                });
+            }
+            
+            function getGabariText(id) {
+                if (!id) return 'Belirtilmemiş';
+                // Firebase'den gabari lookup
+                return new Promise((resolve) => {
+                    database.ref(`gabari/${id}`).once('value')
+                        .then(snapshot => {
+                            const data = snapshot.val();
+                            resolve(data ? data.value : 'Belirtilmemiş');
+                        })
+                        .catch(() => resolve('Belirtilmemiş'));
+                });
+            }
+            
+            function getTapuDurumuText(id) {
+                if (!id) return 'Belirtilmemiş';
+                // Firebase'den tapu durumu lookup
+                return new Promise((resolve) => {
+                    database.ref(`tapu_durumu/${id}`).once('value')
+                        .then(snapshot => {
+                            const data = snapshot.val();
+                            resolve(data ? data.name : 'Belirtilmemiş');
+                        })
+                        .catch(() => resolve('Belirtilmemiş'));
+                });
+            }
+            
+            // Update description section
+            function updateDescriptionSection(property) {
+                const descriptionCard = document.getElementById('dynamicDescription');
+                if (!descriptionCard) return;
+                
+                // Use the aciklama field from Firebase, or show default
+                const description = property.aciklama || '<p>Bu ilan için henüz açıklama eklenmemiş.</p>';
+                
+                console.log('Updating description with:', description);
+                
+                // Directly insert the HTML content (since it contains HTML tags)
+                descriptionCard.innerHTML = description;
+            }
+            
+            // Update features section (Alt yapı, Konum, Genel Özellikler)
+            function updateFeaturesSection(property) {
+                console.log('Updating features with property data:', property);
+                
+                // Update Alt yapı (Infrastructure)
+                updateInfrastructureFeatures(property.altyapi_ozellikleri || {});
+                
+                // Update Konum (Location)
+                updateLocationFeatures(property.konum_ozellikleri || {});
+                
+                // Update Genel Özellikler (General Features)
+                updateGeneralFeatures(property.genel_ozellikler || {});
+            }
+            
+            // Update infrastructure features
+            function updateInfrastructureFeatures(altyapi) {
+                const infrastructureMap = {
+                    'Elektrik': altyapi.elektrik,
+                    'Sanayi Elektriği': altyapi.sanayi_elektrik,
+                    'Su': altyapi.su,
+                    'Telefon': altyapi.telefon,
+                    'Doğalgaz': altyapi.doganlaz, // Firebase: doganlaz
+                    'Kanalizasyon': altyapi.kanalizasyon,
+                    'Arıtma': altyapi.aritma, // Firebase: aritma
+                    'Sondaj & Kuyu': altyapi.sondaj_kuyu,
+                    'Zemin Etüdü': altyapi.zemin_etudu,
+                    'Yolu Açılmış': altyapi.yolu_acilmis, // Firebase: yolu_acilmis
+                    'Yolu Açılmamış': altyapi.yolu_var === false, // Firebase: yolu_var
+                    'Yolu Yok': altyapi.yolu_var === false
+                };
+                
+                updateFeatureItems('Alt yapı', infrastructureMap);
+            }
+            
+            // Update location features  
+            function updateLocationFeatures(konum) {
+                console.log('🏠 KONUM ÖZELLIK GÜNCELLEME BAŞLADI');
+                console.log('📍 TRUE OLAN DEĞERLERİ:', {
+                    ana_yola_yakin: konum.ana_yola_yakin === true,
+                    hastaneye_yakin: konum.hastaneye_yakin === true
+                });
+                
+                // ✅ HTML'deki SPAN TEXT ile birebir eşleşen mapping
+                const locationMap = {
+                    'Anayola Yakın': konum.ana_yola_yakin,           // Firebase: ana_yola_yakin
+                    'Denize Sıfır': konum.denize_sifir,             // Firebase: denize_sifir  
+                    'İtfaiye Yakın': konum.itfaiyeye_yakin,         // Firebase: itfaiyeye_yakin
+                    'Havalimanı Yakın': konum.havalimanina_yakin,   // Firebase: havalimanina_yakin
+                    'Toplu Ulaşıma Yakın': konum.toplu_tasimaya_yakin, // Firebase: toplu_tasimaya_yakin
+                    'Denize Yakın': konum.denize_yakin,             // Firebase: denize_yakin
+                    'Hastane Yakın': konum.hastaneye_yakin,         // Firebase: hastaneye_yakin
+                    'Su Kaynağına Yakın': konum.su_kaynagina_yakin  // Firebase: su_kaynagina_yakin
+                };
+                
+                updateFeatureItems('Konum', locationMap);
+            }
+            
+            // Update general features
+            function updateGeneralFeatures(genel) {
+                const generalMap = {
+                    'İfrazlı': genel.ifrazli,
+                    'Parselli': genel.parselli,
+                    'Projeli': genel.projeli,
+                    'Köşe Parselli': genel.kose_parselli
+                };
+                
+                updateFeatureItems('Genel Özellikler', generalMap);
+            }
+            
+            // Helper function to update feature items
+            function updateFeatureItems(groupTitle, featureMap) {
+                console.log(`🔍 Looking for group: "${groupTitle}"`);
+                console.log('📊 Feature map:', featureMap);
+                
+                // Find the feature group by title
+                const groupTitles = document.querySelectorAll('.feature-group-title');
+                let targetGroup = null;
+                
+                groupTitles.forEach(title => {
+                    const titleText = title.textContent.trim();
+                    console.log(`📋 Found group title: "${titleText}"`);
+                    if (titleText === groupTitle) {
+                        targetGroup = title.closest('.feature-group');
+                        console.log(`✅ Target group found for: "${groupTitle}"`);
+                    }
+                });
+                
+                if (!targetGroup) {
+                    console.error(`❌ No target group found for: "${groupTitle}"`);
+                    return;
+                }
+                
+                // Find all feature items in this group
+                const featureItems = targetGroup.querySelectorAll('.feature-item');
+                console.log(`🔗 Found ${featureItems.length} feature items in "${groupTitle}"`);
+                
+                featureItems.forEach((item, index) => {
+                    const span = item.querySelector('span');
+                    if (!span) return;
+                    
+                    const featureName = span.textContent.trim();
+                    const icon = item.querySelector('.feature-icon');
+                    
+                    console.log(`🏷️ Processing feature: "${featureName}"`);
+                    
+                    if (featureMap.hasOwnProperty(featureName)) {
+                        const isAvailable = featureMap[featureName];
+                        
+                        console.log(`🔧 PROCESSING: ${featureName}`);
+                        console.log(`   Raw value: ${featureMap[featureName]}`);
+                        console.log(`   Type: ${typeof featureMap[featureName]}`);
+                        console.log(`   Is Available: ${isAvailable}`);
+                        console.log(`   Strict equals true: ${featureMap[featureName] === true}`);
+                        console.log(`   Boolean conversion: ${Boolean(featureMap[featureName])}`);
+                        
+                        // Update icon class and SVG content
+                        if (icon) {
+                            console.log(`   Icon found for: ${featureName}`);
+                            icon.classList.remove('available', 'unavailable');
+                            icon.classList.add(isAvailable ? 'available' : 'unavailable');
+                            
+                            // Update SVG content based on availability
+                            if (isAvailable) {
+                                // Green checkmark
+                                icon.innerHTML = `
+                                    <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <path d="m5 9 2 2 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                                `;
+                                console.log(`   ✅ Updated to GREEN checkmark`);
+                            } else {
+                                // Gray X mark
+                                icon.innerHTML = `
+                                    <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <path d="m6 6 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/>
+                                `;
+                                console.log(`   ❌ Updated to GRAY X mark`);
+                            }
+                            
+                            console.log(`   Final class: ${icon.className}`);
+                        } else {
+                            console.log(`   ⚠️ No icon found for: ${featureName}`);
+                        }
+                        
+                        console.log(`✅ ${groupTitle} - ${featureName}: ${isAvailable ? 'AVAILABLE ✓' : 'UNAVAILABLE ✗'}`);
+                    } else {
+                        console.log(`⚠️ Feature "${featureName}" not found in map for group "${groupTitle}"`);
+                        console.log(`   Available keys: ${Object.keys(featureMap).join(', ')}`);
+                    }
+                });
+            }
+            
+            // Update environment section (Çevre)
+            function updateEnvironmentSection(property) {
+                console.log('🌍 Updating environment section with property:', property);
+                
+                // Get cevreler data
+                const cevreler = property.cevreler || {};
+                
+                if (Object.keys(cevreler).length === 0) {
+                    console.log('❌ No cevreler data found');
+                    return;
+                }
+                
+                console.log('🏘️ Cevreler data:', cevreler);
+                
+                // Group environments by category
+                const categorizedEnvironments = groupEnvironmentsByCategory(cevreler);
+                console.log('📂 Categorized environments:', categorizedEnvironments);
+                
+                // Update tabs and content
+                updateEnvironmentTabs(categorizedEnvironments);
+                updateEnvironmentContent(categorizedEnvironments);
+            }
+            
+            // Group environments by category
+            function groupEnvironmentsByCategory(cevreler) {
+                const categories = {};
+                
+                Object.values(cevreler).forEach(cevre => {
+                    if (!cevre.active) return; // Only include active environments
+                    
+                    const categoryName = cevre.kategoriName || 'Diğer';
+                    
+                    if (!categories[categoryName]) {
+                        categories[categoryName] = [];
+                    }
+                    
+                    categories[categoryName].push({
+                        name: cevre.name,
+                        distance: cevre.distance,
+                        kategoriId: cevre.kategoriId
+                    });
+                });
+                
+                return categories;
+            }
+            
+            // Update environment tabs
+            function updateEnvironmentTabs(categorizedEnvironments) {
+                const tabsContainer = document.querySelector('.feature-tabs');
+                if (!tabsContainer) return;
+                
+                console.log('🏷️ Updating environment tabs');
+                
+                // Clear existing tabs
+                tabsContainer.innerHTML = '';
+                
+                const categories = Object.keys(categorizedEnvironments);
+                
+                categories.forEach((categoryName, index) => {
+                    const tabButton = document.createElement('button');
+                    tabButton.className = `feature-tab ${index === 0 ? 'active' : ''}`;
+                    tabButton.setAttribute('role', 'tab');
+                    tabButton.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+                    tabButton.setAttribute('data-tab', categoryName.toLowerCase().replace(/\s+/g, ''));
+                    
+                    // Get appropriate icon for category
+                    const iconSVG = getCategoryIcon(categoryName);
+                    
+                    tabButton.innerHTML = `
+                        ${iconSVG}
+                        <span>${categoryName}</span>
+                    `;
+                    
+                    // Add click handler
+                    tabButton.addEventListener('click', () => {
+                        showEnvironmentCategory(categoryName, categorizedEnvironments);
+                    });
+                    
+                    tabsContainer.appendChild(tabButton);
+                });
+            }
+            
+            // Update environment content
+            function updateEnvironmentContent(categorizedEnvironments) {
+                const tabContent = document.getElementById('tabContent');
+                if (!tabContent) return;
+                
+                console.log('📋 Updating environment content');
+                
+                // Show first category by default
+                const firstCategory = Object.keys(categorizedEnvironments)[0];
+                if (firstCategory) {
+                    showEnvironmentCategory(firstCategory, categorizedEnvironments);
+                }
+            }
+            
+            // Show specific environment category
+            function showEnvironmentCategory(categoryName, categorizedEnvironments) {
+                const tabContent = document.getElementById('tabContent');
+                if (!tabContent) return;
+                
+                console.log(`🎯 Showing category: ${categoryName}`);
+                
+                const environments = categorizedEnvironments[categoryName] || [];
+                
+                // Update active tab
+                document.querySelectorAll('.feature-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                    tab.setAttribute('aria-selected', 'false');
+                });
+                
+                const activeTab = document.querySelector(`[data-tab="${categoryName.toLowerCase().replace(/\s+/g, '')}"]`);
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                    activeTab.setAttribute('aria-selected', 'true');
+                }
+                
+                // Create content
+                if (environments.length === 0) {
+                    tabContent.innerHTML = `
+                        <div style="padding: 20px; text-align: center; color: var(--muted);">
+                            Bu kategori için çevre bilgisi bulunmamaktadır.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const contentHTML = `
+                    <div class="distance-list">
+                        ${environments.map(env => `
+                            <div class="distance-item">
+                                <span class="distance-label">${env.name}</span>
+                                <span class="distance-value">${env.distance} Km</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                tabContent.innerHTML = contentHTML;
+            }
+            
+            // Get category icon
+            function getCategoryIcon(categoryName) {
+                const icons = {
+                    'Ulaşım': `<svg class="feature-tab-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM4.5 8a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
+                    </svg>`,
+                    'Eğitim Kurumları': `<svg class="feature-tab-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8.5 1a.5.5 0 0 0-1 0v1.293l-6.146 6.147a.5.5 0 0 0 .708.708L8 3.207l5.938 5.941a.5.5 0 0 0 .708-.708L8.5 2.293V1z"/>
+                    </svg>`,
+                    'Sağlık Kurumları': `<svg class="feature-tab-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM4.5 8a.5.5 0 0 1 .5-.5h2.5V5a.5.5 0 0 1 1 0v2.5H11a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V8.5H5a.5.5 0 0 1-.5-.5z"/>
+                    </svg>`,
+                    'Alışveriş': `<svg class="feature-tab-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                    </svg>`
+                };
+                
+                return icons[categoryName] || `<svg class="feature-tab-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM4.5 8a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
+                </svg>`;
+            }
+            
+            // Update map with location
+            function updateMapWithLocation(property) {
+                const mapFrame = document.getElementById('mapFrame');
+                if (!mapFrame || !property.location) return;
+                
+                const lat = property.location.lat;
+                const lng = property.location.lng;
+                
+                if (!lat || !lng) {
+                    console.log('No valid coordinates found for property');
+                    return;
+                }
+                
+                console.log(`Updating map with coordinates: ${lat}, ${lng}`);
+                
+                // Create Google Maps embed URL with marker
+                const mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyAw3Z28goiYhTyQxY_zx5eEcx_9I9wMkR4&q=${lat},${lng}&zoom=15&maptype=roadmap`;
+                
+                mapFrame.src = mapUrl;
+                
+                // Update map tabs functionality to maintain location
+                const mapTabs = document.querySelectorAll('.map-tab');
+                mapTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const mapType = tab.dataset.map;
+                        
+                        // Update active map tab
+                        mapTabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        
+                        // Switch map type while keeping location
+                        let newMapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyAw3Z28goiYhTyQxY_zx5eEcx_9I9wMkR4&q=${lat},${lng}&zoom=15`;
+                        
+                        if (mapType === 'satellite') {
+                            newMapUrl += '&maptype=satellite';
+                        } else {
+                            newMapUrl += '&maptype=roadmap';
+                        }
+                        
+                        mapFrame.src = newMapUrl;
+                    });
+                });
+            }
+            
+            // Load property details when page loads
+            document.addEventListener('DOMContentLoaded', () => {
+                loadPropertyDetails();
+            });
+            
+        } else {
+            console.error('Firebase SDK not loaded');
+        }
+    </script>
+</body>
+</html>
