@@ -2084,6 +2084,43 @@
                                         </div>
                                     </div>
                                     
+                                    <!-- Row 8.5: Arsa Sınırları -->
+                                    <div style="margin-top: 2rem;">
+                                        <label style="display: block; margin-bottom: 1rem; color: var(--text-primary); font-weight: 500; font-size: 1.1rem;">🗺️ Arsa Sınırları</label>
+                                        <div style="background: var(--main-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                                            <div style="margin-bottom: 1rem;">
+                                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                                                    Arsa sınırlarını belirlemek için haritada noktalar tıklayın. En az 3 nokta gerekli.
+                                                </p>
+                                                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                                    <button type="button" id="startBoundaryBtn" onclick="startBoundaryDrawing()" style="background: var(--primary-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">
+                                                        🎯 Sınır Çizmeye Başla
+                                                    </button>
+                                                    <button type="button" id="clearBoundaryBtn" onclick="clearBoundary()" style="background: var(--danger-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; display: none;">
+                                                        🗑️ Sınırları Temizle
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Sınır Noktaları Listesi -->
+                                            <div id="boundaryPointsList" style="display: none;">
+                                                <h5 style="margin: 0 0 0.5rem 0; color: var(--text-primary); font-size: 0.95rem;">Sınır Noktaları:</h5>
+                                                <div id="boundaryPointsContainer" style="max-height: 200px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; background: white;">
+                                                    <!-- Noktalar buraya dinamik olarak eklenecek -->
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Sınır Haritası -->
+                                            <div style="margin-top: 1rem;">
+                                                <div id="boundaryMap" style="height: 300px; border: 1px solid var(--border-color); border-radius: 8px; position: relative;">
+                                                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-secondary); text-align: center; z-index: 1;">
+                                                        Sınır çizimi için harita yükleniyor...
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <!-- Row 9: Öngörülen Fiyat Artışı -->
                                     <div style="margin-top: 2rem;">
                                         <label style="display: block; margin-bottom: 1rem; color: var(--text-primary); font-weight: 500; font-size: 1.1rem;">📈 Öngörülen Fiyat Artışı</label>
@@ -4496,6 +4533,9 @@
                     
                     // Harita konumunu temizle
                     clearMapLocation();
+                    
+                    // Arsa sınırlarını temizle
+                    clearBoundary();
                 }
             }
         }
@@ -4738,6 +4778,8 @@
                 cevreler: getSelectedCevreler(),
                 // İlan Açıklaması
                 aciklama: getEditorContent(),
+                // Arsa Sınırları
+                arsa_sinirlari: getBoundaryData(),
                 createdAt: firebase.database.ServerValue.TIMESTAMP,
                 status: 'aktif'
             };
@@ -4976,6 +5018,11 @@
                             }
                         }, 1000);
                         
+                        // Arsa sınırlarını yükle
+                        if (ilan.arsa_sinirlari && Array.isArray(ilan.arsa_sinirlari)) {
+                            loadBoundaryData(ilan.arsa_sinirlari);
+                        }
+                        
                         // Çevreleri yükle
                         loadCevreler();
                         setTimeout(() => {
@@ -5107,6 +5154,8 @@
                 cevreler: getSelectedCevreler(),
                 // İlan Açıklaması
                 aciklama: getEditorContent(),
+                // Arsa Sınırları
+                arsa_sinirlari: getBoundaryData(),
                 updatedAt: firebase.database.ServerValue.TIMESTAMP,
                 status: 'aktif'
             };
@@ -6905,6 +6954,258 @@
         `;
         document.head.appendChild(projeStyles);
 
+        // ===== ARSA SINIRLARI FONKSİYONLARI =====
+        
+        let boundaryMap = null;
+        let boundaryPolygon = null;
+        let boundaryMarkers = [];
+        let boundaryPoints = [];
+        let isDrawingBoundary = false;
+        
+        // Sınır çizmeye başla
+        function startBoundaryDrawing() {
+            if (!boundaryMap) {
+                initBoundaryMap();
+            }
+            
+            isDrawingBoundary = true;
+            document.getElementById('startBoundaryBtn').style.display = 'none';
+            document.getElementById('clearBoundaryBtn').style.display = 'inline-block';
+            document.getElementById('boundaryPointsList').style.display = 'block';
+            
+            // Harita tıklama olayını etkinleştir
+            boundaryMap.addListener('click', addBoundaryPoint);
+            
+            showAlert('ilanAlert', 'Haritada noktalar tıklayarak arsa sınırlarını belirleyin.', 'info');
+        }
+        
+        // Sınırları temizle
+        function clearBoundary() {
+            boundaryPoints = [];
+            boundaryMarkers.forEach(marker => marker.setMap(null));
+            boundaryMarkers = [];
+            
+            if (boundaryPolygon) {
+                boundaryPolygon.setMap(null);
+                boundaryPolygon = null;
+            }
+            
+            document.getElementById('boundaryPointsContainer').innerHTML = '';
+            document.getElementById('startBoundaryBtn').style.display = 'inline-block';
+            document.getElementById('clearBoundaryBtn').style.display = 'none';
+            document.getElementById('boundaryPointsList').style.display = 'none';
+            
+            isDrawingBoundary = false;
+            
+            // Harita tıklama olayını kaldır
+            if (boundaryMap) {
+                google.maps.event.clearListeners(boundaryMap, 'click');
+            }
+        }
+        
+        // Sınır noktası ekle
+        function addBoundaryPoint(event) {
+            if (!isDrawingBoundary) return;
+            
+            const lat = event.latLng.lat();
+            const lng = event.latLng.lng();
+            
+            boundaryPoints.push({ lat, lng });
+            
+            // Marker ekle
+            const marker = new google.maps.Marker({
+                position: event.latLng,
+                map: boundaryMap,
+                title: `Nokta ${boundaryPoints.length}`,
+                icon: {
+                    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="10" cy="10" r="6" fill="#142A45" stroke="#FFFFFF" stroke-width="2"/>
+                            <text x="10" y="13" text-anchor="middle" fill="white" font-size="8" font-weight="bold">${boundaryPoints.length}</text>
+                        </svg>
+                    `),
+                    scaledSize: new google.maps.Size(20, 20),
+                    anchor: new google.maps.Point(10, 10)
+                }
+            });
+            
+            boundaryMarkers.push(marker);
+            
+            // Nokta listesini güncelle
+            updateBoundaryPointsList();
+            
+            // Polygon çiz (en az 3 nokta varsa)
+            if (boundaryPoints.length >= 3) {
+                drawBoundaryPolygon();
+            }
+        }
+        
+        // Sınır noktaları listesini güncelle
+        function updateBoundaryPointsList() {
+            const container = document.getElementById('boundaryPointsContainer');
+            container.innerHTML = '';
+            
+            boundaryPoints.forEach((point, index) => {
+                const pointDiv = document.createElement('div');
+                pointDiv.style.cssText = `
+                    display: flex; 
+                    justify-content: space-between; 
+                    align-items: center; 
+                    padding: 0.5rem; 
+                    border-bottom: 1px solid #eee; 
+                    font-size: 0.85rem;
+                `;
+                
+                pointDiv.innerHTML = `
+                    <span><strong>Nokta ${index + 1}:</strong> ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}</span>
+                    <button onclick="removeBoundaryPoint(${index})" style="background: #dc3545; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Sil</button>
+                `;
+                
+                container.appendChild(pointDiv);
+            });
+        }
+        
+        // Sınır noktası kaldır
+        function removeBoundaryPoint(index) {
+            boundaryPoints.splice(index, 1);
+            
+            // Marker'ları temizle ve yeniden çiz
+            boundaryMarkers.forEach(marker => marker.setMap(null));
+            boundaryMarkers = [];
+            
+            // Yeni marker'lar ekle
+            boundaryPoints.forEach((point, i) => {
+                const marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(point.lat, point.lng),
+                    map: boundaryMap,
+                    title: `Nokta ${i + 1}`,
+                    icon: {
+                        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                            <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="10" cy="10" r="6" fill="#142A45" stroke="#FFFFFF" stroke-width="2"/>
+                                <text x="10" y="13" text-anchor="middle" fill="white" font-size="8" font-weight="bold">${i + 1}</text>
+                            </svg>
+                        `),
+                        scaledSize: new google.maps.Size(20, 20),
+                        anchor: new google.maps.Point(10, 10)
+                    }
+                });
+                boundaryMarkers.push(marker);
+            });
+            
+            updateBoundaryPointsList();
+            
+            if (boundaryPoints.length >= 3) {
+                drawBoundaryPolygon();
+            } else if (boundaryPolygon) {
+                boundaryPolygon.setMap(null);
+                boundaryPolygon = null;
+            }
+        }
+        
+        // Sınır polygon'ını çiz
+        function drawBoundaryPolygon() {
+            if (boundaryPolygon) {
+                boundaryPolygon.setMap(null);
+            }
+            
+            const polygonCoords = boundaryPoints.map(point => 
+                new google.maps.LatLng(point.lat, point.lng)
+            );
+            
+            boundaryPolygon = new google.maps.Polygon({
+                paths: polygonCoords,
+                strokeColor: '#142A45',
+                strokeOpacity: 0.8,
+                strokeWeight: 3,
+                fillColor: '#142A45',
+                fillOpacity: 0.2,
+                map: boundaryMap
+            });
+            
+            // Haritayı polygon'a sığdır
+            const bounds = new google.maps.LatLngBounds();
+            polygonCoords.forEach(coord => bounds.extend(coord));
+            boundaryMap.fitBounds(bounds);
+        }
+        
+        // Sınır haritasını başlat
+        function initBoundaryMap() {
+            const mapElement = document.getElementById('boundaryMap');
+            if (!mapElement) return;
+            
+            // Varsayılan konum (İstanbul)
+            const defaultCenter = new google.maps.LatLng(41.0082, 28.9784);
+            
+            boundaryMap = new google.maps.Map(mapElement, {
+                center: defaultCenter,
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: true,
+                streetViewControl: false,
+                fullscreenControl: false
+            });
+            
+            // Eğer ilan konumu varsa, haritayı oraya taşı
+            const latInput = document.getElementById('ilanLats');
+            const lngInput = document.getElementById('ilanLangs');
+            
+            if (latInput.value && lngInput.value) {
+                const center = new google.maps.LatLng(
+                    parseFloat(latInput.value),
+                    parseFloat(lngInput.value)
+                );
+                boundaryMap.setCenter(center);
+            }
+        }
+        
+        // Sınır verilerini al
+        function getBoundaryData() {
+            return boundaryPoints.length >= 3 ? boundaryPoints : null;
+        }
+        
+        // Sınır verilerini yükle (düzenleme için)
+        function loadBoundaryData(boundaryData) {
+            if (!boundaryData || !Array.isArray(boundaryData)) return;
+            
+            clearBoundary();
+            
+            if (!boundaryMap) {
+                initBoundaryMap();
+            }
+            
+            boundaryPoints = [...boundaryData];
+            
+            // Marker'ları ekle
+            boundaryPoints.forEach((point, index) => {
+                const marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(point.lat, point.lng),
+                    map: boundaryMap,
+                    title: `Nokta ${index + 1}`,
+                    icon: {
+                        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                            <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="10" cy="10" r="6" fill="#142A45" stroke="#FFFFFF" stroke-width="2"/>
+                                <text x="10" y="13" text-anchor="middle" fill="white" font-size="8" font-weight="bold">${index + 1}</text>
+                            </svg>
+                        `),
+                        scaledSize: new google.maps.Size(20, 20),
+                        anchor: new google.maps.Point(10, 10)
+                    }
+                });
+                boundaryMarkers.push(marker);
+            });
+            
+            updateBoundaryPointsList();
+            
+            if (boundaryPoints.length >= 3) {
+                drawBoundaryPolygon();
+            }
+            
+            document.getElementById('clearBoundaryBtn').style.display = 'inline-block';
+            document.getElementById('boundaryPointsList').style.display = 'block';
+        }
+        
         // Global fonksiyonları dışa aktar
         window.showAddProjeForm = showAddProjeForm;
         window.hideProjeForm = hideProjeForm;
@@ -6916,6 +7217,9 @@
         window.dragStart = dragStart;
         window.dropIlan = dropIlan;
         window.removeIlanFromProje = removeIlanFromProje;
+        window.startBoundaryDrawing = startBoundaryDrawing;
+        window.clearBoundary = clearBoundary;
+        window.removeBoundaryPoint = removeBoundaryPoint;
     </script>
 </body>
 </html>

@@ -274,7 +274,7 @@
             display: none;
             margin-top: 40px;
             margin-bottom: 30px;
-            justify-content: center;
+            justify-content: flex-start;
             width: 100%;
         }
 
@@ -294,6 +294,7 @@
             font-size: 14px;
             min-width: 160px;
             justify-content: center;
+            position: relative;
         }
 
         .hamburger-btn:hover {
@@ -312,6 +313,7 @@
             flex-direction: column;
             gap: 4px;
             align-items: center;
+            transition: all 0.3s ease;
         }
 
         .hamburger-line-filter {
@@ -325,6 +327,19 @@
         .hamburger-btn:hover .hamburger-line-filter {
             background: #ffffff;
             transform: scale(1.1);
+        }
+
+        /* Açılı kapanır animasyon */
+        .hamburger-btn.active .hamburger-line-filter:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger-btn.active .hamburger-line-filter:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.active .hamburger-line-filter:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
         }
 
         /* Layout */
@@ -536,7 +551,7 @@
             display: flex;
             flex-direction: column;
             gap: 0;
-            width: 218px;
+            width: 240px;
             margin: 0 auto;
         }
 
@@ -548,8 +563,8 @@
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;
             cursor: pointer;
-            width: 218px;
-            height: 218px;
+            width: 240px;
+            height: 180px;
             margin: 0 auto;
             position: relative;
         }
@@ -561,7 +576,7 @@
         /* Property Image */
         .property-image {
             position: relative;
-            height: 218px;
+            height: 180px;
             overflow: hidden;
         }
 
@@ -1179,12 +1194,12 @@
             .sidebar { 
                 display: none; 
             }
-            .mobile-filter-toggle { 
-                display: flex; 
-                justify-content: center; 
-                margin-top: 40px;
-                margin-bottom: 40px;
-            }
+                         .mobile-filter-toggle { 
+                 display: flex; 
+                 justify-content: flex-start; 
+                 margin-top: 40px;
+                 margin-bottom: 40px;
+             }
             .page-header {
                 text-align: center;
                 margin-bottom: 30px;
@@ -1222,16 +1237,16 @@
             }
             
             .property-card {
-                width: 211px;
-                height: 211px;
+                width: 354px;
+                height: 266px;
             }
             
             .property-wrapper {
-                width: 211px;
+                width: 354px;
             }
             
             .property-image {
-                height: 211px;
+                height: 266px;
             }
         }
         @media (max-width: 767px) {
@@ -1366,16 +1381,16 @@
             }
             
             .property-card {
-                width: 203px;
-                height: 203px;
+                width: 322px;
+                height: 242px;
             }
             
             .property-wrapper {
-                width: 203px;
+                width: 322px;
             }
             
             .property-image {
-                height: 203px;
+                height: 242px;
             }
             
             .property-content {
@@ -1672,26 +1687,30 @@
                 </div>
             </div>
 
-            <div class="filter-group">
-                <div class="group-label">Diğer Alanlar</div>
-                <div class="form-row">
-                    <select class="form-select">
-                        <option value="">İmar Durumu</option>
-                        <option value="imarli">İmarlı</option>
-                        <option value="tarla">Tarla</option>
-                        <option value="bag-bahce">Bağ & Bahçe</option>
-                    </select>
-                    <input type="text" class="form-input" placeholder="Metrekare">
-                    <input type="text" class="form-input" placeholder="Ada No">
-                    <input type="text" class="form-input" placeholder="Parsel No">
-                    <input type="text" class="form-input" placeholder="Kaks (Emsal)">
-                    <select class="form-select">
-                        <option value="">Tapu Durumu</option>
-                        <option value="mustakil">Müstakil Tapu</option>
-                        <option value="hisseli">Hisseli Tapu</option>
-                    </select>
-                </div>
-            </div>
+                         <div class="filter-group">
+                 <div class="group-label">Diğer Alanlar</div>
+                 <div class="form-row">
+                     <select class="form-select">
+                         <option value="">İmar Durumu</option>
+                         <option value="imarli">İmarlı</option>
+                         <option value="tarla">Tarla</option>
+                         <option value="bag-bahce">Bağ & Bahçe</option>
+                     </select>
+                     <input type="text" class="form-input" placeholder="Metrekare">
+                     <input type="text" class="form-input" placeholder="Ada No">
+                     <input type="text" class="form-input" placeholder="Parsel No">
+                     <input type="text" class="form-input" placeholder="Kaks (Emsal)">
+                     <select class="form-select">
+                         <option value="">Tapu Durumu</option>
+                         <option value="mustakil">Müstakil Tapu</option>
+                         <option value="hisseli">Hisseli Tapu</option>
+                     </select>
+                 </div>
+             </div>
+
+             <button class="save-filters-btn" id="mobileSaveFiltersBtn">
+                 Filtreleri Kaydet
+             </button>
         </div>
     </div>
 
@@ -1896,31 +1915,34 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile filter toggle
-            const mobileFilterToggle = document.getElementById('mobileFilterToggle');
-            const mobileDrawer = document.getElementById('mobileDrawer');
-            const drawerClose = document.getElementById('drawerClose');
+                         // Mobile filter toggle
+             const mobileFilterToggle = document.getElementById('mobileFilterToggle');
+             const mobileDrawer = document.getElementById('mobileDrawer');
+             const drawerClose = document.getElementById('drawerClose');
 
-            if (mobileFilterToggle && mobileDrawer) {
-                mobileFilterToggle.addEventListener('click', function() {
-                    mobileDrawer.classList.add('open');
-                });
-            }
+             if (mobileFilterToggle && mobileDrawer) {
+                 mobileFilterToggle.addEventListener('click', function() {
+                     mobileDrawer.classList.add('open');
+                     mobileFilterToggle.classList.add('active');
+                 });
+             }
 
-            if (drawerClose && mobileDrawer) {
-                drawerClose.addEventListener('click', function() {
-                    mobileDrawer.classList.remove('open');
-                });
-            }
+                         if (drawerClose && mobileDrawer) {
+                 drawerClose.addEventListener('click', function() {
+                     mobileDrawer.classList.remove('open');
+                     mobileFilterToggle.classList.remove('active');
+                 });
+             }
 
-            // Close drawer when clicking outside
-            if (mobileDrawer) {
-                mobileDrawer.addEventListener('click', function(e) {
-                    if (e.target === mobileDrawer) {
-                        mobileDrawer.classList.remove('open');
-                    }
-                });
-            }
+             // Close drawer when clicking outside
+             if (mobileDrawer) {
+                 mobileDrawer.addEventListener('click', function(e) {
+                     if (e.target === mobileDrawer) {
+                         mobileDrawer.classList.remove('open');
+                         mobileFilterToggle.classList.remove('active');
+                     }
+                 });
+             }
 
             // Property button functionality (removing old inspect buttons since they don't exist anymore)
             // The new property buttons have onclick="window.open('detay.html', '_blank')" directly in HTML
@@ -1945,50 +1967,68 @@
                 });
             });
             
-            // Save filters button
-            const saveFiltersBtn = document.getElementById('saveFiltersBtn');
-            if (saveFiltersBtn) {
-                saveFiltersBtn.addEventListener('click', function() {
-                    // Collect all filter values
-                    currentFilters = {};
-                    
-                    // Location filters
-                    const city = document.querySelector('select[aria-label="Şehir"]').value;
-                    const district = document.querySelector('select[aria-label="İlçe"]').value;
-                    const neighborhood = document.querySelector('select[aria-label="Mahalle"]').value;
-                    
-                    // Price filters
-                    const minPrice = document.querySelector('input[aria-label="Minimum fiyat"]').value;
-                    const maxPrice = document.querySelector('input[aria-label="Maksimum fiyat"]').value;
-                    
-                    // Other filters
-                    const imarDurumu = document.querySelector('select[aria-label="İmar Durumu"]').value;
-                    const metrekare = document.querySelector('input[aria-label="Metrekare"]').value;
-                    const adaNo = document.querySelector('input[aria-label="Ada No"]').value;
-                    const parselNo = document.querySelector('input[aria-label="Parsel No"]').value;
-                    const kaks = document.querySelector('input[aria-label="Kaks (Emsal)"]').value;
-                    const tapuDurumu = document.querySelector('select[aria-label="Tapu Durumu"]').value;
-                    
-                    if (city) currentFilters.city = city;
-                    if (district) currentFilters.district = district;
-                    if (neighborhood) currentFilters.neighborhood = neighborhood;
-                    if (minPrice) currentFilters.minPrice = minPrice;
-                    if (maxPrice) currentFilters.maxPrice = maxPrice;
-                    if (imarDurumu) currentFilters.imarDurumu = imarDurumu;
-                    if (metrekare) currentFilters.metrekare = metrekare;
-                    if (adaNo) currentFilters.adaNo = adaNo;
-                    if (parselNo) currentFilters.parselNo = parselNo;
-                    if (kaks) currentFilters.kaks = kaks;
-                    if (tapuDurumu) currentFilters.tapuDurumu = tapuDurumu;
-                    
-                    console.log('Applied filters:', currentFilters);
-                    
-                    // Apply filters to properties
-                    applyFilters();
-                    
-                    alert('Filtreler uygulandı!');
-                });
-            }
+                         // Save filters button (desktop)
+             const saveFiltersBtn = document.getElementById('saveFiltersBtn');
+             if (saveFiltersBtn) {
+                 saveFiltersBtn.addEventListener('click', function() {
+                     collectAndApplyFilters();
+                 });
+             }
+
+             // Save filters button (mobile)
+             const mobileSaveFiltersBtn = document.getElementById('mobileSaveFiltersBtn');
+             if (mobileSaveFiltersBtn) {
+                 mobileSaveFiltersBtn.addEventListener('click', function() {
+                     collectAndApplyFilters();
+                     // Close mobile drawer after applying filters
+                     if (mobileDrawer) {
+                         mobileDrawer.classList.remove('open');
+                         if (mobileFilterToggle) {
+                             mobileFilterToggle.classList.remove('active');
+                         }
+                     }
+                 });
+             }
+
+             // Function to collect and apply filters
+             function collectAndApplyFilters() {
+                 // Collect all filter values
+                 currentFilters = {};
+                 
+                 // Try to get values from both desktop and mobile forms
+                 const citySelect = document.querySelector('select[aria-label="Şehir"]') || document.querySelector('.mobile-drawer select:nth-of-type(1)');
+                 const districtSelect = document.querySelector('select[aria-label="İlçe"]') || document.querySelector('.mobile-drawer select:nth-of-type(2)');
+                 const neighborhoodSelect = document.querySelector('select[aria-label="Mahalle"]') || document.querySelector('.mobile-drawer select:nth-of-type(3)');
+                 
+                 const minPriceInput = document.querySelector('input[aria-label="Minimum fiyat"]') || document.querySelector('.mobile-drawer input[placeholder="₺ Min"]');
+                 const maxPriceInput = document.querySelector('input[aria-label="Maksimum fiyat"]') || document.querySelector('.mobile-drawer input[placeholder="₺ Max"]');
+                 
+                 const imarDurumuSelect = document.querySelector('select[aria-label="İmar Durumu"]') || document.querySelector('.mobile-drawer select:nth-of-type(4)');
+                 const metrekareInput = document.querySelector('input[aria-label="Metrekare"]') || document.querySelector('.mobile-drawer input[placeholder="Metrekare"]');
+                 const adaNoInput = document.querySelector('input[aria-label="Ada No"]') || document.querySelector('.mobile-drawer input[placeholder="Ada No"]');
+                 const parselNoInput = document.querySelector('input[aria-label="Parsel No"]') || document.querySelector('.mobile-drawer input[placeholder="Parsel No"]');
+                 const kaksInput = document.querySelector('input[aria-label="Kaks (Emsal)"]') || document.querySelector('.mobile-drawer input[placeholder="Kaks (Emsal)"]');
+                 const tapuDurumuSelect = document.querySelector('select[aria-label="Tapu Durumu"]') || document.querySelector('.mobile-drawer select:nth-of-type(5)');
+                 
+                 if (citySelect && citySelect.value) currentFilters.city = citySelect.value;
+                 if (districtSelect && districtSelect.value) currentFilters.district = districtSelect.value;
+                 if (neighborhoodSelect && neighborhoodSelect.value) currentFilters.neighborhood = neighborhoodSelect.value;
+                 if (minPriceInput && minPriceInput.value) currentFilters.minPrice = minPriceInput.value;
+                 if (maxPriceInput && maxPriceInput.value) currentFilters.maxPrice = maxPriceInput.value;
+                 if (imarDurumuSelect && imarDurumuSelect.value) currentFilters.imarDurumu = imarDurumuSelect.value;
+                 if (metrekareInput && metrekareInput.value) currentFilters.metrekare = metrekareInput.value;
+                 if (adaNoInput && adaNoInput.value) currentFilters.adaNo = adaNoInput.value;
+                 if (parselNoInput && parselNoInput.value) currentFilters.parselNo = parselNoInput.value;
+                 if (kaksInput && kaksInput.value) currentFilters.kaks = kaksInput.value;
+                 if (tapuDurumuSelect && tapuDurumuSelect.value) currentFilters.tapuDurumu = tapuDurumuSelect.value;
+                 
+                 console.log('Applied filters:', currentFilters);
+                 
+                 // Apply filters to properties
+                 applyFilters();
+                 
+                 alert('Filtreler uygulandı!');
+             }
             
             // Mobile menu toggle for header
             const mobileToggle = document.getElementById('mobileToggle');
