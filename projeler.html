@@ -184,10 +184,11 @@
         .mobile-toggle {
             display: none;
             flex-direction: column;
-            background: none;
+            gap: 4px;
+            background: transparent;
+            padding: 8px;
             border: none;
             cursor: pointer;
-            padding: 5px;
         }
 
         /* Hide mobile search on desktop */
@@ -195,13 +196,55 @@
             display: none;
         }
 
+        /* Mobile Search Styles */
+        .mobile-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .mobile-search-icon {
+            width: 18px;
+            height: 18px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .mobile-search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .mobile-search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
         .hamburger-line {
-            width: 25px;
+            width: 24px;
             height: 3px;
-            background-color: white;
-            margin: 3px 0;
+            background-color: #ffffff;
             border-radius: 2px;
             transition: all 0.3s ease;
+        }
+
+        /* Hamburger to X animation */
+        .mobile-toggle.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-toggle.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-toggle.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
         }
 
         /* ===== MAIN CONTENT ===== */
@@ -781,19 +824,25 @@
             }
             
             .nav-menu {
-                display: none;
+                position: fixed;
+                top: 80px;
+                right: -300px; /* Menüyü tamamen gizlemek için sağa kaydır */
+                width: 280px;
+                height: 320px;
+                background-color: rgba(20, 39, 78, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 20px;
+                gap: 16px;
+                transition: right 0.3s ease;
+                border-radius: 12px;
+                display: flex;
+                z-index: 999;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             }
 
             .nav-menu.active {
-                display: flex;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: #14274e;
-                flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                right: 20px; /* Menü açıldığında sağdan 20px içeride göster */
             }
 
             .page-title {
@@ -1380,10 +1429,50 @@
         // Mobile menu toggle
         const mobileToggle = document.getElementById('mobileToggle');
         const navMenu = document.getElementById('navMenu');
-
+        
         if (mobileToggle && navMenu) {
-            mobileToggle.addEventListener('click', () => {
+            mobileToggle.addEventListener('click', function() {
+                // Toggle active class on mobile toggle button
+                mobileToggle.classList.toggle('active');
+                
+                // Toggle active class on navigation menu
                 navMenu.classList.toggle('active');
+                
+                // Update aria-expanded for accessibility
+                const isExpanded = navMenu.classList.contains('active');
+                mobileToggle.setAttribute('aria-expanded', isExpanded);
+            });
+
+            // Close mobile menu when clicking on a link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    mobileToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const isClickInsideNav = navMenu.contains(event.target);
+                const isClickOnToggle = mobileToggle.contains(event.target);
+                
+                if (!isClickInsideNav && !isClickOnToggle && navMenu.classList.contains('active')) {
+                    mobileToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    mobileToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Handle Escape key to close mobile menu
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                    mobileToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    mobileToggle.setAttribute('aria-expanded', 'false');
+                    mobileToggle.focus();
+                }
             });
         }
 

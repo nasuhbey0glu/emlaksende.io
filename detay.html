@@ -625,6 +625,38 @@
             }
         }
 
+        /* Mobile Toggle Button Styles */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: transparent;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hamburger-line {
+            width: 24px;
+            height: 3px;
+            background-color: #ffffff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hamburger to X animation */
+        .mobile-toggle.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-toggle.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-toggle.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
         @media (max-width: 767px) {
             .mobile-toggle {
                 display: flex;
@@ -651,23 +683,25 @@
             
             /* Mobile Navigation Menu */
             .nav-menu {
-                position: fixed !important;
-                top: 80px !important;
-                left: 0 !important;
-                width: 100% !important;
-                background-color: #14274e !important;
-                flex-direction: column !important;
-                padding: 20px !important;
-                gap: 16px !important;
-                transform: translateX(-100%) !important;
-                transition: transform 0.3s ease !important;
-                border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-                display: flex !important;
-                z-index: 999 !important;
+                position: fixed;
+                top: 80px;
+                right: -300px; /* Menüyü tamamen gizlemek için sağa kaydır */
+                width: 280px;
+                height: 320px;
+                background-color: rgba(20, 39, 78, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 20px;
+                gap: 16px;
+                transition: right 0.3s ease;
+                border-radius: 12px;
+                display: flex;
+                z-index: 999;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             }
             
             .nav-menu.active {
-                transform: translateX(0) !important;
+                right: 20px; /* Menü açıldığında sağdan 20px içeride göster */
             }
             
             .nav-link {
@@ -1573,6 +1607,22 @@
                 display: none !important;
             }
             
+            .mobile-toggle {
+                display: none !important;
+            }
+            
+            .nav-menu {
+                position: static !important;
+                transform: none !important;
+                background-color: transparent !important;
+                flex-direction: row !important;
+                padding: 0 !important;
+                gap: 24px !important;
+                display: flex !important;
+                width: auto !important;
+                border-top: none !important;
+            }
+            
             body {
                 padding-bottom: 0;
             }
@@ -2402,9 +2452,48 @@
         const navMenu = document.getElementById('navMenu');
         
         if (mobileToggle && navMenu) {
-            mobileToggle.addEventListener('click', () => {
+            mobileToggle.addEventListener('click', function() {
+                // Toggle active class on mobile toggle button
                 mobileToggle.classList.toggle('active');
+                
+                // Toggle active class on navigation menu
                 navMenu.classList.toggle('active');
+                
+                // Update aria-expanded for accessibility
+                const isExpanded = navMenu.classList.contains('active');
+                mobileToggle.setAttribute('aria-expanded', isExpanded);
+            });
+
+            // Close mobile menu when clicking on a link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    mobileToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const isClickInsideNav = navMenu.contains(event.target);
+                const isClickOnToggle = mobileToggle.contains(event.target);
+                
+                if (!isClickInsideNav && !isClickOnToggle && navMenu.classList.contains('active')) {
+                    mobileToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    mobileToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Handle Escape key to close mobile menu
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                    mobileToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    mobileToggle.setAttribute('aria-expanded', 'false');
+                    mobileToggle.focus();
+                }
             });
         }
 
