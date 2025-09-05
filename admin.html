@@ -322,6 +322,38 @@
             color: var(--text-secondary);
         }
 
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            min-width: 160px;
+            z-index: 1000;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background: var(--border-color);
+        }
+
+        .dropdown-item svg {
+            color: var(--text-secondary);
+        }
+
         /* Main Body */
         .main-body {
             flex: 1;
@@ -1541,10 +1573,235 @@
             font-style: italic;
             color: var(--text-secondary);
         }
+
+        /* ==================== LOGIN SCREEN STYLES ==================== */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+        }
+
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 0.5rem 0;
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            background: var(--main-bg);
+            color: var(--text-primary);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .login-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.875rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .button-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-button.loading .button-text {
+            opacity: 0;
+        }
+
+        .login-button.loading .button-loading {
+            display: block;
+        }
+
+        /* Login Alert Styles */
+        .login-container .alert {
+            margin: 0;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .login-container .alert.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .login-container .alert.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 1rem;
+            }
+            
+            .login-card {
+                padding: 2rem;
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="admin-container">
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <svg width="48" height="48" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <h1 class="login-title">Admin Paneli</h1>
+                <p class="login-subtitle">Devam etmek için giriş yapın</p>
+            </div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail" class="form-label">E-posta</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="ornek@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword" class="form-label">Şifre</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="Şifrenizi girin" required>
+                </div>
+                
+                <div id="loginAlert" class="alert" style="display: none;"></div>
+                
+                <button type="submit" class="login-button" id="loginButton">
+                    <span class="button-text">Giriş Yap</span>
+                    <div class="button-loading" style="display: none;">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="admin-container" id="adminContainer" style="display: none;">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -1683,11 +1940,24 @@
                         <input type="text" class="search-input" placeholder="Ara...">
                     </div>
                     
-                    <div class="user-menu">
-                        <div class="user-avatar">A</div>
+                    <div class="user-menu" onclick="toggleUserDropdown()">
+                        <div class="user-avatar" id="userAvatar">A</div>
                         <div class="user-info">
-                            <div class="user-name">Admin</div>
+                            <div class="user-name" id="userName">Admin</div>
                             <div class="user-role">Yönetici</div>
+                        </div>
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" style="color: var(--text-secondary);">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown" id="userDropdown" style="display: none;">
+                        <div class="dropdown-item" onclick="logout()">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+                            </svg>
+                            Çıkış Yap
                         </div>
                     </div>
                 </div>
@@ -1705,12 +1975,12 @@
                             </svg>
                         </div>
                         <div class="card-title">Toplam İlan</div>
-                        <div class="card-value">156</div>
+                        <div class="card-value" id="toplamIlan">0</div>
                         <div class="card-change positive">
                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            +12% bu ay
+                            <span id="toplamIlanDegisim">+0% bu ay</span>
                         </div>
                     </div>
 
@@ -1721,12 +1991,12 @@
                             </svg>
                         </div>
                         <div class="card-title">Aktif İlan</div>
-                        <div class="card-value">134</div>
+                        <div class="card-value" id="aktifIlan">0</div>
                         <div class="card-change positive">
                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            +8% bu ay
+                            <span id="aktifIlanDegisim">+0% bu ay</span>
                         </div>
                     </div>
 
@@ -1737,12 +2007,12 @@
                             </svg>
                         </div>
                         <div class="card-title">Bekleyen İlan</div>
-                        <div class="card-value">18</div>
+                        <div class="card-value" id="bekleyenIlan">0</div>
                         <div class="card-change negative">
                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            -5% bu ay
+                            <span id="bekleyenIlanDegisim">0% bu ay</span>
                         </div>
                     </div>
 
@@ -1754,12 +2024,12 @@
                             </svg>
                         </div>
                         <div class="card-title">Reddedilen İlan</div>
-                        <div class="card-value">4</div>
+                        <div class="card-value" id="reddedilenIlan">0</div>
                         <div class="card-change negative">
                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            -2% bu ay
+                            <span id="reddedilenIlanDegisim">0% bu ay</span>
                         </div>
                     </div>
                 </div>
@@ -2018,24 +2288,15 @@
                                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
                                         <div>
                                             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Şehir *</label>
-                                            <select id="ilanSehir" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;" onchange="loadIlceler()">
-                                                <option value="">Şehir Seçin</option>
-                                                <option value="istanbul">İstanbul</option>
-                                                <option value="ankara">Ankara</option>
-                                                <option value="izmir">İzmir</option>
-                                            </select>
+                                            <input type="text" id="ilanSehir" placeholder="Şehir giriniz" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
                                         </div>
                                         <div>
                                             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">İlçe *</label>
-                                            <select id="ilanIlce" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;" onchange="loadMahalleler()" disabled>
-                                                <option value="">İlçe Seçin</option>
-                                            </select>
+                                            <input type="text" id="ilanIlce" placeholder="İlçe giriniz" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
                                         </div>
                                         <div>
                                             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Mahalle *</label>
-                                            <select id="ilanMahalle" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;" disabled>
-                                                <option value="">Mahalle Seçin</option>
-                                            </select>
+                                            <input type="text" id="ilanMahalle" placeholder="Mahalle giriniz" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
                                         </div>
                                     </div>
                                     
@@ -2571,6 +2832,26 @@
                                         </div>
                                     </div>
                                     
+                                    <!-- Row 9: Tapu Görseli -->
+                                    <div style="margin-top: 2rem;">
+                                        <label style="display: block; margin-bottom: 1rem; color: var(--text-primary); font-weight: 500; font-size: 1.1rem;">📄 Tapu Görseli</label>
+                                        <div style="background: var(--main-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                                            <div style="margin-bottom: 1rem;">
+                                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                                                    Tapu belgesinin görselini yükleyin. (JPG, PNG formatında, maksimum 5MB)
+                                                </p>
+                                                <input type="file" id="ilanTapuGorseli" accept="image/*" onchange="previewTapuImage()" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
+                                            </div>
+                                            <div id="tapuPreview" style="display: none; margin-top: 1rem;">
+                                                <p style="color: var(--text-primary); font-weight: 500; margin-bottom: 0.5rem;">Önizleme:</p>
+                                                <img id="tapuPreviewImg" style="max-width: 200px; max-height: 150px; border: 1px solid var(--border-color); border-radius: 8px;">
+                                                <button type="button" onclick="removeTapuImage()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: var(--error-color); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">
+                                                    Kaldır
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <!-- Form Actions -->
                                     <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
                                         <button type="button" class="btn btn-secondary" onclick="hideIlanForm()">
@@ -2645,15 +2926,75 @@
                     'musteri-yorumlari': `
                         <div class="content-header">
                             <h2 class="content-title">Müşteri Yorumları</h2>
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" onclick="showAddTestimonialForm()">
                                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
                                 </svg>
-                                Yeni Yorum Ekle
+                                Yeni Video Yorum Ekle
                             </button>
                         </div>
-                        <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
-                            <p>Müşteri yorumlarını buradan yönetebilir, yeni yorumlar ekleyebilir ve mevcut yorumları düzenleyebilirsiniz.</p>
+                        
+                        <div id="testimonialAlert" class="alert"></div>
+                        
+                        <!-- Add/Edit Form -->
+                        <div id="testimonialForm" style="display: none; margin-bottom: 2rem; padding: 1.5rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <h3 style="margin-bottom: 1rem; color: var(--text-primary);" id="testimonialFormTitle">Yeni Video Yorum Ekle</h3>
+                            
+                            <div style="display: grid; gap: 1rem; margin-bottom: 1rem;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Müşteri Adı</label>
+                                        <input type="text" id="customerNameInput" placeholder="Müşteri adını girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.9rem;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Meslek</label>
+                                        <input type="text" id="customerJobInput" placeholder="Mesleğini girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.9rem;">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Video Dosyası (Max 10MB)</label>
+                                    <input type="file" id="testimonialVideoInput" accept="video/*" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.9rem;">
+                                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Desteklenen formatlar: MP4, AVI, MOV, WMV (Maksimum 10MB)</small>
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Müşteri Fotoğrafı (Opsiyonel)</label>
+                                    <input type="file" id="customerPhotoInput" accept="image/*" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.9rem;">
+                                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Desteklenen formatlar: JPG, PNG, GIF (Maksimum 5MB)</small>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 1rem; align-items: end;">
+                                <button class="btn btn-primary" onclick="saveTestimonial()" id="saveTestimonialBtn">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Kaydet
+                                </button>
+                                <button class="btn btn-secondary" onclick="hideTestimonialForm()">İptal</button>
+                            </div>
+                            
+                            <!-- Upload Progress -->
+                            <div id="testimonialUploadProgress" style="display: none; margin-top: 1rem;">
+                                <div style="background: var(--border-color); border-radius: 4px; height: 8px; overflow: hidden;">
+                                    <div id="testimonialProgressBar" style="background: var(--primary-color); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+                                </div>
+                                <p id="testimonialProgressText" style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">Yükleniyor...</p>
+                            </div>
+                        </div>
+                        
+                        <!-- List -->
+                        <div style="background: var(--card-bg); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
+                            <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); background: var(--main-bg);">
+                                <h3 style="margin: 0; color: var(--text-primary);">Mevcut Video Yorumlar</h3>
+                            </div>
+                            <div id="testimonialList" style="padding: 1rem;">
+                                <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                    <div class="loading"></div>
+                                    <p style="margin-top: 1rem;">Video yorumlar yükleniyor...</p>
+                                </div>
+                            </div>
                         </div>
                     `,
                     'imar-durumlari': `
@@ -3137,6 +3478,230 @@
                                 </div>
                             </div>
                         </div>
+                    `,
+                    'soru-cevap': `
+                        <div class="content-header">
+                            <h2 class="content-title">Soru-Cevap Yönetimi</h2>
+                            <button class="btn btn-primary" onclick="showAddSoruCevapForm()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                                Yeni Soru-Cevap Ekle
+                            </button>
+                        </div>
+                        
+                        <div id="soruCevapAlert" class="alert"></div>
+                        
+                        <!-- Add/Edit Form -->
+                        <div id="soruCevapForm" style="display: none; margin-bottom: 2rem;">
+                            <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                    <h3 style="margin: 0; color: var(--text-primary);" id="soruCevapFormTitle">Yeni Soru-Cevap Ekle</h3>
+                                    <button class="btn btn-secondary" onclick="hideSoruCevapForm()">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Kapat
+                                    </button>
+                                </div>
+                                
+                                <!-- Form Content -->
+                                <form id="soruCevapFormContent" style="display: grid; gap: 1.5rem;">
+                                    <!-- Kategori Seçimi -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Kategori *</label>
+                                        <div style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
+                                            <select id="soruCevapKategori" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;" onchange="handleKategoriChange()">
+                                                <option value="">Kategori Seçin veya Yeni Girin</option>
+                                                <option value="genel">Genel</option>
+                                                <option value="kurulum">Kurulum</option>
+                                                <option value="destek">Destek</option>
+                                                <option value="custom">+ Yeni Kategori Ekle</option>
+                                            </select>
+                                            <input type="text" id="soruCevapKategoriCustom" placeholder="Yeni kategori" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; display: none;">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Soru Başlığı -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Soru Başlığı *</label>
+                                        <input type="text" id="soruCevapBaslik" placeholder="Soru başlığını girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                    </div>
+                                    
+                                    <!-- Cevap -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Cevap *</label>
+                                        <textarea id="soruCevapCevap" placeholder="Cevabı girin..." style="width: 100%; min-height: 150px; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; resize: vertical; font-family: inherit;"></textarea>
+                                    </div>
+                                    
+                                    <!-- Form Actions -->
+                                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                        <button type="button" class="btn btn-secondary" onclick="hideSoruCevapForm()">
+                                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            İptal
+                                        </button>
+                                        <button type="button" class="btn btn-primary" onclick="saveSoruCevap()">
+                                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Kaydet
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Soru-Cevap Listesi -->
+                        <div style="background: var(--card-bg); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
+                            <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); background: var(--main-bg);">
+                                <h3 style="margin: 0; color: var(--text-primary);">Mevcut Soru-Cevaplar</h3>
+                            </div>
+                            <div id="soruCevapList" style="padding: 1rem;">
+                                <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                    <div class="loading"></div>
+                                    <p style="margin-top: 1rem;">Soru-cevaplar yükleniyor...</p>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    'hakkimizda': `
+                        <div class="content-header">
+                            <h2 class="content-title">Hakkımızda Yönetimi</h2>
+                        </div>
+                        
+                        <div id="hakkimizdaAlert" class="alert"></div>
+                        
+                        <!-- Hakkımızda Formu -->
+                        <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+                            <h3 style="margin: 0 0 2rem 0; color: var(--text-primary);">Hakkımızda Açıklaması</h3>
+                            
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    📝 Açıklama Metni
+                                </label>
+                                <textarea 
+                                    id="hakkimizdaText" 
+                                    placeholder="Hakkımızda açıklamanızı buraya yazın..."
+                                    style="width: 100%; min-height: 200px; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; line-height: 1.6; resize: vertical; font-family: inherit;"
+                                ></textarea>
+                                <div style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="hakkimizdaCharCount">0</span> karakter
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                                <button type="button" class="btn btn-secondary" onclick="loadHakkimizdaData()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Yenile
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="saveHakkimizdaData()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Kaydet
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Önizleme -->
+                        <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+                            <h3 style="margin: 0 0 1.5rem 0; color: var(--text-primary);">Önizleme</h3>
+                            <div id="hakkimizdaPreview" style="padding: 1.5rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color); color: var(--text-secondary); font-style: italic;">
+                                Henüz açıklama metni girilmedi...
+                            </div>
+                        </div>
+                    `,
+                    'kullanicilar': `
+                        <div class="content-header">
+                            <h2 class="content-title">Kullanıcı Yönetimi</h2>
+                            <button class="btn btn-primary" onclick="showAddUserForm()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                                Yeni Kullanıcı Ekle
+                            </button>
+                        </div>
+                        
+                        <div id="userAlert" class="alert"></div>
+                        
+                        <!-- Add/Edit Form -->
+                        <div id="userForm" style="display: none; margin-bottom: 2rem;">
+                            <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                    <h3 style="margin: 0; color: var(--text-primary);" id="userFormTitle">Yeni Kullanıcı Ekle</h3>
+                                    <button class="btn btn-secondary" onclick="hideUserForm()">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Kapat
+                                    </button>
+                                </div>
+                                
+                                <!-- Form Content -->
+                                <form id="userFormContent" style="display: grid; gap: 1.5rem;">
+                                    <!-- Row 1: İsim ve Soyisim -->
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                        <div>
+                                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">İsim *</label>
+                                            <input type="text" id="userFirstName" placeholder="İsim girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                        </div>
+                                        <div>
+                                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Soyisim *</label>
+                                            <input type="text" id="userLastName" placeholder="Soyisim girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Row 2: Email -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">E-posta *</label>
+                                        <input type="email" id="userEmail" placeholder="ornek@email.com" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                    </div>
+                                    
+                                    <!-- Row 3: Şifre -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Şifre *</label>
+                                        <input type="password" id="userPassword" placeholder="Şifre girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                    </div>
+                                    
+                                    <!-- Row 4: Şifre Tekrar -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Şifre Tekrar *</label>
+                                        <input type="password" id="userPasswordConfirm" placeholder="Şifreyi tekrar girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                    </div>
+                                    
+                                    <!-- Form Actions -->
+                                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                        <button type="button" class="btn btn-secondary" onclick="hideUserForm()">
+                                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            İptal
+                                        </button>
+                                        <button type="button" class="btn btn-primary" onclick="saveUser()">
+                                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Kullanıcıyı Kaydet
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- User List -->
+                        <div id="userList" style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+                            <h3 style="margin: 0 0 1.5rem 0; color: var(--text-primary);">Kullanıcı Listesi</h3>
+                            <div id="userListContent">
+                                <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                    <div class="loading"></div>
+                                    <p style="margin-top: 1rem;">Kullanıcılar yükleniyor...</p>
+                                </div>
+                            </div>
+                        </div>
                     `
                 };
 
@@ -3178,6 +3743,9 @@
                         case 'cevreler-kategorileri':
                             loadCevreKategoriList();
                             break;
+                        case 'musteri-yorumlari':
+                            loadTestimonialList();
+                            break;
                         case 'cevreler':
                             loadCevreList();
                             break;
@@ -3189,6 +3757,16 @@
                             break;
                         case 'proje-yonetimi':
                             loadProjeList();
+                            break;
+                        case 'hakkimizda':
+                            loadHakkimizdaData();
+                            setupHakkimizdaHandlers();
+                            break;
+                        case 'soru-cevap':
+                            loadSoruCevapList();
+                            break;
+                        case 'kullanicilar':
+                            loadUsers();
                             break;
                     }
                 }, 100);
@@ -3236,6 +3814,28 @@
 
             // Initialize file upload functionality
             initializeFileUpload();
+            
+            // Load dashboard statistics
+            loadDashboardStats();
+            
+            // Setup login form
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+            
+            // Check login status on page load
+            checkLoginStatus();
+            
+            // Close user dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                const userMenu = document.querySelector('.user-menu');
+                const userDropdown = document.getElementById('userDropdown');
+                
+                if (userMenu && userDropdown && !userMenu.contains(e.target)) {
+                    userDropdown.style.display = 'none';
+                }
+            });
         });
 
         // File Upload Functions
@@ -4627,74 +5227,75 @@
             });
         }
 
-        // Şehir İlçe Mahalle
-        const sehirIlceData = {
-            istanbul: {
-                name: 'İstanbul',
-                ilceler: {
-                    besiktas: { name: 'Beşiktaş', mahalleler: ['Levent', 'Etiler', 'Bebek', 'Ortaköy'] },
-                    sisli: { name: 'Şişli', mahalleler: ['Mecidiyeköy', 'Gayrettepe', 'Fülya'] },
-                    kadikoy: { name: 'Kadıköy', mahalleler: ['Moda', 'Caferağa', 'Hasanpaşa'] }
-                }
-            },
-            ankara: {
-                name: 'Ankara',
-                ilceler: {
-                    cankaya: { name: 'Çankaya', mahalleler: ['Kızılay', 'Bahçelievler', 'GOP'] },
-                    kecioren: { name: 'Keçiören', mahalleler: ['Etlik', 'Kuşcağız', 'Ovacık'] }
-                }
-            }
-        };
+        // Şehir, İlçe, Mahalle artık input alanları olarak kullanılıyor
 
-        function loadIlceler() {
-            const sehirSelect = document.getElementById('ilanSehir');
-            const ilceSelect = document.getElementById('ilanIlce');
-            const mahalleSelect = document.getElementById('ilanMahalle');
-            const selectedSehir = sehirSelect.value;
+        // Tapu görseli önizleme
+        function previewTapuImage() {
+            const fileInput = document.getElementById('ilanTapuGorseli');
+            const preview = document.getElementById('tapuPreview');
+            const previewImg = document.getElementById('tapuPreviewImg');
             
-            ilceSelect.innerHTML = '<option value="">İlçe Seçin</option>';
-            mahalleSelect.innerHTML = '<option value="">Mahalle Seçin</option>';
-            mahalleSelect.disabled = true;
-            
-            if (selectedSehir && sehirIlceData[selectedSehir]) {
-                ilceSelect.disabled = false;
-                const ilceler = sehirIlceData[selectedSehir].ilceler;
-                Object.keys(ilceler).forEach(ilceKey => {
-                    const option = document.createElement('option');
-                    option.value = ilceKey;
-                    option.textContent = ilceler[ilceKey].name;
-                    ilceSelect.appendChild(option);
-                });
-            } else {
-                ilceSelect.disabled = true;
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                
+                // Dosya boyutu kontrolü (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showGenericAlert('ilanAlert', 'Tapu görseli maksimum 5MB olabilir.', 'error');
+                    fileInput.value = '';
+                    return;
+                }
+                
+                // Dosya tipi kontrolü
+                if (!file.type.startsWith('image/')) {
+                    showGenericAlert('ilanAlert', 'Sadece resim dosyaları yüklenebilir.', 'error');
+                    fileInput.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
             }
         }
-
-        function loadMahalleler() {
-            const sehirSelect = document.getElementById('ilanSehir');
-            const ilceSelect = document.getElementById('ilanIlce');
-            const mahalleSelect = document.getElementById('ilanMahalle');
-            const selectedSehir = sehirSelect.value;
-            const selectedIlce = ilceSelect.value;
+        
+        // Tapu görselini kaldır
+        function removeTapuImage() {
+            document.getElementById('ilanTapuGorseli').value = '';
+            document.getElementById('tapuPreview').style.display = 'none';
+        }
+        
+        // Tapu görseli yükleme
+        async function uploadTapuImage() {
+            const fileInput = document.getElementById('ilanTapuGorseli');
+            if (!fileInput.files || !fileInput.files[0]) {
+                return null;
+            }
             
-            mahalleSelect.innerHTML = '<option value="">Mahalle Seçin</option>';
+            const file = fileInput.files[0];
+            const fileName = `tapu-${Date.now()}-${file.name}`;
+            const storageRef = storage.ref(`listing-photos/${fileName}`);
             
-            if (selectedSehir && selectedIlce && sehirIlceData[selectedSehir]?.ilceler[selectedIlce]) {
-                mahalleSelect.disabled = false;
-                const mahalleler = sehirIlceData[selectedSehir].ilceler[selectedIlce].mahalleler;
-                mahalleler.forEach(mahalle => {
-                    const option = document.createElement('option');
-                    option.value = mahalle.toLowerCase().replace(/\s+/g, '-');
-                    option.textContent = mahalle;
-                    mahalleSelect.appendChild(option);
-                });
-            } else {
-                mahalleSelect.disabled = true;
+            try {
+                const snapshot = await storageRef.put(file);
+                const downloadURL = await snapshot.ref.getDownloadURL();
+                return {
+                    fileName: fileName,
+                    url: downloadURL,
+                    name: file.name,
+                    size: file.size,
+                    uploadedAt: Date.now()
+                };
+            } catch (error) {
+                console.error('Tapu görseli yükleme hatası:', error);
+                throw error;
             }
         }
 
         // İlan kaydetme
-        function saveIlan() {
+        async function saveIlan() {
             const requiredFields = [
                 { id: 'ilanBaslik', name: 'Başlık' },
                 { id: 'ilanNo', name: 'İlan No' },
@@ -4720,6 +5321,15 @@
                     element.focus();
                     return;
                 }
+            }
+            
+            // Tapu görseli yükle
+            let tapuImage = null;
+            try {
+                tapuImage = await uploadTapuImage();
+            } catch (error) {
+                showGenericAlert('ilanAlert', 'Tapu görseli yüklenirken hata oluştu.', 'error');
+                return;
             }
             
             const ilanData = {
@@ -4780,6 +5390,8 @@
                 aciklama: getEditorContent(),
                 // Arsa Sınırları
                 arsa_sinirlari: getBoundaryData(),
+                // Tapu Görseli
+                tapuGorseli: tapuImage,
                 createdAt: firebase.database.ServerValue.TIMESTAMP,
                 status: 'aktif'
             };
@@ -4789,6 +5401,7 @@
                     showGenericAlert('ilanAlert', 'İlan başarıyla eklendi!', 'success');
                     hideIlanForm();
                     loadIlanList();
+                    loadDashboardStats(); // Dashboard verilerini güncelle
                 })
                 .catch((error) => {
                     console.error('İlan kaydetme hatası:', error);
@@ -4998,17 +5611,9 @@
                         document.getElementById('ilanTapuDurumu').value = ilan.tapuDurumuId || '';
                         document.getElementById('ilanImarDurumu').value = ilan.imarDurumuId || '';
                         
-                        // İlçe ve mahalle yükle
-                        if (ilan.sehir) {
-                            loadIlceler();
-                            setTimeout(() => {
-                                document.getElementById('ilanIlce').value = ilan.ilce || '';
-                                loadMahalleler();
-                                setTimeout(() => {
-                                    document.getElementById('ilanMahalle').value = ilan.mahalle || '';
-                                }, 100);
-                            }, 100);
-                        }
+                        // Şehir, ilçe ve mahalle değerlerini direkt olarak doldur
+                        document.getElementById('ilanIlce').value = ilan.ilce || '';
+                        document.getElementById('ilanMahalle').value = ilan.mahalle || '';
                         
                         // Haritayı başlat ve konumu göster
                         initializeIlanMap();
@@ -5165,6 +5770,7 @@
                     showGenericAlert('ilanAlert', 'İlan başarıyla güncellendi!', 'success');
                     hideIlanForm();
                     loadIlanList();
+                    loadDashboardStats(); // Dashboard verilerini güncelle
                     window.editingIlanId = null;
                 })
                 .catch((error) => {
@@ -5204,6 +5810,7 @@
                     .then(() => {
                         showGenericAlert('ilanAlert', 'İlan başarıyla silindi!', 'success');
                         loadIlanList();
+                        loadDashboardStats(); // Dashboard verilerini güncelle
                     })
                     .catch((error) => {
                         console.error('İlan silme hatası:', error);
@@ -5216,8 +5823,8 @@
         window.showAddIlanForm = showAddIlanForm;
         window.hideIlanForm = hideIlanForm;
         window.calculateTotalPrice = calculateTotalPrice;
-        window.loadIlceler = loadIlceler;
-        window.loadMahalleler = loadMahalleler;
+        // loadIlceler fonksiyonu artık gerekli değil
+        // loadMahalleler fonksiyonu artık gerekli değil
         window.saveIlan = saveIlan;
         window.editIlan = editIlan;
         window.updateIlan = updateIlan;
@@ -7220,6 +7827,1364 @@
         window.startBoundaryDrawing = startBoundaryDrawing;
         window.clearBoundary = clearBoundary;
         window.removeBoundaryPoint = removeBoundaryPoint;
+
+        // ===== HAKKIMIZDA FONKSİYONLARI =====
+        
+        // Hakkımızda event handler'larını kur
+        function setupHakkimizdaHandlers() {
+            const textArea = document.getElementById('hakkimizdaText');
+            const charCount = document.getElementById('hakkimizdaCharCount');
+            const preview = document.getElementById('hakkimizdaPreview');
+            
+            if (textArea && charCount && preview) {
+                // Karakter sayısını güncelle
+                textArea.addEventListener('input', function() {
+                    const count = this.value.length;
+                    charCount.textContent = count;
+                    
+                    // Önizlemeyi güncelle
+                    if (this.value.trim()) {
+                        preview.innerHTML = formatAboutTextForPreview(this.value);
+                        preview.style.color = 'var(--text-primary)';
+                        preview.style.fontStyle = 'normal';
+                    } else {
+                        preview.innerHTML = 'Henüz açıklama metni girilmedi...';
+                        preview.style.color = 'var(--text-secondary)';
+                        preview.style.fontStyle = 'italic';
+                    }
+                });
+                
+                // İlk yüklemede karakter sayısını ayarla
+                const count = textArea.value.length;
+                charCount.textContent = count;
+            }
+        }
+        
+        // Hakkımızda verilerini yükle
+        function loadHakkimizdaData() {
+            const textArea = document.getElementById('hakkimizdaText');
+            const preview = document.getElementById('hakkimizdaPreview');
+            const charCount = document.getElementById('hakkimizdaCharCount');
+            
+            if (!textArea || !preview || !charCount) {
+                console.error('Hakkımızda form elemanları bulunamadı');
+                return;
+            }
+            
+            console.log('Hakkımızda verileri yükleniyor...');
+            
+            // Firebase'den veriyi oku
+            database.ref('aciklama').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    console.log('Hakkımızda verisi:', data);
+                    
+                    if (data && data.text) {
+                        textArea.value = data.text;
+                        charCount.textContent = data.text.length;
+                        
+                        // Önizlemeyi güncelle
+                        preview.innerHTML = formatAboutTextForPreview(data.text);
+                        preview.style.color = 'var(--text-primary)';
+                        preview.style.fontStyle = 'normal';
+                        
+                        showGenericAlert('hakkimizdaAlert', 'Hakkımızda verisi başarıyla yüklendi.', 'success');
+                    } else {
+                        textArea.value = '';
+                        charCount.textContent = '0';
+                        preview.innerHTML = 'Henüz açıklama metni girilmedi...';
+                        preview.style.color = 'var(--text-secondary)';
+                        preview.style.fontStyle = 'italic';
+                        
+                        showGenericAlert('hakkimizdaAlert', 'Henüz hakkımızda verisi bulunmamaktadır.', 'info');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Hakkımızda verileri yüklenirken hata:', error);
+                    showGenericAlert('hakkimizdaAlert', 'Veriler yüklenirken hata oluştu.', 'error');
+                });
+        }
+        
+        // Hakkımızda verilerini kaydet
+        function saveHakkimizdaData() {
+            const textArea = document.getElementById('hakkimizdaText');
+            
+            if (!textArea) {
+                console.error('Hakkımızda textarea bulunamadı');
+                return;
+            }
+            
+            const text = textArea.value.trim();
+            
+            if (!text) {
+                showGenericAlert('hakkimizdaAlert', 'Lütfen açıklama metnini girin.', 'error');
+                return;
+            }
+            
+            console.log('Hakkımızda verisi kaydediliyor...');
+            
+            // Firebase'e kaydet
+            database.ref('aciklama').set({
+                text: text,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP,
+                updatedBy: 'admin'
+            })
+            .then(() => {
+                console.log('Hakkımızda verisi başarıyla kaydedildi');
+                showGenericAlert('hakkimizdaAlert', 'Hakkımızda açıklaması başarıyla kaydedildi!', 'success');
+            })
+            .catch((error) => {
+                console.error('Hakkımızda verisi kaydedilirken hata:', error);
+                showGenericAlert('hakkimizdaAlert', 'Kaydetme sırasında hata oluştu.', 'error');
+            });
+        }
+
+        // Metni paragraflara böl ve HTML formatında döndür (Admin panel için)
+        function formatAboutTextForPreview(text) {
+            if (!text || !text.trim()) {
+                return 'Henüz açıklama metni girilmedi...';
+            }
+            
+            // Metni paragraflara böl (çift satır boşluğu ile)
+            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim());
+            
+            if (paragraphs.length === 0) {
+                return 'Henüz açıklama metni girilmedi...';
+            }
+            
+            // Her paragrafı <p> etiketi ile sar
+            const formattedParagraphs = paragraphs.map(paragraph => {
+                // Tek satır boşluklarını <br> ile değiştir
+                const formattedParagraph = paragraph.trim().replace(/\n/g, '<br>');
+                return `<p style="margin-bottom: 1rem;">${formattedParagraph}</p>`;
+            });
+            
+            return formattedParagraphs.join('');
+        }
+
+        // ===== SORU-CEVAP FONKSİYONLARI =====
+        
+        let editingSoruCevapId = null;
+        
+        // Soru-cevap formunu göster
+        function showAddSoruCevapForm() {
+            const form = document.getElementById('soruCevapForm');
+            const title = document.getElementById('soruCevapFormTitle');
+            
+            if (form && title) {
+                title.textContent = 'Yeni Soru-Cevap Ekle';
+                form.style.display = 'block';
+                editingSoruCevapId = null;
+                clearSoruCevapForm();
+            }
+        }
+        
+        // Soru-cevap formunu gizle
+        function hideSoruCevapForm() {
+            const form = document.getElementById('soruCevapForm');
+            if (form) {
+                form.style.display = 'none';
+                editingSoruCevapId = null;
+                clearSoruCevapForm();
+            }
+        }
+        
+        // Soru-cevap formunu temizle
+        function clearSoruCevapForm() {
+            const kategori = document.getElementById('soruCevapKategori');
+            const kategoriCustom = document.getElementById('soruCevapKategoriCustom');
+            const baslik = document.getElementById('soruCevapBaslik');
+            const cevap = document.getElementById('soruCevapCevap');
+            
+            if (kategori) kategori.value = '';
+            if (kategoriCustom) {
+                kategoriCustom.value = '';
+                kategoriCustom.style.display = 'none';
+            }
+            if (baslik) baslik.value = '';
+            if (cevap) cevap.value = '';
+        }
+        
+        // Soru-cevap kaydet
+        function saveSoruCevap() {
+            const kategori = document.getElementById('soruCevapKategori');
+            const kategoriCustom = document.getElementById('soruCevapKategoriCustom');
+            const baslik = document.getElementById('soruCevapBaslik');
+            const cevap = document.getElementById('soruCevapCevap');
+            
+            if (!kategori || !baslik || !cevap) {
+                console.error('Soru-cevap form elemanları bulunamadı');
+                return;
+            }
+            
+            let kategoriValue = kategori.value.trim();
+            const baslikValue = baslik.value.trim();
+            const cevapValue = cevap.value.trim();
+            
+            // Eğer custom kategori seçildiyse, custom input'tan değeri al
+            if (kategoriValue === 'custom') {
+                if (!kategoriCustom) {
+                    showGenericAlert('soruCevapAlert', 'Kategori input alanı bulunamadı.', 'error');
+                    return;
+                }
+                kategoriValue = kategoriCustom.value.trim();
+            }
+            
+            // Validasyon
+            if (!kategoriValue) {
+                showGenericAlert('soruCevapAlert', 'Lütfen bir kategori seçin veya girin.', 'error');
+                return;
+            }
+            
+            if (!baslikValue) {
+                showGenericAlert('soruCevapAlert', 'Lütfen soru başlığını girin.', 'error');
+                return;
+            }
+            
+            if (!cevapValue) {
+                showGenericAlert('soruCevapAlert', 'Lütfen cevabı girin.', 'error');
+                return;
+            }
+            
+            console.log('Soru-cevap kaydediliyor...');
+            
+            const soruCevapData = {
+                kategori: kategoriValue,
+                baslik: baslikValue,
+                cevap: cevapValue,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP,
+                updatedBy: 'admin'
+            };
+            
+            if (editingSoruCevapId) {
+                // Güncelleme
+                database.ref('soru_cevap').child(editingSoruCevapId).set(soruCevapData)
+                    .then(() => {
+                        showGenericAlert('soruCevapAlert', 'Soru-cevap başarıyla güncellendi.', 'success');
+                        hideSoruCevapForm();
+                        loadSoruCevapList();
+                    })
+                    .catch((error) => {
+                        console.error('Soru-cevap güncellenirken hata:', error);
+                        showGenericAlert('soruCevapAlert', 'Güncelleme sırasında hata oluştu.', 'error');
+                    });
+            } else {
+                // Yeni ekleme
+                database.ref('soru_cevap').push(soruCevapData)
+                    .then(() => {
+                        showGenericAlert('soruCevapAlert', 'Soru-cevap başarıyla eklendi.', 'success');
+                        hideSoruCevapForm();
+                        loadSoruCevapList();
+                    })
+                    .catch((error) => {
+                        console.error('Soru-cevap eklenirken hata:', error);
+                        showGenericAlert('soruCevapAlert', 'Ekleme sırasında hata oluştu.', 'error');
+                    });
+            }
+        }
+        
+        // Soru-cevap listesini yükle
+        function loadSoruCevapList() {
+            const soruCevapList = document.getElementById('soruCevapList');
+            if (!soruCevapList) return;
+            
+            console.log('Soru-cevap listesi yükleniyor...');
+            
+            database.ref('soru_cevap').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    
+                    if (data) {
+                        const soruCevaplar = Object.keys(data).map(key => ({
+                            id: key,
+                            ...data[key]
+                        }));
+                        
+                        renderSoruCevapList(soruCevaplar);
+                    } else {
+                        soruCevapList.innerHTML = `
+                            <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                <p>Henüz soru-cevap eklenmemiş.</p>
+                            </div>
+                        `;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Soru-cevap listesi yüklenirken hata:', error);
+                    soruCevapList.innerHTML = `
+                        <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                            <p>Soru-cevaplar yüklenirken hata oluştu.</p>
+                        </div>
+                    `;
+                });
+        }
+        
+        // Soru-cevap listesini render et
+        function renderSoruCevapList(soruCevaplar) {
+            const soruCevapList = document.getElementById('soruCevapList');
+            if (!soruCevapList) return;
+            
+            // Kategorilere göre grupla
+            const groupedByKategori = {};
+            soruCevaplar.forEach(item => {
+                if (!groupedByKategori[item.kategori]) {
+                    groupedByKategori[item.kategori] = [];
+                }
+                groupedByKategori[item.kategori].push(item);
+            });
+            
+            let html = '';
+            
+            Object.keys(groupedByKategori).forEach(kategori => {
+                const items = groupedByKategori[kategori];
+                
+                html += `
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="color: var(--text-primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color);">
+                            ${kategori.charAt(0).toUpperCase() + kategori.slice(1)}
+                        </h4>
+                        <div style="display: grid; gap: 1rem;">
+                `;
+                
+                items.forEach(item => {
+                    html += `
+                        <div style="background: var(--main-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                <h5 style="margin: 0; color: var(--text-primary); font-size: 1rem;">${item.baslik}</h5>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-sm btn-secondary" onclick="editSoruCevap('${item.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                                        Düzenle
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteSoruCevap('${item.id}', '${item.baslik}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                                        Sil
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <strong style="color: var(--text-primary);">Cevap:</strong>
+                                <p style="margin: 0.25rem 0; color: var(--text-secondary);">${item.cevap}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            soruCevapList.innerHTML = html;
+        }
+        
+        // Soru-cevap düzenle
+        function editSoruCevap(id) {
+            const form = document.getElementById('soruCevapForm');
+            const title = document.getElementById('soruCevapFormTitle');
+            const kategori = document.getElementById('soruCevapKategori');
+            const kategoriCustom = document.getElementById('soruCevapKategoriCustom');
+            const baslik = document.getElementById('soruCevapBaslik');
+            const cevap = document.getElementById('soruCevapCevap');
+            
+            if (!form || !title || !kategori || !baslik || !cevap) return;
+            
+            // Firebase'den veriyi oku
+            database.ref('soru_cevap').child(id).once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        title.textContent = 'Soru-Cevap Düzenle';
+                        
+                        // Kategori ayarla
+                        const kategoriValue = data.kategori || '';
+                        const predefinedKategoriler = ['genel', 'kurulum', 'destek'];
+                        
+                        if (predefinedKategoriler.includes(kategoriValue)) {
+                            kategori.value = kategoriValue;
+                            if (kategoriCustom) kategoriCustom.style.display = 'none';
+                        } else {
+                            kategori.value = 'custom';
+                            if (kategoriCustom) {
+                                kategoriCustom.value = kategoriValue;
+                                kategoriCustom.style.display = 'block';
+                            }
+                        }
+                        
+                        baslik.value = data.baslik || '';
+                        cevap.value = data.cevap || '';
+                        
+                        form.style.display = 'block';
+                        editingSoruCevapId = id;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Soru-cevap düzenleme verisi yüklenirken hata:', error);
+                    showGenericAlert('soruCevapAlert', 'Veri yüklenirken hata oluştu.', 'error');
+                });
+        }
+        
+        // Soru-cevap sil
+        function deleteSoruCevap(id, baslik) {
+            if (confirm(`"${baslik}" soru-cevabını silmek istediğinizden emin misiniz?`)) {
+                database.ref('soru_cevap').child(id).remove()
+                    .then(() => {
+                        showGenericAlert('soruCevapAlert', 'Soru-cevap başarıyla silindi.', 'success');
+                        loadSoruCevapList();
+                    })
+                    .catch((error) => {
+                        console.error('Soru-cevap silinirken hata:', error);
+                        showGenericAlert('soruCevapAlert', 'Silme sırasında hata oluştu.', 'error');
+                    });
+            }
+        }
+
+        // Kategori değişikliğini handle et
+        function handleKategoriChange() {
+            const kategori = document.getElementById('soruCevapKategori');
+            const kategoriCustom = document.getElementById('soruCevapKategoriCustom');
+            
+            if (!kategori || !kategoriCustom) return;
+            
+            if (kategori.value === 'custom') {
+                kategoriCustom.style.display = 'block';
+                kategoriCustom.focus();
+            } else {
+                kategoriCustom.style.display = 'none';
+                kategoriCustom.value = '';
+            }
+        }
+
+        // Global fonksiyonları tanımla
+        window.setupHakkimizdaHandlers = setupHakkimizdaHandlers;
+        window.loadHakkimizdaData = loadHakkimizdaData;
+        window.saveHakkimizdaData = saveHakkimizdaData;
+        window.formatAboutTextForPreview = formatAboutTextForPreview;
+        window.showAddSoruCevapForm = showAddSoruCevapForm;
+        window.hideSoruCevapForm = hideSoruCevapForm;
+        window.saveSoruCevap = saveSoruCevap;
+        window.loadSoruCevapList = loadSoruCevapList;
+        window.editSoruCevap = editSoruCevap;
+        window.deleteSoruCevap = deleteSoruCevap;
+        window.handleKategoriChange = handleKategoriChange;
+
+        // ===== MÜŞTERİ YORUMLARI (TESTIMONIALS) FUNCTIONS =====
+        let editingTestimonialId = null;
+
+        // Testimonial form gösterme
+        function showAddTestimonialForm() {
+            const form = document.getElementById('testimonialForm');
+            const title = document.getElementById('testimonialFormTitle');
+            const nameInput = document.getElementById('customerNameInput');
+            const jobInput = document.getElementById('customerJobInput');
+            const videoInput = document.getElementById('testimonialVideoInput');
+            const photoInput = document.getElementById('customerPhotoInput');
+            const saveBtn = document.getElementById('saveTestimonialBtn');
+            
+            if (!form) return;
+            
+            // Formu sıfırla
+            title.textContent = 'Yeni Video Yorum Ekle';
+            nameInput.value = '';
+            jobInput.value = '';
+            videoInput.value = '';
+            photoInput.value = '';
+            saveBtn.textContent = 'Kaydet';
+            editingTestimonialId = null;
+            
+            // Progress bar'ı gizle
+            const progressDiv = document.getElementById('testimonialUploadProgress');
+            if (progressDiv) progressDiv.style.display = 'none';
+            
+            form.style.display = 'block';
+        }
+
+        // Testimonial form gizleme
+        function hideTestimonialForm() {
+            const form = document.getElementById('testimonialForm');
+            if (form) form.style.display = 'none';
+            editingTestimonialId = null;
+        }
+
+        // Testimonial kaydetme
+        function saveTestimonial() {
+            const nameInput = document.getElementById('customerNameInput');
+            const jobInput = document.getElementById('customerJobInput');
+            const videoInput = document.getElementById('testimonialVideoInput');
+            const photoInput = document.getElementById('customerPhotoInput');
+            const saveBtn = document.getElementById('saveTestimonialBtn');
+            const progressDiv = document.getElementById('testimonialUploadProgress');
+            const progressBar = document.getElementById('testimonialProgressBar');
+            const progressText = document.getElementById('testimonialProgressText');
+            
+            if (!nameInput || !jobInput || !videoInput) return;
+            
+            const name = nameInput.value.trim();
+            const job = jobInput.value.trim();
+            const videoFile = videoInput.files[0];
+            const photoFile = photoInput.files[0];
+            
+            // Validasyon
+            if (!name) {
+                showGenericAlert('testimonialAlert', 'Müşteri adı gereklidir.', 'error');
+                return;
+            }
+            
+            if (!job) {
+                showGenericAlert('testimonialAlert', 'Meslek bilgisi gereklidir.', 'error');
+                return;
+            }
+            
+            if (!videoFile) {
+                showGenericAlert('testimonialAlert', 'Video dosyası gereklidir.', 'error');
+                return;
+            }
+            
+            // Video dosya boyutu kontrolü (10MB)
+            const maxVideoSize = 10 * 1024 * 1024; // 10MB
+            if (videoFile.size > maxVideoSize) {
+                showGenericAlert('testimonialAlert', 'Video dosyası 10MB\'dan büyük olamaz.', 'error');
+                return;
+            }
+            
+            // Fotoğraf dosya boyutu kontrolü (5MB)
+            if (photoFile && photoFile.size > 5 * 1024 * 1024) {
+                showGenericAlert('testimonialAlert', 'Fotoğraf dosyası 5MB\'dan büyük olamaz.', 'error');
+                return;
+            }
+            
+            // Video format kontrolü
+            const allowedVideoTypes = ['video/mp4', 'video/avi', 'video/mov', 'video/wmv', 'video/quicktime'];
+            if (!allowedVideoTypes.includes(videoFile.type)) {
+                showGenericAlert('testimonialAlert', 'Desteklenmeyen video formatı. Lütfen MP4, AVI, MOV veya WMV formatında bir video seçin.', 'error');
+                return;
+            }
+            
+            // Fotoğraf format kontrolü
+            if (photoFile) {
+                const allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                if (!allowedImageTypes.includes(photoFile.type)) {
+                    showGenericAlert('testimonialAlert', 'Desteklenmeyen fotoğraf formatı. Lütfen JPG, PNG veya GIF formatında bir fotoğraf seçin.', 'error');
+                    return;
+                }
+            }
+            
+            // Butonu devre dışı bırak
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Yükleniyor...';
+            
+            // Progress bar'ı göster
+            if (progressDiv) {
+                progressDiv.style.display = 'block';
+                progressBar.style.width = '0%';
+                progressText.textContent = 'Video yükleniyor...';
+            }
+            
+            const timestamp = Date.now();
+            const videoFileName = `testimonials/videos/testimonial-${timestamp}.${videoFile.name.split('.').pop()}`;
+            const photoFileName = photoFile ? `testimonials/photos/photo-${timestamp}.${photoFile.name.split('.').pop()}` : null;
+            
+            // Video yükleme
+            const videoUploadTask = storageRef.child(videoFileName).put(videoFile);
+            
+            videoUploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if (progressBar) progressBar.style.width = progress + '%';
+                    if (progressText) progressText.textContent = `Video yükleniyor... ${Math.round(progress)}%`;
+                },
+                (error) => {
+                    console.error('Video yükleme hatası:', error);
+                    showGenericAlert('testimonialAlert', 'Video yüklenirken hata oluştu: ' + error.message, 'error');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Kaydet';
+                    if (progressDiv) progressDiv.style.display = 'none';
+                },
+                () => {
+                    // Video yükleme tamamlandı
+                    videoUploadTask.snapshot.ref.getDownloadURL().then((videoUrl) => {
+                        let photoUrl = null;
+                        
+                        // Fotoğraf yükleme (varsa)
+                        if (photoFile && photoFileName) {
+                            const photoUploadTask = storageRef.child(photoFileName).put(photoFile);
+                            
+                            photoUploadTask.on('state_changed',
+                                (snapshot) => {
+                                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                    if (progressBar) progressBar.style.width = 50 + (progress * 0.5) + '%';
+                                    if (progressText) progressText.textContent = `Fotoğraf yükleniyor... ${Math.round(progress)}%`;
+                                },
+                                (error) => {
+                                    console.error('Fotoğraf yükleme hatası:', error);
+                                    showGenericAlert('testimonialAlert', 'Fotoğraf yüklenirken hata oluştu: ' + error.message, 'error');
+                                    saveBtn.disabled = false;
+                                    saveBtn.textContent = 'Kaydet';
+                                    if (progressDiv) progressDiv.style.display = 'none';
+                                },
+                                () => {
+                                    // Fotoğraf yükleme tamamlandı
+                                    photoUploadTask.snapshot.ref.getDownloadURL().then((photoDownloadUrl) => {
+                                        photoUrl = photoDownloadUrl;
+                                        saveTestimonialToDatabase(name, job, videoUrl, videoFileName, photoUrl, photoFileName);
+                                    });
+                                }
+                            );
+                        } else {
+                            // Fotoğraf yok, direkt veritabanına kaydet
+                            saveTestimonialToDatabase(name, job, videoUrl, videoFileName, photoUrl, photoFileName);
+                        }
+                    });
+                }
+            );
+        }
+
+        // Testimonial'ı veritabanına kaydetme
+        function saveTestimonialToDatabase(name, job, videoUrl, videoFileName, photoUrl, photoFileName) {
+            const progressText = document.getElementById('testimonialProgressText');
+            if (progressText) progressText.textContent = 'Veritabanına kaydediliyor...';
+            
+            const testimonialData = {
+                customerName: name,
+                customerJob: job,
+                videoUrl: videoUrl,
+                videoFileName: videoFileName,
+                photoUrl: photoUrl,
+                photoFileName: photoFileName,
+                isActive: true,
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            };
+            
+            if (editingTestimonialId) {
+                // Düzenleme
+                testimonialData.updatedAt = firebase.database.ServerValue.TIMESTAMP;
+                database.ref('testimonials').child(editingTestimonialId).set(testimonialData)
+                    .then(() => {
+                        showGenericAlert('testimonialAlert', 'Video yorum başarıyla güncellendi.', 'success');
+                        hideTestimonialForm();
+                        loadTestimonialList();
+                    })
+                    .catch((error) => {
+                        console.error('Testimonial güncelleme hatası:', error);
+                        showGenericAlert('testimonialAlert', 'Güncelleme sırasında hata oluştu: ' + error.message, 'error');
+                    });
+            } else {
+                // Yeni ekleme
+                database.ref('testimonials').push(testimonialData)
+                    .then(() => {
+                        showGenericAlert('testimonialAlert', 'Video yorum başarıyla eklendi.', 'success');
+                        hideTestimonialForm();
+                        loadTestimonialList();
+                    })
+                    .catch((error) => {
+                        console.error('Testimonial ekleme hatası:', error);
+                        showGenericAlert('testimonialAlert', 'Ekleme sırasında hata oluştu: ' + error.message, 'error');
+                    });
+            }
+            
+            // Butonu tekrar aktif et
+            const saveBtn = document.getElementById('saveTestimonialBtn');
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Kaydet';
+            }
+            
+            // Progress bar'ı gizle
+            const progressDiv = document.getElementById('testimonialUploadProgress');
+            if (progressDiv) progressDiv.style.display = 'none';
+        }
+
+        // Testimonial listesini yükleme
+        function loadTestimonialList() {
+            const listContainer = document.getElementById('testimonialList');
+            if (!listContainer) return;
+            
+            listContainer.innerHTML = `
+                <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                    <div class="loading"></div>
+                    <p style="margin-top: 1rem;">Video yorumlar yükleniyor...</p>
+                </div>
+            `;
+            
+            database.ref('testimonials').orderByChild('createdAt').once('value')
+                .then((snapshot) => {
+                    const testimonials = [];
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        testimonials.push({
+                            id: childSnapshot.key,
+                            ...data
+                        });
+                    });
+                    
+                    if (testimonials.length === 0) {
+                        listContainer.innerHTML = `
+                            <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                <p>Henüz video yorum eklenmemiş.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // Tarihe göre ters sırala (en yeni önce)
+                    testimonials.reverse();
+                    
+                    let html = '';
+                    testimonials.forEach((testimonial) => {
+                        const createdAt = testimonial.createdAt ? new Date(testimonial.createdAt).toLocaleDateString('tr-TR') : 'Bilinmiyor';
+                        const statusClass = testimonial.isActive ? 'success' : 'warning';
+                        const statusText = testimonial.isActive ? 'Aktif' : 'Pasif';
+                        
+                        html += `
+                            <div style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color); background: var(--card-bg); margin-bottom: 0.5rem; border-radius: 6px;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; background: var(--border-color); display: flex; align-items: center; justify-content: center;">
+                                            ${testimonial.photoUrl ? 
+                                                `<img src="${testimonial.photoUrl}" alt="${testimonial.customerName}" style="width: 100%; height: 100%; object-fit: cover;">` :
+                                                `<svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20" style="color: var(--text-secondary);">
+                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                                </svg>`
+                                            }
+                                        </div>
+                                        <div>
+                                            <h4 style="margin: 0; color: var(--text-primary);">${testimonial.customerName}</h4>
+                                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">${testimonial.customerJob}</p>
+                                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.8rem;">Eklenme: ${createdAt}</p>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <span class="badge badge-${statusClass}">${statusText}</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.8rem;">Video: ${testimonial.videoFileName ? testimonial.videoFileName.split('/').pop() : 'Yok'}</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-sm btn-secondary" onclick="editTestimonial('${testimonial.id}')" title="Düzenle">
+                                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteTestimonial('${testimonial.id}', '${testimonial.customerName}')" title="Sil">
+                                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd"/>
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    listContainer.innerHTML = html;
+                })
+                .catch((error) => {
+                    console.error('Testimonial listesi yükleme hatası:', error);
+                    listContainer.innerHTML = `
+                        <div style="text-align: center; color: var(--error-color); padding: 2rem;">
+                            <p>Video yorumlar yüklenirken hata oluştu.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // Testimonial düzenleme
+        function editTestimonial(id) {
+            database.ref('testimonials').child(id).once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        const form = document.getElementById('testimonialForm');
+                        const title = document.getElementById('testimonialFormTitle');
+                        const nameInput = document.getElementById('customerNameInput');
+                        const jobInput = document.getElementById('customerJobInput');
+                        const saveBtn = document.getElementById('saveTestimonialBtn');
+                        
+                        if (!form || !title || !nameInput || !jobInput || !saveBtn) return;
+                        
+                        title.textContent = 'Video Yorum Düzenle';
+                        nameInput.value = data.customerName || '';
+                        jobInput.value = data.customerJob || '';
+                        saveBtn.textContent = 'Güncelle';
+                        editingTestimonialId = id;
+                        
+                        form.style.display = 'block';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Testimonial düzenleme verisi yüklenirken hata:', error);
+                    showGenericAlert('testimonialAlert', 'Veri yüklenirken hata oluştu.', 'error');
+                });
+        }
+
+        // Testimonial silme
+        function deleteTestimonial(id, customerName) {
+            if (confirm(`"${customerName}" adlı müşterinin video yorumunu silmek istediğinizden emin misiniz?`)) {
+                // Önce veritabanından veriyi al
+                database.ref('testimonials').child(id).once('value')
+                    .then((snapshot) => {
+                        const data = snapshot.val();
+                        if (data) {
+                            // Storage'dan dosyaları sil
+                            const deletePromises = [];
+                            
+                            if (data.videoFileName) {
+                                deletePromises.push(
+                                    storageRef.child(data.videoFileName).delete().catch(error => {
+                                        console.error('Video silinirken hata:', error);
+                                    })
+                                );
+                            }
+                            
+                            if (data.photoFileName) {
+                                deletePromises.push(
+                                    storageRef.child(data.photoFileName).delete().catch(error => {
+                                        console.error('Fotoğraf silinirken hata:', error);
+                                    })
+                                );
+                            }
+                            
+                            // Tüm dosyalar silindikten sonra veritabanından da sil
+                            Promise.all(deletePromises).then(() => {
+                                return database.ref('testimonials').child(id).remove();
+                            }).then(() => {
+                                showGenericAlert('testimonialAlert', 'Video yorum başarıyla silindi.', 'success');
+                                loadTestimonialList();
+                            }).catch((error) => {
+                                console.error('Testimonial silme hatası:', error);
+                                showGenericAlert('testimonialAlert', 'Silme sırasında hata oluştu: ' + error.message, 'error');
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Testimonial silme verisi yüklenirken hata:', error);
+                        showGenericAlert('testimonialAlert', 'Veri yüklenirken hata oluştu.', 'error');
+                    });
+            }
+        }
+
+        // ==================== KULLANICI YÖNETİMİ ====================
+        
+        // Kullanıcı düzenleme için global değişken
+        let editingUserId = null;
+
+        // Kullanıcı formu gösterme
+        function showAddUserForm() {
+            const form = document.getElementById('userForm');
+            const title = document.getElementById('userFormTitle');
+            const saveBtn = document.querySelector('#userForm button[onclick="saveUser()"]');
+            
+            if (form && title && saveBtn) {
+                // Formu temizle
+                document.getElementById('userFirstName').value = '';
+                document.getElementById('userLastName').value = '';
+                document.getElementById('userEmail').value = '';
+                document.getElementById('userPassword').value = '';
+                document.getElementById('userPasswordConfirm').value = '';
+                
+                title.textContent = 'Yeni Kullanıcı Ekle';
+                saveBtn.innerHTML = `
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    Kullanıcıyı Kaydet
+                `;
+                editingUserId = null;
+                form.style.display = 'block';
+            }
+        }
+
+        // Kullanıcı formu gizleme
+        function hideUserForm() {
+            const form = document.getElementById('userForm');
+            if (form) form.style.display = 'none';
+            editingUserId = null;
+        }
+
+        // Kullanıcı kaydetme
+        function saveUser() {
+            const firstNameInput = document.getElementById('userFirstName');
+            const lastNameInput = document.getElementById('userLastName');
+            const emailInput = document.getElementById('userEmail');
+            const passwordInput = document.getElementById('userPassword');
+            const passwordConfirmInput = document.getElementById('userPasswordConfirm');
+            
+            if (!firstNameInput || !lastNameInput || !emailInput || !passwordInput || !passwordConfirmInput) return;
+            
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const passwordConfirm = passwordConfirmInput.value;
+            
+            // Validasyon
+            if (!firstName) {
+                showGenericAlert('userAlert', 'İsim gereklidir.', 'error');
+                return;
+            }
+            
+            if (!lastName) {
+                showGenericAlert('userAlert', 'Soyisim gereklidir.', 'error');
+                return;
+            }
+            
+            if (!email) {
+                showGenericAlert('userAlert', 'E-posta gereklidir.', 'error');
+                return;
+            }
+            
+            // E-posta format kontrolü
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showGenericAlert('userAlert', 'Geçerli bir e-posta adresi girin.', 'error');
+                return;
+            }
+            
+            if (!password) {
+                showGenericAlert('userAlert', 'Şifre gereklidir.', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showGenericAlert('userAlert', 'Şifre en az 6 karakter olmalıdır.', 'error');
+                return;
+            }
+            
+            if (password !== passwordConfirm) {
+                showGenericAlert('userAlert', 'Şifreler eşleşmiyor.', 'error');
+                return;
+            }
+            
+            const userData = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password, // Gerçek uygulamada şifre hash'lenmelidir
+                isActive: true,
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            };
+            
+            if (editingUserId) {
+                // Düzenleme
+                userData.updatedAt = firebase.database.ServerValue.TIMESTAMP;
+                database.ref('users').child(editingUserId).set(userData)
+                    .then(() => {
+                        showGenericAlert('userAlert', 'Kullanıcı başarıyla güncellendi.', 'success');
+                        hideUserForm();
+                        loadUsers();
+                    })
+                    .catch((error) => {
+                        console.error('Kullanıcı güncelleme hatası:', error);
+                        showGenericAlert('userAlert', 'Güncelleme sırasında hata oluştu: ' + error.message, 'error');
+                    });
+            } else {
+                // Yeni ekleme
+                database.ref('users').push(userData)
+                    .then(() => {
+                        showGenericAlert('userAlert', 'Kullanıcı başarıyla eklendi.', 'success');
+                        hideUserForm();
+                        loadUsers();
+                    })
+                    .catch((error) => {
+                        console.error('Kullanıcı ekleme hatası:', error);
+                        showGenericAlert('userAlert', 'Ekleme sırasında hata oluştu: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        // Kullanıcı listesini yükleme
+        function loadUsers() {
+            const listContainer = document.getElementById('userList');
+            if (!listContainer) return;
+            
+            listContainer.innerHTML = `
+                <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                    <div class="loading"></div>
+                    <p style="margin-top: 1rem;">Kullanıcılar yükleniyor...</p>
+                </div>
+            `;
+            
+            database.ref('users').orderByChild('createdAt').once('value')
+                .then((snapshot) => {
+                    const users = [];
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        users.push({
+                            id: childSnapshot.key,
+                            ...data
+                        });
+                    });
+                    
+                    if (users.length === 0) {
+                        listContainer.innerHTML = `
+                            <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                <p>Henüz kullanıcı eklenmemiş.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // Tarihe göre ters sırala (en yeni önce)
+                    users.reverse();
+                    
+                    let html = '';
+                    users.forEach((user) => {
+                        const createdAt = user.createdAt ? new Date(user.createdAt).toLocaleDateString('tr-TR') : 'Bilinmiyor';
+                        const statusClass = user.isActive ? 'success' : 'warning';
+                        const statusText = user.isActive ? 'Aktif' : 'Pasif';
+                        
+                        html += `
+                            <div style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color); background: var(--card-bg); margin-bottom: 0.5rem; border-radius: 6px;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem;">
+                                            ${user.firstName ? user.firstName.charAt(0).toUpperCase() : 'U'}
+                                        </div>
+                                        <div>
+                                            <h4 style="margin: 0; color: var(--text-primary);">${user.firstName} ${user.lastName}</h4>
+                                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">${user.email}</p>
+                                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.8rem;">Eklenme: ${createdAt}</p>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <span class="badge badge-${statusClass}">${statusText}</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-sm btn-secondary" onclick="editUser('${user.id}')" title="Düzenle">
+                                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}', '${user.firstName} ${user.lastName}')" title="Sil">
+                                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd"/>
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    listContainer.innerHTML = html;
+                })
+                .catch((error) => {
+                    console.error('Kullanıcı listesi yükleme hatası:', error);
+                    listContainer.innerHTML = `
+                        <div style="text-align: center; color: var(--error-color); padding: 2rem;">
+                            <p>Kullanıcılar yüklenirken hata oluştu.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // Kullanıcı düzenleme
+        function editUser(id) {
+            database.ref('users').child(id).once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        const form = document.getElementById('userForm');
+                        const title = document.getElementById('userFormTitle');
+                        const firstNameInput = document.getElementById('userFirstName');
+                        const lastNameInput = document.getElementById('userLastName');
+                        const emailInput = document.getElementById('userEmail');
+                        const passwordInput = document.getElementById('userPassword');
+                        const passwordConfirmInput = document.getElementById('userPasswordConfirm');
+                        const saveBtn = document.querySelector('#userForm button[onclick="saveUser()"]');
+                        
+                        if (!form || !title || !firstNameInput || !lastNameInput || !emailInput || !passwordInput || !passwordConfirmInput || !saveBtn) return;
+                        
+                        title.textContent = 'Kullanıcı Düzenle';
+                        firstNameInput.value = data.firstName || '';
+                        lastNameInput.value = data.lastName || '';
+                        emailInput.value = data.email || '';
+                        passwordInput.value = ''; // Güvenlik için şifre alanını boş bırak
+                        passwordConfirmInput.value = '';
+                        saveBtn.innerHTML = `
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                            Kullanıcıyı Güncelle
+                        `;
+                        editingUserId = id;
+                        
+                        form.style.display = 'block';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Kullanıcı düzenleme verisi yüklenirken hata:', error);
+                    showGenericAlert('userAlert', 'Veri yüklenirken hata oluştu.', 'error');
+                });
+        }
+
+        // Kullanıcı silme
+        function deleteUser(id, userName) {
+            if (confirm(`"${userName}" adlı kullanıcıyı silmek istediğinizden emin misiniz?`)) {
+                database.ref('users').child(id).remove()
+                    .then(() => {
+                        showGenericAlert('userAlert', 'Kullanıcı başarıyla silindi.', 'success');
+                        loadUsers();
+                    })
+                    .catch((error) => {
+                        console.error('Kullanıcı silme hatası:', error);
+                        showGenericAlert('userAlert', 'Silme sırasında hata oluştu: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        // Global fonksiyonları window'a ekle
+        window.showAddTestimonialForm = showAddTestimonialForm;
+        window.hideTestimonialForm = hideTestimonialForm;
+        window.saveTestimonial = saveTestimonial;
+        window.editTestimonial = editTestimonial;
+        window.deleteTestimonial = deleteTestimonial;
+        window.loadTestimonialList = loadTestimonialList;
+        
+        // Kullanıcı fonksiyonlarını window'a ekle
+        window.showAddUserForm = showAddUserForm;
+        window.hideUserForm = hideUserForm;
+        window.saveUser = saveUser;
+        window.loadUsers = loadUsers;
+        window.editUser = editUser;
+        window.deleteUser = deleteUser;
+
+        // ==================== DASHBOARD YÖNETİMİ ====================
+        
+        // Dashboard istatistiklerini yükleme
+        function loadDashboardStats() {
+            database.ref('ilanlar').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    let toplamIlan = 0;
+                    let aktifIlan = 0;
+                    let bekleyenIlan = 0;
+                    let reddedilenIlan = 0;
+                    
+                    if (data) {
+                        Object.keys(data).forEach(key => {
+                            const ilan = data[key];
+                            toplamIlan++;
+                            
+                            // Status kontrolü
+                            if (ilan.status === 'aktif') {
+                                aktifIlan++;
+                            } else if (ilan.status === 'bekleyen') {
+                                bekleyenIlan++;
+                            } else if (ilan.status === 'reddedilen') {
+                                reddedilenIlan++;
+                            } else {
+                                // Status belirtilmemişse aktif kabul et
+                                aktifIlan++;
+                            }
+                        });
+                    }
+                    
+                    // Dashboard değerlerini güncelle
+                    updateDashboardValues(toplamIlan, aktifIlan, bekleyenIlan, reddedilenIlan);
+                })
+                .catch((error) => {
+                    console.error('Dashboard verileri yüklenirken hata:', error);
+                    // Hata durumunda 0 değerleri göster
+                    updateDashboardValues(0, 0, 0, 0);
+                });
+        }
+
+        // Dashboard değerlerini güncelleme
+        function updateDashboardValues(toplam, aktif, bekleyen, reddedilen) {
+            const toplamElement = document.getElementById('toplamIlan');
+            const aktifElement = document.getElementById('aktifIlan');
+            const bekleyenElement = document.getElementById('bekleyenIlan');
+            const reddedilenElement = document.getElementById('reddedilenIlan');
+            
+            if (toplamElement) toplamElement.textContent = toplam;
+            if (aktifElement) aktifElement.textContent = aktif;
+            if (bekleyenElement) bekleyenElement.textContent = bekleyen;
+            if (reddedilenElement) reddedilenElement.textContent = reddedilen;
+            
+            // Değişim yüzdelerini güncelle (şimdilik sabit değerler)
+            const toplamDegisim = document.getElementById('toplamIlanDegisim');
+            const aktifDegisim = document.getElementById('aktifIlanDegisim');
+            const bekleyenDegisim = document.getElementById('bekleyenIlanDegisim');
+            const reddedilenDegisim = document.getElementById('reddedilenIlanDegisim');
+            
+            if (toplamDegisim) toplamDegisim.textContent = '+0% bu ay';
+            if (aktifDegisim) aktifDegisim.textContent = '+0% bu ay';
+            if (bekleyenDegisim) bekleyenDegisim.textContent = '0% bu ay';
+            if (reddedilenDegisim) reddedilenDegisim.textContent = '0% bu ay';
+        }
+
+        // Dashboard fonksiyonunu window'a ekle
+        window.loadDashboardStats = loadDashboardStats;
+
+        // ==================== LOGIN AUTHENTICATION ====================
+        
+        // Giriş durumunu kontrol et
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            const loginContainer = document.getElementById('loginContainer');
+            const adminContainer = document.getElementById('adminContainer');
+            
+            if (isLoggedIn === 'true') {
+                // Kullanıcı giriş yapmış, admin panelini göster
+                if (loginContainer) loginContainer.style.display = 'none';
+                if (adminContainer) adminContainer.style.display = 'block';
+                updateUserInfo(); // Kullanıcı bilgilerini güncelle
+            } else {
+                // Kullanıcı giriş yapmamış, giriş ekranını göster
+                if (loginContainer) loginContainer.style.display = 'flex';
+                if (adminContainer) adminContainer.style.display = 'none';
+            }
+        }
+
+        // Giriş formu gönderimi
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const loginButton = document.getElementById('loginButton');
+            const loginAlert = document.getElementById('loginAlert');
+            
+            // Validasyon
+            if (!email || !password) {
+                showLoginAlert('Lütfen tüm alanları doldurun.', 'error');
+                return;
+            }
+            
+            // E-posta format kontrolü
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showLoginAlert('Geçerli bir e-posta adresi girin.', 'error');
+                return;
+            }
+            
+            // Butonu loading durumuna getir
+            setLoginButtonLoading(true);
+            
+            // Firebase'den kullanıcıları kontrol et
+            database.ref('users').once('value')
+                .then((snapshot) => {
+                    const users = snapshot.val();
+                    let userFound = false;
+                    
+                    if (users) {
+                        Object.keys(users).forEach(key => {
+                            const user = users[key];
+                            if (user.email === email && user.password === password && user.isActive === true) {
+                                userFound = true;
+                                // Giriş başarılı
+                                localStorage.setItem('adminLoggedIn', 'true');
+                                localStorage.setItem('adminUser', JSON.stringify({
+                                    id: key,
+                                    firstName: user.firstName,
+                                    lastName: user.lastName,
+                                    email: user.email
+                                }));
+                                
+                                showLoginAlert('Giriş başarılı! Yönlendiriliyorsunuz...', 'success');
+                                
+                                setTimeout(() => {
+                                    checkLoginStatus();
+                                    // Dashboard verilerini yükle
+                                    loadDashboardStats();
+                                }, 1000);
+                            }
+                        });
+                    }
+                    
+                    if (!userFound) {
+                        showLoginAlert('E-posta veya şifre hatalı.', 'error');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Giriş kontrolü hatası:', error);
+                    showLoginAlert('Giriş sırasında bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+                })
+                .finally(() => {
+                    setLoginButtonLoading(false);
+                });
+        }
+
+        // Giriş butonunu loading durumuna getir/bırak
+        function setLoginButtonLoading(loading) {
+            const loginButton = document.getElementById('loginButton');
+            const buttonText = loginButton.querySelector('.button-text');
+            const buttonLoading = loginButton.querySelector('.button-loading');
+            
+            if (loading) {
+                loginButton.disabled = true;
+                loginButton.classList.add('loading');
+                buttonText.style.opacity = '0';
+                buttonLoading.style.display = 'block';
+            } else {
+                loginButton.disabled = false;
+                loginButton.classList.remove('loading');
+                buttonText.style.opacity = '1';
+                buttonLoading.style.display = 'none';
+            }
+        }
+
+        // Giriş alert mesajı göster
+        function showLoginAlert(message, type) {
+            const loginAlert = document.getElementById('loginAlert');
+            if (loginAlert) {
+                loginAlert.textContent = message;
+                loginAlert.className = `alert ${type}`;
+                loginAlert.style.display = 'block';
+                
+                // 5 saniye sonra alert'i gizle
+                setTimeout(() => {
+                    loginAlert.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Çıkış yap
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            localStorage.removeItem('adminUser');
+            checkLoginStatus();
+        }
+
+        // User dropdown toggle
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) {
+                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        // Kullanıcı bilgilerini güncelle
+        function updateUserInfo() {
+            const userData = localStorage.getItem('adminUser');
+            if (userData) {
+                const user = JSON.parse(userData);
+                const userAvatar = document.getElementById('userAvatar');
+                const userName = document.getElementById('userName');
+                
+                if (userAvatar) {
+                    userAvatar.textContent = user.firstName ? user.firstName.charAt(0).toUpperCase() : 'U';
+                }
+                
+                if (userName) {
+                    userName.textContent = `${user.firstName} ${user.lastName}`;
+                }
+            }
+        }
+
+        // Çıkış yap (güncellenmiş)
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            localStorage.removeItem('adminUser');
+            checkLoginStatus();
+        }
+
+        // Login fonksiyonlarını window'a ekle
+        window.handleLogin = handleLogin;
+        window.logout = logout;
+        window.checkLoginStatus = checkLoginStatus;
+        window.toggleUserDropdown = toggleUserDropdown;
+        window.updateUserInfo = updateUserInfo;
     </script>
 </body>
 </html>

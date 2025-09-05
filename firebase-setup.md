@@ -117,6 +117,14 @@ Firebase Console > Realtime Database > Rules:
     "site_ayarlari": {
       ".read": true,
       ".write": true
+    },
+    "users": {
+      ".read": true,
+      ".write": true
+    },
+    "testimonials": {
+      ".read": true,
+      ".write": true
     }
   }
 }

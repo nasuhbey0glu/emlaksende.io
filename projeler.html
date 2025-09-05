@@ -32,220 +32,7 @@
         }
 
         /* ===== HEADER STYLES ===== */
-        .header {
-            position: sticky;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #14274e;
-            z-index: 1000;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav {
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            gap: 20px;
-            padding: 0 40px;
-        }
-
-        /* Left side - Logo and Search */
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            justify-self: start;
-        }
-
-        /* Logo Section - Left */
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-            margin-right: 0;
-        }
-
-        .logo-image {
-            height: 65px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        /* Search Section - Center */
-        .nav-search {
-            display: flex;
-            justify-content: flex-start;
-            max-width: 400px;
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-        .search-box {
-            position: relative;
-            width: 100%;
-            max-width: 350px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .search-box:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 50px 12px 45px;
-            border: none;
-            background: transparent;
-            color: white;
-            font-size: 14px;
-            border-radius: 30px;
-            outline: none;
-        }
-
-        .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
-            color: rgba(255, 255, 255, 0.7);
-            transition: all 0.3s ease;
-        }
-
-        .search-icon:hover {
-            color: white;
-        }
-
-        /* Navigation Menu - Right */
-        .nav-menu {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            flex-shrink: 0;
-            justify-self: end;
-        }
-
-        .nav-item {
-            position: relative;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 15px;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-link:hover {
-            color: #ffffff;
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .user-icon {
-            font-size: 14px;
-        }
-
-        /* Mobile Menu Toggle */
-        .mobile-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            background: transparent;
-            padding: 8px;
-            border: none;
-            cursor: pointer;
-        }
-
-        /* Hide mobile search on desktop */
-        .mobile-search-item {
-            display: none;
-        }
-
-        /* Mobile Search Styles */
-        .mobile-search {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-
-        .mobile-search-icon {
-            width: 18px;
-            height: 18px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .mobile-search-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .mobile-search-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .hamburger-line {
-            width: 24px;
-            height: 3px;
-            background-color: #ffffff;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        /* Hamburger to X animation */
-        .mobile-toggle.active .hamburger-line:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
-        }
-
-        .mobile-toggle.active .hamburger-line:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-toggle.active .hamburger-line:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
-        }
+        /* Header styles are now included from header.html */
 
         /* ===== MAIN CONTENT ===== */
         .container {
@@ -269,6 +56,12 @@
 
         .page-header {
             margin-bottom: 20px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
         }
 
         .page-title {
@@ -333,6 +126,8 @@
             position: sticky;
             top: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
         }
 
         .filter-title {
@@ -524,6 +319,7 @@
             max-width: 1125px;
             margin: 0 auto;
             margin-top: 100px;
+            margin-bottom: 80px;
         }
 
         .project-card {
@@ -883,61 +679,7 @@
 
 <body>
     <!-- Header -->
-    <header class="header" id="header">
-        <div class="container">
-            <nav class="nav">
-                <!-- Left Side - Logo and Search -->
-                <div class="nav-left">
-                    <!-- Logo Section -->
-                    <div class="nav-logo">
-                        <img src="images/emlaknew.png" alt="EMLAKSENDE Logo" class="logo-image">
-                    </div>
-
-                    <!-- Search Section -->
-                    <div class="nav-search">
-                        <div class="search-box">
-                            <svg viewBox="0 0 24 24" fill="currentColor" class="search-icon">
-                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
-                            </svg>
-                            <input type="text" placeholder="Arsanı Ara" class="search-input">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Navigation Menu - Right -->
-                <ul class="nav-menu" id="navMenu">
-                    <!-- Mobile Search -->
-                    <li class="nav-item mobile-search-item">
-                        <div class="mobile-search">
-                            <svg viewBox="0 0 24 24" fill="currentColor" class="mobile-search-icon">
-                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
-                            </svg>
-                            <input type="text" placeholder="Arsanı Ara" class="mobile-search-input">
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a href="ilanlar.html" class="nav-link">İlanlar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="projeler.html" class="nav-link">Projeler</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="admin.html" class="nav-link">
-                            <i class="fas fa-user user-icon"></i>
-                            Giriş
-                        </a>
-                    </li>
-                </ul>
-
-                <!-- Mobile Menu Toggle -->
-                <button class="mobile-toggle" id="mobileToggle" aria-label="Menü">
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                </button>
-            </nav>
-        </div>
-    </header>
+    <div id="header-container" style="margin-bottom: 30px;"></div>
 
     <div class="container">
         <!-- Mobile/Tablet toolbar -->
@@ -1426,55 +1168,7 @@
             updateProjectGrid();
         }
 
-        // Mobile menu toggle
-        const mobileToggle = document.getElementById('mobileToggle');
-        const navMenu = document.getElementById('navMenu');
-        
-        if (mobileToggle && navMenu) {
-            mobileToggle.addEventListener('click', function() {
-                // Toggle active class on mobile toggle button
-                mobileToggle.classList.toggle('active');
-                
-                // Toggle active class on navigation menu
-                navMenu.classList.toggle('active');
-                
-                // Update aria-expanded for accessibility
-                const isExpanded = navMenu.classList.contains('active');
-                mobileToggle.setAttribute('aria-expanded', isExpanded);
-            });
-
-            // Close mobile menu when clicking on a link
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    mobileToggle.setAttribute('aria-expanded', 'false');
-                });
-            });
-
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const isClickInsideNav = navMenu.contains(event.target);
-                const isClickOnToggle = mobileToggle.contains(event.target);
-                
-                if (!isClickInsideNav && !isClickOnToggle && navMenu.classList.contains('active')) {
-                    mobileToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    mobileToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-
-            // Handle Escape key to close mobile menu
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                    mobileToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    mobileToggle.setAttribute('aria-expanded', 'false');
-                    mobileToggle.focus();
-                }
-            });
-        }
+        // Mobile menu is now handled by include-components.js
 
         // Mobile filter toggle
         const mobileFilterToggle = document.getElementById('mobileFilterToggle');
@@ -1530,5 +1224,8 @@
             });
         }
     </script>
+    
+    <!-- Include Header and Footer -->
+    <script src="include-components.js"></script>
 </body>
 </html>

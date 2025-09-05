@@ -96,12 +96,14 @@
         /* Main Grid */
         .detail-grid {
             display: grid;
-            grid-template-columns: 380px 420px 1fr;
-            gap: 72px;
+            grid-template-columns: minmax(320px, 380px) minmax(380px, 450px) minmax(280px, 1fr);
+            gap: clamp(40px, 4vw, 72px);
             align-items: start;
-            justify-content: start;
+            justify-content: center;
             max-width: 1400px;
-            padding-left: 40px; /* Sol taraftan 40px boşluk ekledik */
+            margin: 0 auto;
+            padding: 0 clamp(20px, 3vw, 40px);
+            box-sizing: border-box;
         }
 
         /* Icon Rail */
@@ -183,6 +185,47 @@
             box-shadow: 0 8px 20px rgba(134, 185, 138, 0.3);
         }
 
+        /* Tapu Modal Styles */
+        .modal {
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            animation: slideIn 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background-color: #f3f4f6 !important;
+            color: #374151 !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         .gallery-nav {
             position: absolute;
             top: 50%;
@@ -253,7 +296,7 @@
             display: flex;
             flex-direction: column;
             gap: 24px;
-            margin-left: 100px; /* 80px'den 100px'e arttırdık */
+            margin-left: clamp(60px, 6vw, 100px);
         }
 
         .location {
@@ -277,7 +320,7 @@
         }
 
         .features-title {
-            font-size: 15px;
+            font-size: 17px;
             font-weight: 600;
             margin-bottom: 20px;
             color: var(--ink);
@@ -295,12 +338,12 @@
 
         .feature-label {
             color: var(--muted);
-            font-size: 11.5px;
+            font-size: 13.5px;
         }
 
         .feature-value {
             color: var(--ink);
-            font-size: 11.5px;
+            font-size: 13.5px;
             font-weight: 500;
         }
 
@@ -436,37 +479,42 @@
         .valuation-panel {
             background: var(--primary);
             color: var(--primary-ink);
-            border-radius: 28px;
-            padding: 32px 28px;
+            border-radius: clamp(20px, 3.5vw, 28px);
+            padding: clamp(24px, 3vw, 32px) clamp(20px, 2.5vw, 28px);
             box-shadow: 0 24px 48px rgba(20, 42, 69, 0.2);
             position: sticky;
-            top: 32px;
-            margin-left: 160px; /* 140px'den 160px'e arttırdık */
-            width: 300px;
+            top: clamp(24px, 4vw, 32px);
+            margin-left: clamp(30px, 2vw, 30px); /* Önceden: clamp(60px, 6vw, 120px) */
+            width: clamp(280px, 25vw, 320px);
             justify-self: start;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow: visible; /* Tooltip'lerin tam görünmesi için visible yapıldı */
         }
 
         .valuation-title {
             text-align: center;
-            font-size: 20.7px;
+            font-size: clamp(18px, 2.5vw, 20.7px);
             font-weight: 700;
-            margin-bottom: 24px;
+            margin-bottom: clamp(20px, 3vw, 24px);
         }
 
         .chart-placeholder {
-            width: 200px;
-            height: 160px;
+            width: clamp(180px, 20vw, 220px);
+            height: clamp(140px, 18vw, 180px);
             background: #ffffff;
-            border-radius: 20px;
-            margin: 0 auto 24px auto;
+            border-radius: clamp(16px, 2.5vw, 20px);
+            margin: 0 auto clamp(20px, 3vw, 24px) auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
+            font-size: clamp(11px, 1.5vw, 13px);
             color: #666;
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* Tooltip'lerin tam görünmesi için visible yapıldı */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-width: 0;
+            min-height: 0;
         }
 
         .fake-chart {
@@ -476,11 +524,13 @@
             display: flex;
             align-items: flex-end;
             justify-content: space-around;
-            padding: 20px 20px;
+            padding: clamp(16px, 2.5vw, 20px);
+            box-sizing: border-box;
+            min-width: 0;
         }
 
         .chart-bar {
-            width: 24px;
+            width: clamp(20px, 2.5vw, 24px);
             background: #007AFF;
             border-radius: 4px 4px 0 0;
             animation: growUp 2s ease-out;
@@ -488,17 +538,19 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            min-width: 0;
         }
 
         .chart-label {
             position: absolute;
-            bottom: -25px;
+            bottom: clamp(-20px, -2.5vw, -25px);
             left: 50%;
             transform: translateX(-50%);
-            font-size: 11px;
+            font-size: clamp(9px, 1.2vw, 11px);
             color: var(--primary-ink);
             font-weight: 500;
             white-space: nowrap;
+            min-width: 0;
         }
 
         .chart-bar:hover {
@@ -512,14 +564,22 @@
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
             padding: 8px 12px;
             border-radius: 6px;
             font-size: 12px;
             white-space: nowrap;
-            z-index: 1000;
+            z-index: 9999; /* Daha yüksek z-index */
             margin-bottom: 8px;
+            /* Tooltip'in tam görünmesi için overflow kontrolü */
+            max-width: 200px;
+            word-wrap: break-word;
+            white-space: normal;
+            text-align: center;
+            /* Tooltip'in tam görünmesi için ek özellikler */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            pointer-events: none; /* Tooltip'in hover olaylarını engellemesini önler */
         }
 
         .chart-bar:hover::before {
@@ -529,8 +589,10 @@
             left: 50%;
             transform: translateX(-50%);
             border: 5px solid transparent;
-            border-top-color: rgba(0, 0, 0, 0.8);
+            border-top-color: rgba(0, 0, 0, 0.9);
             margin-bottom: 3px;
+            z-index: 9999; /* Arrow'ın da yüksek z-index'e sahip olması */
+            pointer-events: none; /* Arrow'ın da hover olaylarını engellemesini önler */
         }
 
         .chart-bar:nth-child(1) { height: 60%; }
@@ -543,9 +605,9 @@
         }
 
         .forecast-title {
-            font-size: 17.3px;
+            font-size: clamp(15px, 2.2vw, 17.3px);
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: clamp(14px, 2.5vw, 16px);
             text-align: center;
         }
 
@@ -559,7 +621,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16.1px;
+            font-size: clamp(14px, 2vw, 16.1px);
         }
 
         .forecast-period {
@@ -595,9 +657,9 @@
                 max-width: 130%;
             }
             
-            /* Desktop için property-details'i sağa kaydır - valuation-panel ile arasındaki boşluğu azalt */
+            /* Desktop için property-details'i responsive margin */
             .property-details {
-                margin-left: 120px; /* 100px'den 120px'e arttırdık */
+                margin-left: clamp(60px, 6vw, 100px);
             }
         }
 
@@ -622,6 +684,15 @@
             
             .nav {
                 padding: 0 20px;
+            }
+            
+            /* Tablet görünümde breadcrumb ve page-title'ı main image ile aynı hizada yap */
+            .breadcrumb {
+                padding-left: clamp(20px, 3vw, 40px); /* main image ile aynı hizada */
+            }
+            
+            .page-title {
+                padding-left: clamp(20px, 3vw, 40px); /* main image ile aynı hizada */
             }
         }
 
@@ -659,7 +730,7 @@
 
         @media (max-width: 767px) {
             .mobile-toggle {
-                display: flex;
+                display: none !important;
             }
             
             /* Header fixes for mobile */
@@ -714,26 +785,31 @@
         /* Responsive */
         @media (max-width: 1279px) {
             .detail-grid {
-                grid-template-columns: 1fr 460px;
-                gap: 36px;
-                padding-left: 20px; /* Tablet'te daha az padding */
+                grid-template-columns: 1fr minmax(400px, 500px);
+                gap: clamp(24px, 3vw, 36px);
+                padding: 0 clamp(16px, 2vw, 20px);
             }
 
             .icon-rail {
-                left: -70px;
+                left: clamp(-60px, -5vw, -70px);
             }
 
             .valuation-panel {
                 grid-column: 1 / -1;
-                margin-top: 40px;
+                margin-top: clamp(32px, 4vw, 40px);
                 margin-left: 0; /* Tablet'te margin sıfırla */
+                width: 100%;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
             }
         }
 
         @media (max-width: 1023px) {
             .detail-grid {
                 grid-template-columns: 1fr;
-                gap: 32px;
+                gap: clamp(24px, 3vw, 32px);
+                padding: 0 clamp(16px, 2vw, 24px);
             }
 
             .icon-rail {
@@ -751,33 +827,39 @@
 
             .property-details {
                 order: 2;
+                margin-left: 0;
             }
 
             .valuation-panel {
                 order: 3;
                 position: static;
                 margin-top: 0;
+                width: 100%;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
             }
         }
 
         @media (max-width: 767px) {
             .container {
-                padding: 0 16px;
+                padding: 0 clamp(12px, 2vw, 16px);
                 max-width: 100%;
                 overflow-x: hidden;
             }
 
             .page-title {
-                margin: 20px 0 16px 0;
-                font-size: 0.1em;
+                margin: clamp(16px, 3vw, 20px) 0 clamp(12px, 2vw, 16px) 0;
+                font-size: clamp(18px, 4vw, 24px);
+                padding-left: clamp(12px, 2vw, 16px); /* main image ile aynı hizada */
             }
 
             .detail-grid {
-                gap: 20px;
+                gap: clamp(16px, 3vw, 20px);
                 grid-template-columns: 1fr !important;
                 max-width: 100%;
                 overflow: visible !important;
-                padding-left: 0; /* Mobile'da padding sıfırla */
+                padding: 0 clamp(12px, 2vw, 16px);
             }
 
             .gallery {
@@ -839,8 +921,13 @@
                 overflow: visible !important;
             }
 
+            /* Mobil görünümde propertyLocation ve propertyPrice başlıklarını features-title ile aynı hizada yap */
+            .property-details > div:first-child {
+                padding-left: 20px; /* features-table ile aynı padding */
+            }
+
             .valuation-panel {
-                padding: 24px 20px;
+                padding: clamp(20px, 3vw, 24px) clamp(16px, 2.5vw, 20px);
                 margin-left: 0 !important;
                 width: 100% !important;
                 max-width: 100%;
@@ -878,6 +965,7 @@
                 gap: 4px;
                 max-width: 100%;
                 overflow-x: hidden;
+                padding-left: clamp(12px, 2vw, 16px); /* main image ile aynı hizada */
             }
 
             .breadcrumb span {
@@ -889,11 +977,11 @@
         /* Additional mobile responsive fixes */
         @media (max-width: 480px) {
             .container {
-                padding: 0 12px;
+                padding: 0 clamp(8px, 2vw, 12px);
             }
 
             .detail-grid {
-                gap: 16px;
+                gap: clamp(12px, 3vw, 16px);
             }
 
             .main-image {
@@ -902,47 +990,54 @@
             }
 
             .valuation-panel {
-                padding: 20px 16px;
-                border-radius: 20px;
+                padding: clamp(16px, 3vw, 20px) clamp(12px, 2.5vw, 16px);
+                border-radius: clamp(16px, 3vw, 20px);
             }
 
             .chart-placeholder {
-                width: 140px;
-                height: 100px;
+                width: clamp(120px, 25vw, 140px);
+                height: clamp(80px, 20vw, 100px);
             }
 
             .chart-bar {
-                width: 20px;
+                width: clamp(16px, 4vw, 20px);
             }
 
             .page-title {
-                font-size: 16px !important;
-                margin-bottom: 20px;
+                font-size: clamp(14px, 4vw, 16px) !important;
+                margin-bottom: clamp(16px, 3vw, 20px);
+                padding-left: clamp(8px, 2vw, 12px); /* main image ile aynı hizada */
             }
 
             .breadcrumb {
-                font-size: 10px;
-                margin-top: 20px;
+                font-size: clamp(9px, 2.5vw, 10px);
+                margin-top: clamp(16px, 3vw, 20px);
+                padding-left: clamp(12px, 2vw, 16px); /* main image ile aynı hizada */
             }
 
             .property-details {
-                gap: 20px;
+                gap: clamp(16px, 3vw, 20px);
             }
 
             .features-table {
-                padding: 16px;
+                padding: clamp(12px, 3vw, 16px);
+            }
+
+            /* Küçük mobil ekranlarda da propertyLocation ve propertyPrice başlıklarını features-title ile aynı hizada yap */
+            .property-details > div:first-child {
+                padding-left: clamp(12px, 3vw, 16px); /* features-table ile aynı padding */
             }
 
             .feature-row {
-                margin-bottom: 10px;
+                margin-bottom: clamp(8px, 2vw, 10px);
             }
 
             .action-buttons {
-                gap: 10px;
+                gap: clamp(8px, 2vw, 10px);
             }
 
             .contact-buttons {
-                gap: 10px;
+                gap: clamp(8px, 2vw, 10px);
             }
         }
 
@@ -1632,52 +1727,7 @@
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header" id="header">
-        <div class="container">
-            <nav class="nav">
-                <!-- Left Side - Logo and Search -->
-                <div class="nav-left">
-                <!-- Logo Section -->
-                <div class="nav-logo">
-                        <img src="images/emlaknew.png" alt="EMLAKSENDE Logo" class="logo-image">
-                </div>
-
-                    <!-- Search Section -->
-                    <div class="nav-search">
-                        <div class="search-box">
-                            <svg viewBox="0 0 24 24" fill="currentColor" class="search-icon">
-                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5SS14 7.01 14 9.5S11.99 14 9.5 14Z"/>
-                            </svg>
-                            <input type="text" placeholder="Arsanı Ara" class="search-input">
-                        </div>
-                    </div>
-                    </div>
-
-                <!-- Navigation Menu - Right -->
-                    <ul class="nav-menu" id="navMenu">
-                    <!-- Mobile Search -->
-                    <li class="nav-item mobile-search-item">
-                        <div class="mobile-search">
-                            <svg viewBox="0 0 24 24" fill="currentColor" class="mobile-search-icon">
-                                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5S5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14Z"/>
-                            </svg>
-                            <input type="text" placeholder="Arsanı Ara" class="mobile-search-input">
-                        </div>
-                        </li>
-                        <li class="nav-item">
-                        <a href="ilanlar.html" class="nav-link">İlanlar</a>
-                        </li>
-                        <li class="nav-item">
-                        <a href="projeler.html" class="nav-link">Projeler</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="admin.html" class="nav-link">
-                            <i class="fas fa-user user-icon"></i>
-                                Giriş
-                            </a>
-                        </li>
-                    </ul>
+   
 
                 <!-- Mobile Menu Toggle -->
                 <button class="mobile-toggle" id="mobileToggle" aria-label="Menü">
@@ -2155,204 +2205,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <!-- Newsletter Section -->
-        <div class="newsletter-section">
-            <div class="container">
-                <div class="newsletter-content">
-                    <div class="newsletter-text">
-                        <h3 class="newsletter-title">Gelişmelerden Haberdar Ol</h3>
-                        <p class="newsletter-subtitle">Bültenimize kayıt olarak gayrimenkul dünyasındaki gelişmelerden haberdar olabilirsin.</p>
-                    </div>
-                    <div class="newsletter-form">
-                        <div class="email-input-container">
-                            <input type="email" class="newsletter-email" placeholder="Mail" id="newsletterEmail">
-                            <button class="newsletter-btn" id="newsletterBtn">Abone Ol</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Footer -->
-        <div class="footer-main">
-            <div class="container">
-                <div class="footer-content">
-                    <!-- Logo and Brand -->
-                    <div class="footer-brand">
-                        <div class="footer-logo">
-                            <img src="images/emlakmavi.png" alt="EMLAKSENDE" class="footer-logo-img">
-                        </div>
-                    </div>
-
-                    <!-- Footer Links -->
-                    <div class="footer-links">
-                        <!-- Kurumsal -->
-                        <div class="footer-column">
-                            <h4 class="footer-column-title">Kurumsal</h4>
-                            <ul class="footer-list">
-                                <li><a href="#" class="footer-link">Hakkımızda</a></li>
-                                <li><a href="#" class="footer-link">Misyon</a></li>
-                                <li><a href="#" class="footer-link">Vizyon</a></li>
-                                <li><a href="#" class="footer-link">Nasıl Çalışır?</a></li>
-                                <li><a href="#" class="footer-link">İletişim</a></li>
-                            </ul>
-                        </div>
-
-                        <!-- Hizmetler -->
-                        <div class="footer-column">
-                            <h4 class="footer-column-title">Hizmetler</h4>
-                            <ul class="footer-list">
-                                <li><a href="#" class="footer-link">İlanlar</a></li>
-                                <li><a href="#" class="footer-link">Projeler</a></li>
-                                <li><a href="#" class="footer-link">Danışmanlık</a></li>
-                            </ul>
-                        </div>
-
-                        <!-- Destek -->
-                        <div class="footer-column">
-                            <h4 class="footer-column-title">Destek</h4>
-                            <ul class="footer-list">
-                                <li><a href="#" class="footer-link">Destek Alın</a></li>
-                                <li><a href="#" class="footer-link">Kullanım Koşulları</a></li>
-                                <li><a href="#" class="footer-link">Gizlilik & Çerez Politikası</a></li>
-                                <li><a href="#" class="footer-link">KVKK Aydınlat Metni</a></li>
-                                <li><a href="#" class="footer-link">Üyelik Sözleşmesi</a></li>
-                                <li><a href="#" class="footer-link">SSS</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Right Side Contact -->
-                    <div class="footer-contact">
-                        <!-- Social Media -->
-                        <div class="footer-social">
-                            <h4 class="footer-social-title">Takipte Kalın</h4>
-                            <div class="social-media-icons">
-                                <a href="#" class="social-icon" aria-label="Instagram">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="social-icon" aria-label="Facebook">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="social-icon" aria-label="LinkedIn">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="social-icon" aria-label="X (Twitter)">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="social-icon" aria-label="YouTube">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Contact Info -->
-                        <div class="footer-contact-info">
-                            <h4 class="footer-contact-title">Bize Ulaşın</h4>
-                            
-                            <!-- Phone -->
-                            <div class="contact-item phone-item">
-                                <div class="contact-icon">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                                    </svg>
-                                </div>
-                                <span class="contact-text">444 02 03</span>
-                            </div>
-
-                            <!-- WhatsApp -->
-                            <div class="contact-item whatsapp-item">
-                                <button class="whatsapp-btn">
-                                    <div class="whatsapp-icon">
-                                        <svg viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.051 3.488"/>
-                                        </svg>
-                                    </div>
-                                    <span>WhatsApp Destek</span>
-                                </button>
-                            </div>
-
-                            <!-- Email -->
-                            <div class="contact-item email-item">
-                                <div class="contact-icon">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                                    </svg>
-                                </div>
-                                <span class="contact-text">info@emlaksende.com</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer Bottom -->
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="footer-bottom-content">
-                    <!-- Left Side - Copyright -->
-                    <div class="footer-left">
-                        <p class="copyright">© 2024 Emlaksende. Tüm hakları saklıdır.</p>
-                        <p class="footer-note">Emlaksende.com sitesi Yamanof tarafından kurulup tasarlanmıştır</p>
-                    </div>
-
-                    <!-- Center - Payment Cards -->
-                    <div class="footer-center">
-                        <div class="payment-cards">
-                            <div class="payment-card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzAwNTZkMiIvPjx0ZXh0IHg9IjUiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPkJPTlVTPC90ZXh0Pjwvc3ZnPg==" alt="Bonus Card">
-                            </div>
-                            <div class="payment-card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iI2ZmMDA0NCI+PC9yZWN0Pjx0ZXh0IHg9IjMiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPk1BWElNVU08L3RleHQ+PC9zdmc+" alt="Maximum">
-                            </div>
-                            <div class="payment-card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzAwODBmZiI+PC9yZWN0Pjx0ZXh0IHg9IjgiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPldPUkxEPC90ZXh0Pjwvc3ZnPg==" alt="World">
-                            </div>
-                            <div class="payment-card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzZjNzU3ZCI+PC9yZWN0Pjx0ZXh0IHg9IjEiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjciPkJBTktLQVJUPC90ZXh0Pjwvc3ZnPg==" alt="Bankkart">
-                            </div>
-                            <div class="payment-card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzJiOWJkNCI+PC9yZWN0Pjx0ZXh0IHg9IjQiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjgiPkFYRVNTPC90ZXh0Pjwvc3ZnPg==" alt="Axess">
-                            </div>
-                            <div class="payment-card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzFlNmU4ZCI+PC9yZWN0Pjx0ZXh0IHg9IjgiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjciPlRST1k8L3RleHQ+PC9zdmc+" alt="Troy">
-                            </div>
-                            <div class="payment-card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzAwNTZkMiI+PC9yZWN0Pjx0ZXh0IHg9IjEwIiB5PSIxNiIgZmlsbD0iI2ZmZiIgZm9udC1zaXplPSI4Ij5WSVNBIDwvdGV4dD48L3N2Zz4=" alt="Visa">
-                            </div>
-                            <div class="payment-card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iI2ViMDAxYiI+PC9yZWN0Pjx0ZXh0IHg9IjUiIHk9IjE2IiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjciPk1BU1RFUjwvdGV4dD48L3N2Zz4=" alt="Mastercard">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Side - Yamanof Logo -->
-                    <div class="footer-right">
-                        <div class="yamanof-logo">
-                            <div class="yamanof-icon">Y</div>
-                            <div class="yamanof-text">
-                                <div class="yamanof-title">Yamanof</div>
-                                <div class="yamanof-subtitle">Consultancy</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+   
 
     <!-- Image Modal -->
     <div class="image-modal" id="imageModal">
@@ -2375,12 +2228,6 @@
     <!-- Mobile Contact Menu -->
     <div class="mobile-contact-menu" id="mobileContactMenu">
         <div class="mobile-contact-buttons">
-            <button class="mobile-contact-btn primary" id="mobileContactBtn">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                    <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.2c.27-.27.35-.67.24-1.02C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/>
-                </svg>
-                İletişim
-            </button>
             <button class="mobile-contact-btn whatsapp" id="mobileWhatsappBtn">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.051 3.488"/>
@@ -2397,6 +2244,13 @@
     </div>
 
     <script>
+        // Google Maps API callback function - Global scope'da tanımlanmalı
+        function initMap() {
+            console.log('🌐 Google Maps API loaded successfully');
+            console.log('🔧 Google Maps object available:', typeof google !== 'undefined' && google.maps);
+            // Map will be initialized when property data is loaded
+        }
+        
         // Details dropdown and other non-gallery functionality
         const detailsBtn = document.getElementById('detailsBtn');
         const detailsDropdown = document.getElementById('detailsDropdown');
@@ -2431,9 +2285,9 @@
             btn.addEventListener('click', () => {
                 const label = btn.getAttribute('aria-label');
                 if (label === 'WhatsApp') {
-                    window.open('https://wa.me/905324444203?text=Merhaba, bu ilanla ilgili bilgi almak istiyorum.', '_blank');
+                    window.open('https://wa.me/905524709898?text=Merhaba, bu ilanla ilgili bilgi almak istiyorum.', '_blank');
                 } else if (label === 'Telefon') {
-                    window.location.href = 'tel:+905324444203';
+                    window.location.href = 'tel:+905524709898';
                 }
             });
         });
@@ -2444,57 +2298,54 @@
         });
 
         document.querySelector('.tapview-btn').addEventListener('click', () => {
-            alert('Tapu görüntüleme özelliği açılacak...');
+            showTapuModal();
         });
 
-        // Mobile menu toggle
-        const mobileToggle = document.getElementById('mobileToggle');
-        const navMenu = document.getElementById('navMenu');
+        // Tapu Modal Functions
+        function showTapuModal() {
+            const modal = document.getElementById('tapuModal');
+            const imageContainer = document.getElementById('tapuImageContainer');
+            const noImageContainer = document.getElementById('tapuNoImage');
+            const tapuImage = document.getElementById('tapuImage');
+            
+            console.log('🔍 Tapu Modal - İlan verisi:', window.currentIlanData);
+            console.log('🔍 Tapu Modal - Tapu görseli:', window.currentIlanData?.tapuGorseli);
+            
+            // İlan verisinden tapu görseli URL'sini al
+            if (window.currentIlanData && window.currentIlanData.tapuGorseli && window.currentIlanData.tapuGorseli.url) {
+                console.log('✅ Tapu görseli bulundu:', window.currentIlanData.tapuGorseli.url);
+                tapuImage.src = window.currentIlanData.tapuGorseli.url;
+                imageContainer.style.display = 'block';
+                noImageContainer.style.display = 'none';
+            } else {
+                console.log('❌ Tapu görseli bulunamadı');
+                imageContainer.style.display = 'none';
+                noImageContainer.style.display = 'block';
+            }
+            
+            modal.style.display = 'flex';
+            
+            // ESC tuşu ile kapatma
+            document.addEventListener('keydown', handleEscKey);
+            
+            // Modal dışına tıklayınca kapatma
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeTapuModal();
+                }
+            });
+        }
         
-        if (mobileToggle && navMenu) {
-            mobileToggle.addEventListener('click', function() {
-                // Toggle active class on mobile toggle button
-                mobileToggle.classList.toggle('active');
-                
-                // Toggle active class on navigation menu
-                navMenu.classList.toggle('active');
-                
-                // Update aria-expanded for accessibility
-                const isExpanded = navMenu.classList.contains('active');
-                mobileToggle.setAttribute('aria-expanded', isExpanded);
-            });
-
-            // Close mobile menu when clicking on a link
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    mobileToggle.setAttribute('aria-expanded', 'false');
-                });
-            });
-
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const isClickInsideNav = navMenu.contains(event.target);
-                const isClickOnToggle = mobileToggle.contains(event.target);
-                
-                if (!isClickInsideNav && !isClickOnToggle && navMenu.classList.contains('active')) {
-                    mobileToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    mobileToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-
-            // Handle Escape key to close mobile menu
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                    mobileToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    mobileToggle.setAttribute('aria-expanded', 'false');
-                    mobileToggle.focus();
-                }
-            });
+        function closeTapuModal() {
+            const modal = document.getElementById('tapuModal');
+            modal.style.display = 'none';
+            document.removeEventListener('keydown', handleEscKey);
+        }
+        
+        function handleEscKey(e) {
+            if (e.key === 'Escape') {
+                closeTapuModal();
+            }
         }
 
         // Özellikler Section Functionality
@@ -2571,32 +2422,25 @@
         // WhatsApp button functionality
         document.querySelectorAll('.whatsapp-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                const whatsappUrl = 'https://wa.me/905324444203?text=Merhaba, emlak ilanı hakkında bilgi almak istiyorum.';
+                const whatsappUrl = 'https://wa.me/905524709898?text=Merhaba, emlak ilanı hakkında bilgi almak istiyorum.';
                 window.open(whatsappUrl, '_blank');
             });
         });
 
         // Mobile contact menu functionality
-        const mobileContactBtn = document.getElementById('mobileContactBtn');
         const mobileWhatsappBtn = document.getElementById('mobileWhatsappBtn');
         const mobilePhoneBtn = document.getElementById('mobilePhoneBtn');
 
-        if (mobileContactBtn) {
-            mobileContactBtn.addEventListener('click', () => {
-                alert('İletişime geçme seçeneklerini görebilirsiniz.');
-            });
-        }
-
         if (mobileWhatsappBtn) {
             mobileWhatsappBtn.addEventListener('click', () => {
-                const whatsappUrl = 'https://wa.me/905324444203?text=Merhaba, emlak ilanı hakkında bilgi almak istiyorum.';
+                const whatsappUrl = 'https://wa.me/905524709898?text=Merhaba, emlak ilanı hakkında bilgi almak istiyorum.';
                 window.open(whatsappUrl, '_blank');
             });
         }
 
         if (mobilePhoneBtn) {
             mobilePhoneBtn.addEventListener('click', () => {
-                window.location.href = 'tel:+905324444203';
+                window.location.href = 'tel:+905524709898';
             });
         }
 
@@ -2741,6 +2585,9 @@
             
             // Update page content with property data
             async function updatePageWithPropertyData(property) {
+                // İlan verisini global olarak sakla (tapu modal için)
+                window.currentIlanData = property;
+                
                 // Update page title
                 const pageTitle = document.querySelector('.page-title');
                 if (pageTitle) {
@@ -3451,12 +3298,29 @@
                 // Process boundary data - handle both array and object formats from Firebase
                 let arsaSinirlariArray = [];
                 if (property.arsa_sinirlari) {
+                    console.log('🔍 Raw arsa_sinirlari data:', property.arsa_sinirlari);
+                    console.log('🔍 Type of arsa_sinirlari:', typeof property.arsa_sinirlari);
+                    console.log('🔍 Keys in arsa_sinirlari:', Object.keys(property.arsa_sinirlari));
+                    
                     if (Array.isArray(property.arsa_sinirlari)) {
                         arsaSinirlariArray = property.arsa_sinirlari;
                         console.log('🏗️ Arsa sınırları (array format):', arsaSinirlariArray);
                     } else if (typeof property.arsa_sinirlari === 'object') {
                         // Convert object to array if Firebase returned it as an object with numeric keys
-                        arsaSinirlariArray = Object.values(property.arsa_sinirlari);
+                        // Filter out empty/undefined values and ensure we have valid lat/lng pairs
+                        const allValues = Object.values(property.arsa_sinirlari);
+                        console.log('🔍 All values from arsa_sinirlari:', allValues);
+                        
+                        arsaSinirlariArray = allValues.filter(point => {
+                            const isValid = point && typeof point === 'object' && 
+                                   typeof point.lat === 'number' && 
+                                   typeof point.lng === 'number' &&
+                                   !isNaN(point.lat) && !isNaN(point.lng);
+                            if (!isValid) {
+                                console.log('⚠️ Filtered out invalid point:', point);
+                            }
+                            return isValid;
+                        });
                         console.log('🏗️ Arsa sınırları (object format converted to array):', arsaSinirlariArray);
                     }
                     console.log('📊 Sınır noktası sayısı:', arsaSinirlariArray.length);
@@ -3516,6 +3380,9 @@
                     
                     console.log('✅ Google Maps initialized successfully');
                     
+                    // Initialize boundary markers array
+                    window.boundaryMarkers = [];
+                    
                     // Add marker for property location
                     window.propertyMarker = new google.maps.Marker({
                         position: center,
@@ -3539,7 +3406,7 @@
                 }
             }
             
-            // Draw property boundaries
+            // Draw property boundaries (Kullanıcının önerdiği yöntem + mevcut kod)
             function drawPropertyBoundaries(boundaries) {
                 console.log('🎨 drawPropertyBoundaries called with:', boundaries);
                 
@@ -3560,57 +3427,265 @@
                 
                 console.log('✅ All checks passed, drawing polygon...');
                 
-                // Clear existing polygon
+                // Clear existing elements
                 if (window.propertyPolygon) {
                     console.log('🗑️ Clearing existing polygon');
                     window.propertyPolygon.setMap(null);
                 }
                 
-                // Create polygon coordinates
-                const polygonCoords = boundaries.map(point => {
-                    const coord = new google.maps.LatLng(point.lat, point.lng);
-                    console.log(`📍 Created coordinate: ${point.lat}, ${point.lng}`);
-                    return coord;
-                });
+                if (window.propertyPolyline) {
+                    console.log('🗑️ Clearing existing polyline');
+                    window.propertyPolyline.setMap(null);
+                }
                 
-                console.log('📐 Created polygon coordinates:', polygonCoords);
+                if (window.boundaryMarkers) {
+                    window.boundaryMarkers.forEach(marker => marker.setMap(null));
+                }
+                window.boundaryMarkers = [];
                 
-                // Create and display polygon
-                try {
-                    window.propertyPolygon = new google.maps.Polygon({
-                        paths: polygonCoords,
-                        strokeColor: '#142A45',
-                        strokeOpacity: 0.8,
-                        strokeWeight: 3,
-                        fillColor: '#142A45',
-                        fillOpacity: 0.2,
-                        map: window.propertyMap
+                // Kullanıcının önerdiği yöntem: Koordinatları bir dizide topla
+                let boundaryCoords = [];
+                
+                // Firebase'den gelen noktaları işlerken
+                boundaries.forEach((point, index) => {
+                    let lat = point.lat;
+                    let lng = point.lng;
+                    let pos = {lat: lat, lng: lng};
+                    
+                    console.log(`📍 Processing boundary point ${index + 1}:`, pos);
+                    console.log(`🔍 Point ${index + 1} details:`, {
+                        originalPoint: point,
+                        lat: lat,
+                        lng: lng,
+                        latType: typeof lat,
+                        lngType: typeof lng,
+                        latValid: !isNaN(lat) && lat !== null && lat !== undefined,
+                        lngValid: !isNaN(lng) && lng !== null && lng !== undefined
                     });
                     
-                    console.log('✅ Polygon created successfully');
+                    // Marker ekle
+                    const marker = new google.maps.Marker({
+                        position: pos,
+                        map: window.propertyMap,
+                        title: `Sınır Noktası ${index + 1}`,
+                        icon: {
+                            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="10" cy="10" r="6" fill="#2b6cff" stroke="#FFFFFF" stroke-width="2"/>
+                                    <text x="10" y="13" text-anchor="middle" fill="white" font-size="8" font-weight="bold">${index + 1}</text>
+                                </svg>
+                            `),
+                            scaledSize: new google.maps.Size(20, 20),
+                            anchor: new google.maps.Point(10, 10)
+                        }
+                    });
+                    window.boundaryMarkers.push(marker);
                     
-                    // Fit map to show entire polygon
-                    const bounds = new google.maps.LatLngBounds();
-                    polygonCoords.forEach(coord => bounds.extend(coord));
-                    window.propertyMap.fitBounds(bounds);
+                    // Koordinatları polygon için sakla
+                    boundaryCoords.push(pos);
+                });
+                
+                console.log('📐 Collected boundary coordinates:', boundaryCoords);
+                console.log('🔍 Boundary coordinates details:', {
+                    length: boundaryCoords.length,
+                    firstCoord: boundaryCoords[0],
+                    lastCoord: boundaryCoords[boundaryCoords.length - 1],
+                    allCoords: boundaryCoords
+                });
+                
+                // Noktalar geldikten sonra polygon çiz (kullanıcının önerdiği yöntem)
+                if (boundaryCoords.length >= 3) {
+                    console.log('🎯 Drawing polygon with collected coordinates...');
                     
-                    console.log('🎯 Map fitted to polygon bounds');
-                    
-                    // Add some padding to bounds
-                    window.propertyMap.setZoom(Math.min(window.propertyMap.getZoom(), 18));
-                    
-                    console.log('✅ Polygon drawing completed successfully');
-                } catch (error) {
-                    console.error('❌ Error creating polygon:', error);
+                    try {
+                        // Google Maps LatLng objelerine dönüştür
+                        const googleMapsCoords = boundaryCoords.map(coord => 
+                            new google.maps.LatLng(coord.lat, coord.lng)
+                        );
+                        
+                        console.log('🗺️ Google Maps coordinates:', googleMapsCoords);
+                        console.log('🔍 First Google Maps coord:', googleMapsCoords[0]);
+                        console.log('🔍 Last Google Maps coord:', googleMapsCoords[googleMapsCoords.length - 1]);
+                        
+                        // Koordinatların çok küçük olup olmadığını kontrol et
+                        const coordDifferences = [];
+                        for (let i = 0; i < googleMapsCoords.length - 1; i++) {
+                            const diff = {
+                                latDiff: Math.abs(googleMapsCoords[i].lat() - googleMapsCoords[i + 1].lat()),
+                                lngDiff: Math.abs(googleMapsCoords[i].lng() - googleMapsCoords[i + 1].lng())
+                            };
+                            coordDifferences.push(diff);
+                        }
+                        console.log('🔍 Coordinate differences between consecutive points:', coordDifferences);
+                        
+                        // Eğer koordinatlar çok yakınsa, bunları büyüt
+                        const minDiff = 0.0001; // Minimum fark
+                        let needsAdjustment = false;
+                        coordDifferences.forEach((diff, index) => {
+                            if (diff.latDiff < minDiff || diff.lngDiff < minDiff) {
+                                console.log(`⚠️ Points ${index + 1} and ${index + 2} are too close, adjusting...`);
+                                needsAdjustment = true;
+                            }
+                        });
+                        
+                        // Eğer koordinatlar çok yakınsa, bunları büyüt
+                        if (needsAdjustment) {
+                            console.log('🔧 Adjusting coordinates to make them more visible...');
+                            const adjustedCoords = googleMapsCoords.map((coord, index) => {
+                                const adjustment = 0.0002; // 0.0002 derece = yaklaşık 20 metre
+                                return new google.maps.LatLng(
+                                    coord.lat() + (index * adjustment * 0.1),
+                                    coord.lng() + (index * adjustment * 0.1)
+                                );
+                            });
+                            googleMapsCoords = adjustedCoords;
+                            console.log('🔧 Adjusted coordinates:', googleMapsCoords);
+                        }
+                        
+                                                // Ana polygon çiz - daha görünür renklerle
+                    window.propertyPolygon = new google.maps.Polygon({
+                            paths: googleMapsCoords,
+                            strokeColor: "#FF0000", // Kırmızı çizgi - daha görünür
+                        strokeOpacity: 1.0, // Tam opak
+                        strokeWeight: 5, // Daha kalın çizgi
+                            fillColor: "#FF0000", // Kırmızı doldurma
+                        fillOpacity: 0.3, // Daha opak doldurma
+                            map: window.propertyMap,
+                            clickable: true,
+                            zIndex: 1000
+                        });
+                        
+                        console.log('✅ Polygon created successfully with user method');
+                        console.log('🔍 Polygon object:', window.propertyPolygon);
+                        console.log('🔍 Polygon map:', window.propertyPolygon.getMap());
+                        console.log('🔍 Polygon paths:', window.propertyPolygon.getPath());
+                        console.log('🔍 Polygon paths array:', window.propertyPolygon.getPath().getArray());
+                        console.log('🔍 Polygon visible:', window.propertyPolygon.getVisible());
+                        
+                        // Polygon'ın gerçekten haritada olup olmadığını basit test ile kontrol et
+                        const polygonMap = window.propertyPolygon.getMap();
+                        if (polygonMap) {
+                            console.log('✅ Polygon is attached to map');
+                            console.log('🔍 Map center:', polygonMap.getCenter());
+                            console.log('🔍 Map zoom:', polygonMap.getZoom());
+                            
+                            // Polygon'ın gerçekten görünür olup olmadığını test et
+                            console.log('🔍 Testing polygon visibility...');
+                            const paths = window.propertyPolygon.getPath();
+                            const pathArray = paths.getArray();
+                            console.log('🔍 Polygon has', pathArray.length, 'points');
+                            
+                            if (pathArray.length > 0) {
+                                const firstPoint = pathArray[0];
+                                console.log('🔍 First point:', firstPoint.lat(), firstPoint.lng());
+                                console.log('🔍 Last point:', pathArray[pathArray.length - 1].lat(), pathArray[pathArray.length - 1].lng());
+                            }
+                        } else {
+                            console.log('❌ Polygon is NOT attached to map');
+                        }
+                        
+                        // Ek olarak polyline da çiz (mevcut kod)
+                        window.propertyPolyline = new google.maps.Polyline({
+                            path: googleMapsCoords,
+                            strokeColor: '#00FF00', // Yeşil çizgi
+                            strokeOpacity: 1.0,
+                            strokeWeight: 4,
+                            map: window.propertyMap,
+                            zIndex: 999
+                        });
+                        
+                        console.log('✅ Polyline created successfully');
+                        
+                        // Haritayı polygon'a sığdır
+                        const bounds = new google.maps.LatLngBounds();
+                        googleMapsCoords.forEach(coord => bounds.extend(coord));
+                        console.log('🔍 Bounds object:', bounds);
+                        console.log('🔍 Bounds center:', bounds.getCenter());
+                        console.log('🔍 Bounds northeast:', bounds.getNorthEast());
+                        console.log('🔍 Bounds southwest:', bounds.getSouthWest());
+                        
+                        window.propertyMap.fitBounds(bounds, 40);
+                        
+                        console.log('🎯 Map fitted to polygon bounds');
+                        console.log('🔍 Current map center:', window.propertyMap.getCenter());
+                        console.log('🔍 Current map zoom:', window.propertyMap.getZoom());
+                        console.log('✅ Polygon drawing completed successfully with both methods');
+                        
+                        // Test: Polygon'ın gerçekten haritada olup olmadığını kontrol et
+                        setTimeout(() => {
+                            console.log('🔍 After 1 second - Polygon check:');
+                            console.log('🔍 Polygon exists:', !!window.propertyPolygon);
+                            console.log('🔍 Polygon map:', window.propertyPolygon ? window.propertyPolygon.getMap() : 'null');
+                            console.log('🔍 Polygon visible:', window.propertyPolygon ? window.propertyPolygon.getVisible() : 'null');
+                            console.log('🔍 Polygon paths count:', window.propertyPolygon ? window.propertyPolygon.getPath().getLength() : 'null');
+                            
+                            // Haritada polygon'ı bulmaya çalış (getOverlays method'u yok, alternatif yöntem)
+                            console.log('🔍 Map overlays: getOverlays method not available in Google Maps API');
+                            console.log('🔍 Checking polygon properties instead...');
+                            
+                            // Polygon'ın gerçekten haritada olup olmadığını test et
+                            if (window.propertyPolygon) {
+                                const polygonMap = window.propertyPolygon.getMap();
+                                console.log('🔍 Polygon map reference:', polygonMap);
+                                console.log('🔍 Polygon map === window.propertyMap:', polygonMap === window.propertyMap);
+                                
+                                // Polygon'ı haritadan kaldır ve tekrar ekle
+                                if (polygonMap) {
+                                    console.log('🔍 Testing polygon removal and re-addition...');
+                                    window.propertyPolygon.setMap(null);
+                                    setTimeout(() => {
+                                        window.propertyPolygon.setMap(window.propertyMap);
+                                        console.log('🔍 Polygon re-added to map');
+                                    }, 1000);
+                                }
+                            }
+                            
+                            // Alternatif yöntem: Haritaya yeni bir test polygon ekle - farklı konumda
+                            try {
+                                const testPolygon = new google.maps.Polygon({
+                                    paths: [
+                                        {lat: boundaryCoords[0].lat + 0.002, lng: boundaryCoords[0].lng + 0.002},
+                                        {lat: boundaryCoords[0].lat + 0.002, lng: boundaryCoords[0].lng - 0.002},
+                                        {lat: boundaryCoords[0].lat - 0.002, lng: boundaryCoords[0].lng}
+                                    ],
+                                    strokeColor: "#00FF00", // Yeşil - farklı renk
+                                    strokeOpacity: 1.0,
+                                    strokeWeight: 8, // Daha kalın
+                                    fillColor: "#00FF00",
+                                    fillOpacity: 0.6, // Daha opak
+                                    map: window.propertyMap
+                                });
+                                console.log('🔍 Test green polygon added for debugging');
+                                console.log('🔍 Test polygon position:', testPolygon.getPath().getArray());
+                                
+                                // Test polygon'ı 5 saniye sonra kaldır
+                                setTimeout(() => {
+                                    if (testPolygon) {
+                                        testPolygon.setMap(null);
+                                        console.log('🔍 Test polygon removed after 5 seconds');
+                                    }
+                                }, 5000);
+                                
+                            } catch (testError) {
+                                console.error('❌ Error creating test polygon:', testError);
+                            }
+                            
+                        }, 1000);
+                        
+                    } catch (error) {
+                        console.error('❌ Error creating polygon:', error);
+                        console.error('❌ Error details:', {
+                            message: error.message,
+                            stack: error.stack,
+                            boundaryCoords: boundaryCoords
+                        });
+                    }
+                } else {
+                    console.log('❌ Not enough coordinates collected for polygon');
                 }
             }
             
-            // Google Maps API callback function
-            function initMap() {
-                console.log('🌐 Google Maps API loaded successfully');
-                console.log('🔧 Google Maps object available:', typeof google !== 'undefined' && google.maps);
-                // Map will be initialized when property data is loaded
-            }
+
             
             // Load property details when page loads
             document.addEventListener('DOMContentLoaded', () => {
@@ -3622,5 +3697,33 @@
             console.error('Firebase SDK not loaded');
         }
     </script>
+    
+    <!-- Include Components Script -->
+    <script src="include-components.js"></script>
+    
+    <!-- Tapu Görseli Modal -->
+    <div id="tapuModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 90vw; max-height: 90vh; background: white; border-radius: 12px; padding: 0; overflow: hidden;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
+                <h3 style="margin: 0; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Tapu Belgesi</h3>
+                <button class="modal-close" onclick="closeTapuModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280; padding: 0.25rem; border-radius: 4px; transition: all 0.2s;">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem; text-align: center; max-height: 70vh; overflow-y: auto;">
+                <div id="tapuImageContainer" style="display: none;">
+                    <img id="tapuImage" style="max-width: 100%; max-height: 60vh; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                </div>
+                <div id="tapuNoImage" style="display: none; padding: 2rem; color: #6b7280;">
+                    <svg width="64" height="64" fill="currentColor" viewBox="0 0 20 20" style="margin: 0 auto 1rem; opacity: 0.5;">
+                        <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                    </svg>
+                    <p style="margin: 0; font-size: 1.1rem;">Bu ilan için tapu görseli bulunmamaktadır.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

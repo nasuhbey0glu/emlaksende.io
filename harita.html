@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arsa Sınırı Çizici — Google Maps</title>
+
+  <style>
+    :root{
+      --primary: #1c2b4a;
+      --accent: #ff6b6b;
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Poppins", Arial, sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
+
+    /* Basit layout */
+    .container{
+      display:flex;
+      flex-direction:column;
+      height:100vh;
+    }
+
+    header.appbar{
+      background: var(--primary);
+      color:white;
+      padding:10px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    header.appbar h1{
+      font-size:16px;
+      margin:0;
+      font-weight:600;
+    }
+    header.appbar .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    button {
+      background: white;
+      border: none;
+      padding:8px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+      color:var(--primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    button.ghost{
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    button.danger{
+      background: var(--accent);
+      color: white;
+    }
+
+    /* main area: map + sidepanel */
+    .main{
+      display:flex;
+      flex:1;
+      gap:12px;
+      padding:12px;
+    }
+
+    /* map area */
+    #map {
+      flex:1;
+      min-height:0; /* allow flexbox to shrink properly */
+      border-radius:12px;
+      box-shadow: 0 6px 18px rgba(23,35,66,0.08);
+      overflow:hidden;
+    }
+
+    /* side panel */
+    .panel{
+      width:320px;
+      max-width:40%;
+      background:white;
+      border-radius:12px;
+      padding:12px;
+      box-shadow: 0 6px 18px rgba(23,35,66,0.06);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .panel h2{
+      margin:0;
+      font-size:14px;
+    }
+    textarea.coords{
+      width:100%;
+      height:160px;
+      resize:vertical;
+      padding:8px;
+      border-radius:8px;
+      border:1px solid #e6e9f0;
+      font-family:monospace;
+      font-size:13px;
+    }
+    .hint{
+      font-size:12px;
+      color:#666;
+    }
+
+    .panel .row{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .status{
+      font-size:13px;
+      padding:8px;
+      border-radius:8px;
+      background: #fff6f6;
+      color:#8b2b2b;
+      display:none;
+    }
+
+    footer.note{
+      font-size:12px;
+      color:#666;
+      margin-top:auto;
+    }
+
+    /* Responsive */
+    @media(max-width:880px){
+      .main{ flex-direction:column; padding:8px; }
+      .panel{ width:100%; max-width:100%; order:2; }
+      #map{ order:1; height:56vh; border-radius:8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="appbar">
+      <h1>Arsa Sınırı Çizici — Google Maps</h1>
+      <div class="controls">
+        <button id="fitBtn">Haritaya Sığdır</button>
+        <button id="redrawBtn">Yeniden Çiz</button>
+        <button id="clearBtn" class="danger">Temizle</button>
+      </div>
+    </header>
+
+    <div class="main">
+      <div id="map"></div>
+
+      <aside class="panel">
+        <h2>Koordinatlar (3–5 nokta)</h2>
+        <div class="hint">
+          Format: her satırda <code>lat,lng</code> örn: <code>41.012,28.976</code><br>
+          En az 3, en fazla 5 satır.
+        </div>
+        <textarea id="coordsInput" class="coords" spellcheck="false"></textarea>
+
+        <div class="row">
+          <button id="drawBtn">Çiz</button>
+          <button id="sample3">Örnek 3</button>
+          <button id="sample5">Örnek 5</button>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <footer class="note">
+          API: Google Maps JavaScript API kullanılıyor. (API anahtarı yukarıda gömülü)
+        </footer>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Google Maps JS (callback:initMap). API anahtarını gerektiği gibi değiştir -->
+  <script>
+    // --------- KULLANICIYA GÖRÜNEN AYAR: Koordinat örneği -------------
+    // Varsayılan (5 nokta örneği). İstersen burayı 3 nokta ile değiştir.
+    const defaultCoords = [
+      {lat: 41.015137, lng: 28.979530},
+      {lat: 41.014000, lng: 28.985000},
+      {lat: 41.011000, lng: 28.983000},
+      {lat: 41.009500, lng: 28.978000},
+      {lat: 41.012600, lng: 28.975000}
+    ];
+    // ---------------------------------------------------------------
+
+    // Global değişkenler
+    let map;
+    let polygon = null;
+    let markers = [];
+    let bounds;
+
+    // Yardımcı: inputtaki metni parse eder -> [ {lat, lng}, ... ]
+    function parseCoordsText(text){
+      const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      const arr = [];
+      for(const line of lines){
+        // kabul et: "lat,lng" veya "lat, lng"
+        const parts = line.split(',').map(p => p.trim());
+        if(parts.length !== 2) throw new Error("Her satırda iki değer (lat,lng) olmalı.");
+        const lat = parseFloat(parts[0].replace(',', '.'));
+        const lng = parseFloat(parts[1].replace(',', '.'));
+        if(Number.isNaN(lat) || Number.isNaN(lng)) throw new Error("Geçersiz sayı formatı: " + line);
+        arr.push({lat, lng});
+      }
+      return arr;
+    }
+
+    // Haritayı başlat (Google Maps callback)
+    function initMap(){
+      // Başlangıç merkezi (varsayılan)
+      const center = {lat: 41.0128, lng: 28.9760};
+
+      map = new google.maps.Map(document.getElementById('map'), {
+        center,
+        zoom: 14,
+        mapTypeId: 'roadmap',
+        gestureHandling: 'greedy'
+      });
+
+      // Put default text in textarea
+      const input = document.getElementById('coordsInput');
+      input.value = defaultCoords.map(c => c.lat + ',' + c.lng).join('\n');
+
+      // İlk çizim
+      safeDraw();
+
+      // butonlar
+      document.getElementById('drawBtn').addEventListener('click', safeDraw);
+      document.getElementById('redrawBtn').addEventListener('click', safeDraw);
+      document.getElementById('clearBtn').addEventListener('click', clearAll);
+      document.getElementById('fitBtn').addEventListener('click', fitToBounds);
+
+      document.getElementById('sample3').addEventListener('click', () => {
+        // örnek 3 nokta (küçük üçgen)
+        const s3 = [
+          {lat:41.015, lng:28.98},
+          {lat:41.012, lng:28.987},
+          {lat:41.0085, lng:28.981}
+        ];
+        document.getElementById('coordsInput').value = s3.map(c=>c.lat+','+c.lng).join('\n');
+      });
+
+      document.getElementById('sample5').addEventListener('click', () => {
+        document.getElementById('coordsInput').value = defaultCoords.map(c=>c.lat+','+c.lng).join('\n');
+      });
+    }
+
+    // Çizim işlemini güvenli yap (hata mesajı göster)
+    function safeDraw(){
+      const statusEl = document.getElementById('status');
+      statusEl.style.display = 'none';
+      try {
+        const txt = document.getElementById('coordsInput').value;
+        const arr = parseCoordsText(txt);
+        if(arr.length < 3) throw new Error("En az 3 koordinat girin.");
+        if(arr.length > 5) throw new Error("En fazla 5 koordinat girin.");
+        drawPolygon(arr);
+      } catch(err){
+        statusEl.innerText = err.message;
+        statusEl.style.display = 'block';
+      }
+    }
+
+    // Polygon çiz, marker ekle, eskiyi temizle
+    function drawPolygon(latlngs){
+      // Temizle
+      clearMarkersAndPolygon();
+
+      // Markers
+      bounds = new google.maps.LatLngBounds();
+      latlngs.forEach((pt, idx) => {
+        const m = new google.maps.Marker({
+          position: pt,
+          map: map,
+          label: `${idx+1}`,
+          title: `Nokta ${idx+1}`
+        });
+        markers.push(m);
+        bounds.extend(pt);
+      });
+
+      // Polygon ayarları
+      polygon = new google.maps.Polygon({
+        paths: latlngs,
+        strokeColor: '#2b6cff',
+        strokeOpacity: 0.95,
+        strokeWeight: 3,
+        fillColor: '#2b6cff',
+        fillOpacity: 0.12,
+        clickable: true,
+        editable: false,
+        zIndex: 1
+      });
+      polygon.setMap(map);
+
+      // Polygon üzerine tıklanınca bilgi penceresi
+      const info = new google.maps.InfoWindow();
+      polygon.addListener('click', (ev) => {
+        const content = `<div style="font-family:Arial,sans-serif;">
+          <strong>Arsa Sınırı</strong><br>
+          Nokta sayısı: ${latlngs.length}
+          </div>`;
+        info.setContent(content);
+        info.setPosition(ev.latLng || bounds.getCenter());
+        info.open(map);
+      });
+
+      // Haritayı poligona sığdır
+      fitToBounds();
+    }
+
+    function fitToBounds(){
+      if(!bounds) {
+        // Eğer polygon yoksa, map merkezini koru
+        return;
+      }
+      map.fitBounds(bounds, 40);
+    }
+
+    function clearMarkersAndPolygon(){
+      if(polygon){
+        polygon.setMap(null);
+        polygon = null;
+      }
+      if(markers && markers.length){
+        markers.forEach(m => m.setMap(null));
+        markers = [];
+      }
+      bounds = null;
+    }
+
+    function clearAll(){
+      clearMarkersAndPolygon();
+      document.getElementById('coordsInput').value = '';
+      const statusEl = document.getElementById('status');
+      statusEl.style.display = 'none';
+      // reset view
+      map.setCenter({lat:41.0128, lng:28.9760});
+      map.setZoom(13);
+    }
+
+    // Google Maps JS yüklenince çağrılacak global fonksiyon.
+    window.initMap = initMap;
+  </script>
+
+  <!-- Google Maps API (callback initMap). API KEY: kullanıcının verdiği -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAw3Z28goiYhTyQxY_zx5eEcx_9I9wMkR4&callback=initMap">
+  </script>
+</body>
+</html>

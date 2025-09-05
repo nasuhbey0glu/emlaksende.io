@@ -49,69 +49,35 @@ const cityData = {
 };
 
 // ===== DOM ELEMENTS =====
-const mobileToggle = document.getElementById('mobileToggle');
-const navMenu = document.getElementById('navMenu');
 const citySelect = document.getElementById('citySelect');
 const districtSelect = document.getElementById('districtSelect');
 const zoningSelect = document.getElementById('zoningSelect');
 const searchButton = document.getElementById('searchButton');
+const citySelectBtn = document.getElementById('citySelectBtn');
+const cityModal = document.getElementById('cityModal');
+const cityModalClose = document.getElementById('cityModalClose');
+const cityGrid = document.getElementById('cityGrid');
 
 // ===== MOBILE MENU FUNCTIONALITY =====
-function initializeMobileMenu() {
-    mobileToggle.addEventListener('click', function() {
-        // Toggle active class on mobile toggle button
-        mobileToggle.classList.toggle('active');
-        
-        // Toggle active class on navigation menu
-        navMenu.classList.toggle('active');
-        
-        // Update aria-expanded for accessibility
-        const isExpanded = navMenu.classList.contains('active');
-        mobileToggle.setAttribute('aria-expanded', isExpanded);
-    });
-
-    // Close mobile menu when clicking on a link
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            mobileToggle.classList.remove('active');
-            navMenu.classList.remove('active');
-            mobileToggle.setAttribute('aria-expanded', 'false');
-        });
-    });
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const isClickInsideNav = navMenu.contains(event.target);
-        const isClickOnToggle = mobileToggle.contains(event.target);
-        
-        if (!isClickInsideNav && !isClickOnToggle && navMenu.classList.contains('active')) {
-            mobileToggle.classList.remove('active');
-            navMenu.classList.remove('active');
-            mobileToggle.setAttribute('aria-expanded', 'false');
-        }
-    });
-}
+// Header functionality is now handled by header.html
 
 // ===== CITY DISTRICT FUNCTIONALITY =====
 function initializeCityDistrictSelection() {
+    // Load cities and districts from Firebase
+    loadCitiesAndDistrictsFromFirebase();
+    
     citySelect.addEventListener('change', function() {
         const selectedCity = this.value;
         
         // Clear district select
         districtSelect.innerHTML = '<option value="">İlçe Seç</option>';
         
-        if (selectedCity && cityData[selectedCity]) {
+        if (selectedCity) {
             // Enable district select
             districtSelect.disabled = false;
             
-            // Populate district options
-            cityData[selectedCity].forEach(district => {
-                const option = document.createElement('option');
-                option.value = district.toLowerCase().replace(/\s+/g, '-').replace(/ş/g, 's').replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ü/g, 'u');
-                option.textContent = district;
-                districtSelect.appendChild(option);
-            });
+            // Load districts for selected city from Firebase
+            loadDistrictsForCity(selectedCity);
             
             console.log('Şehir seçildi:', selectedCity);
         } else {
@@ -137,6 +103,152 @@ function initializeCityDistrictSelection() {
         } else {
             console.log('İmar durumu seçimi temizlendi');
         }
+    });
+}
+
+// Load cities and districts from Firebase
+function loadCitiesAndDistrictsFromFirebase() {
+    if (!database) {
+        console.error('Database not initialized');
+        return;
+    }
+    
+    console.log('Loading cities and districts from Firebase...');
+    
+    // Load cities from properties
+    database.ref('ilanlar').once('value')
+        .then((snapshot) => {
+            const propertiesData = snapshot.val();
+            
+            if (!propertiesData) {
+                console.log('No properties found for city/district loading');
+                return;
+            }
+            
+            // Get unique cities
+            const cities = [...new Set(
+                Object.values(propertiesData)
+                    .map(property => property.sehir)
+                    .filter(Boolean)
+            )].sort();
+            
+            console.log('Available cities:', cities);
+            
+            // Update city select options
+            updateCitySelectOptions(cities);
+            
+            // Load imar durumu options
+            loadImarDurumuOptions();
+        })
+        .catch((error) => {
+            console.error('Error loading cities from Firebase:', error);
+        });
+}
+
+// Update city select options
+function updateCitySelectOptions(cities) {
+    // Clear existing options except first one
+    while (citySelect.children.length > 1) {
+        citySelect.removeChild(citySelect.lastChild);
+    }
+    
+    // Add new city options
+    cities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        citySelect.appendChild(option);
+    });
+}
+
+// Load districts for selected city
+function loadDistrictsForCity(selectedCity) {
+    if (!database) {
+        console.error('Database not initialized');
+        return;
+    }
+    
+    console.log(`Loading districts for city: ${selectedCity}`);
+    
+    database.ref('ilanlar').once('value')
+        .then((snapshot) => {
+            const propertiesData = snapshot.val();
+            
+            if (!propertiesData) {
+                console.log('No properties found for district loading');
+                return;
+            }
+            
+            // Get districts for selected city
+            const districts = [...new Set(
+                Object.values(propertiesData)
+                    .filter(property => property.sehir === selectedCity)
+                    .map(property => property.ilce)
+                    .filter(Boolean)
+            )].sort();
+            
+            console.log(`Districts for ${selectedCity}:`, districts);
+            
+            // Update district select options
+            districts.forEach(district => {
+                const option = document.createElement('option');
+                option.value = district;
+                option.textContent = district;
+                districtSelect.appendChild(option);
+            });
+        })
+        .catch((error) => {
+            console.error('Error loading districts from Firebase:', error);
+        });
+}
+
+// Load imar durumu options from Firebase
+function loadImarDurumuOptions() {
+    if (!database) {
+        console.error('Database not initialized');
+        return;
+    }
+    
+    console.log('Loading imar durumu options from Firebase...');
+    
+    database.ref('imar_durumu').once('value')
+        .then((snapshot) => {
+            const imarData = snapshot.val();
+            
+            if (!imarData) {
+                console.log('No imar durumu data found');
+                return;
+            }
+            
+            // Get imar durumu names
+            const imarOptions = Object.values(imarData)
+                .map(item => item.name)
+                .filter(Boolean)
+                .sort();
+            
+            console.log('Available imar durumu options:', imarOptions);
+            
+            // Update zoning select options
+            updateZoningSelectOptions(imarOptions);
+        })
+        .catch((error) => {
+            console.error('Error loading imar durumu from Firebase:', error);
+        });
+}
+
+// Update zoning select options
+function updateZoningSelectOptions(imarOptions) {
+    // Clear existing options except first one
+    while (zoningSelect.children.length > 1) {
+        zoningSelect.removeChild(zoningSelect.lastChild);
+    }
+    
+    // Add new imar durumu options
+    imarOptions.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option;
+        optionElement.textContent = option;
+        zoningSelect.appendChild(optionElement);
     });
 }
 
@@ -177,9 +289,23 @@ function initializeSearchFunctionality() {
         console.log('İmar Durumu:', searchData.zoning.text || 'Seçilmedi');
         console.log('====================');
         
-        // Show user feedback (you can replace this with actual search functionality)
+        // Navigate to ilanlar.html with search parameters
         if (searchData.city.text || searchData.district.text || searchData.zoning.text) {
-            alert(`Arama başlatılıyor...\n\nŞehir: ${searchData.city.text || 'Tümü'}\nİlçe: ${searchData.district.text || 'Tümü'}\nİmar Durumu: ${searchData.zoning.text || 'Tümü'}`);
+            const params = new URLSearchParams();
+            
+            if (searchData.city.text) {
+                params.append('city', searchData.city.text);
+            }
+            if (searchData.district.text) {
+                params.append('district', searchData.district.text);
+            }
+            if (searchData.zoning.text) {
+                params.append('zoning', searchData.zoning.text);
+            }
+            
+            const searchUrl = `ilanlar.html?${params.toString()}`;
+            console.log('Navigating to:', searchUrl);
+            window.location.href = searchUrl;
         } else {
             alert('Lütfen en az bir arama kriteri seçiniz.');
         }
@@ -257,15 +383,7 @@ function initializeKeyboardAccessibility() {
         }
     });
     
-    // Handle Escape key to close mobile menu
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-            mobileToggle.classList.remove('active');
-            navMenu.classList.remove('active');
-            mobileToggle.setAttribute('aria-expanded', 'false');
-            mobileToggle.focus();
-        }
-    });
+    // Header functionality is now handled by header.html
 }
 
 // ===== PERFORMANCE OPTIMIZATION =====
@@ -738,29 +856,9 @@ function initializeFAQ() {
 
 // ===== ABOUT SECTION FUNCTIONALITY =====
 function initializeAboutSection() {
-    const readMoreBtn = document.getElementById('readMoreBtn');
-    const fullText = document.getElementById('aboutFullText');
-    const btnText = readMoreBtn?.querySelector('.btn-text');
-    
-    if (!readMoreBtn || !fullText || !btnText) return;
-    
-    readMoreBtn.addEventListener('click', () => {
-        const isExpanded = fullText.classList.contains('expanded');
-        
-        if (isExpanded) {
-            fullText.classList.remove('expanded');
-            readMoreBtn.classList.remove('expanded');
-            btnText.textContent = 'Devamını Oku';
-        } else {
-            fullText.classList.add('expanded');
-            readMoreBtn.classList.add('expanded');
-            btnText.textContent = 'Daha Az Göster';
-        }
-        
-        console.log(`About section ${isExpanded ? 'kapatıldı' : 'genişletildi'}`);
-    });
-    
-    console.log('About section fonksiyonları başlatıldı');
+    // Bu fonksiyon artık loadAboutDescription tarafından handle ediliyor
+    // setupReadMoreButton fonksiyonu dinamik olarak "Devamını Oku" butonunu kuruyor
+    console.log('About section fonksiyonları başlatıldı (Firebase entegrasyonu ile)');
 }
 
 // ===== FOOTER FUNCTIONALITY =====
@@ -835,6 +933,463 @@ function initializeFooterFunctionality() {
     });
     
     console.log('Footer fonksiyonları başlatıldı');
+}
+
+// ===== CITY SELECTION MODAL =====
+function initializeCitySelectionModal() {
+    if (!citySelectBtn || !cityModal || !cityModalClose || !cityGrid) {
+        console.error('City modal elements not found');
+        return;
+    }
+    
+    // Open modal when city select button is clicked
+    citySelectBtn.addEventListener('click', function() {
+        console.log('City select button clicked');
+        openCityModal();
+    });
+    
+    // Close modal when close button is clicked
+    cityModalClose.addEventListener('click', function() {
+        closeCityModal();
+    });
+    
+    // Close modal when clicking outside
+    cityModal.addEventListener('click', function(e) {
+        if (e.target === cityModal) {
+            closeCityModal();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && cityModal.classList.contains('show')) {
+            closeCityModal();
+        }
+    });
+    
+    console.log('City selection modal initialized');
+}
+
+// Open city modal and load cities
+function openCityModal() {
+    cityModal.classList.add('show');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    
+    // Load cities from Firebase
+    loadCitiesForModal();
+}
+
+// Close city modal
+function closeCityModal() {
+    cityModal.classList.remove('show');
+    document.body.style.overflow = ''; // Restore scrolling
+}
+
+// Load cities from Firebase for modal
+function loadCitiesForModal() {
+    if (!database) {
+        console.error('Database not initialized for city modal');
+        cityGrid.innerHTML = '<div class="city-loading"><p>Firebase bağlantısı kurulamadı.</p></div>';
+        return;
+    }
+    
+    console.log('Loading cities for modal from Firebase...');
+    
+    // Show loading state
+    cityGrid.innerHTML = '<div class="city-loading"><p>Şehirler yükleniyor...</p></div>';
+    
+    database.ref('ilanlar').once('value')
+        .then((snapshot) => {
+            const propertiesData = snapshot.val();
+            
+            if (!propertiesData) {
+                cityGrid.innerHTML = '<div class="city-loading"><p>Henüz ilan bulunamadı.</p></div>';
+                return;
+            }
+            
+            // Get unique cities with property counts
+            const cityCounts = {};
+            Object.values(propertiesData).forEach(property => {
+                if (property.sehir) {
+                    cityCounts[property.sehir] = (cityCounts[property.sehir] || 0) + 1;
+                }
+            });
+            
+            // Convert to array and sort
+            const cities = Object.keys(cityCounts)
+                .map(city => ({
+                    name: city,
+                    count: cityCounts[city]
+                }))
+                .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+            
+            console.log('Available cities for modal:', cities);
+            
+            // Render cities in modal
+            renderCitiesInModal(cities);
+        })
+        .catch((error) => {
+            console.error('Error loading cities for modal:', error);
+            cityGrid.innerHTML = '<div class="city-loading"><p>Şehirler yüklenirken hata oluştu.</p></div>';
+        });
+}
+
+// Render cities in modal
+function renderCitiesInModal(cities) {
+    if (cities.length === 0) {
+        cityGrid.innerHTML = '<div class="city-loading"><p>Henüz şehir bulunamadı.</p></div>';
+        return;
+    }
+    
+    cityGrid.innerHTML = '';
+    
+    cities.forEach(city => {
+        const cityItem = document.createElement('div');
+        cityItem.className = 'city-item';
+        cityItem.innerHTML = `
+            <h4>${city.name}</h4>
+            <p>${city.count} ilan</p>
+        `;
+        
+        // Add click handler
+        cityItem.addEventListener('click', function() {
+            selectCityFromModal(city.name);
+        });
+        
+        cityGrid.appendChild(cityItem);
+    });
+    
+    console.log(`Rendered ${cities.length} cities in modal`);
+}
+
+// Handle city selection from modal
+function selectCityFromModal(cityName) {
+    console.log(`City selected from modal: ${cityName}`);
+    
+    // Close modal
+    closeCityModal();
+    
+    // Navigate to ilanlar.html with city filter
+    const params = new URLSearchParams();
+    params.append('city', cityName);
+    
+    const searchUrl = `ilanlar.html?${params.toString()}`;
+    console.log('Navigating to:', searchUrl);
+    window.location.href = searchUrl;
+}
+
+// ===== ABOUT DESCRIPTION LOADING =====
+function loadAboutDescription() {
+    if (!database) {
+        console.error('Database not initialized for about description');
+        return;
+    }
+    
+    console.log('Loading about description from Firebase...');
+    
+    // Firebase'den hakkımızda açıklamasını oku
+    database.ref('aciklama').once('value')
+        .then((snapshot) => {
+            const data = snapshot.val();
+            
+            if (data && data.text) {
+                // about-intro kısmını güncelle
+                const aboutIntro = document.getElementById('aboutIntro');
+                const readMoreBtn = document.getElementById('readMoreBtn');
+                
+                if (aboutIntro) {
+                    // Metni paragraflara böl ve HTML formatında göster
+                    const formattedText = formatAboutText(data.text);
+                    aboutIntro.innerHTML = formattedText;
+                    
+                    // Eğer metin uzunsa "Devamını Oku" butonunu göster
+                    if (data.text.length > 300) {
+                        setupReadMoreButton(data.text);
+                    } else {
+                        // Kısa metinse butonu gizle
+                        if (readMoreBtn) {
+                            readMoreBtn.style.display = 'none';
+                        }
+                    }
+                    
+                    console.log('About description updated successfully');
+                } else {
+                    console.warn('About intro element not found');
+                }
+            } else {
+                // Firebase'de veri yoksa varsayılan metni göster
+                const aboutIntro = document.getElementById('aboutIntro');
+                if (aboutIntro) {
+                    aboutIntro.innerHTML = `
+                        <p style="color: var(--text-secondary); font-style: italic;">
+                            Hakkımızda bilgisi henüz eklenmemiş. Admin panelden ekleyebilirsiniz.
+                        </p>
+                    `;
+                }
+                console.log('No about description found in Firebase');
+            }
+        })
+        .catch((error) => {
+            console.error('Error loading about description:', error);
+            // Hata durumunda varsayılan mesaj göster
+            const aboutIntro = document.getElementById('aboutIntro');
+            if (aboutIntro) {
+                aboutIntro.innerHTML = `
+                    <p style="color: var(--text-secondary); font-style: italic;">
+                        Hakkımızda bilgisi yüklenirken hata oluştu.
+                    </p>
+                `;
+            }
+        });
+}
+
+// Metni paragraflara böl ve HTML formatında döndür
+function formatAboutText(text) {
+    if (!text || !text.trim()) {
+        return '<p style="color: var(--text-secondary); font-style: italic;">Henüz açıklama metni girilmedi...</p>';
+    }
+    
+    // Metni paragraflara böl (çift satır boşluğu ile)
+    const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim());
+    
+    if (paragraphs.length === 0) {
+        return '<p style="color: var(--text-secondary); font-style: italic;">Henüz açıklama metni girilmedi...</p>';
+    }
+    
+    // Her paragrafı <p> etiketi ile sar
+    const formattedParagraphs = paragraphs.map(paragraph => {
+        // Tek satır boşluklarını <br> ile değiştir
+        const formattedParagraph = paragraph.trim().replace(/\n/g, '<br>');
+        return `<p>${formattedParagraph}</p>`;
+    });
+    
+    return formattedParagraphs.join('');
+}
+
+// "Devamını Oku" butonunu kur
+function setupReadMoreButton(fullText) {
+    const aboutIntro = document.getElementById('aboutIntro');
+    const readMoreBtn = document.getElementById('readMoreBtn');
+    const btnText = readMoreBtn?.querySelector('.btn-text');
+    
+    if (!aboutIntro || !readMoreBtn || !btnText) return;
+    
+    // Metni kısalt (ilk 300 karakter)
+    const shortText = fullText.substring(0, 300) + '...';
+    const shortFormattedText = formatAboutText(shortText);
+    
+    // İlk yüklemede kısa metni göster
+    aboutIntro.innerHTML = shortFormattedText;
+    readMoreBtn.style.display = 'block';
+    btnText.textContent = 'Devamını Oku';
+    
+    // Buton durumunu takip et
+    let isExpanded = false;
+    
+    // Event listener'ı temizle (varsa)
+    readMoreBtn.replaceWith(readMoreBtn.cloneNode(true));
+    const newReadMoreBtn = document.getElementById('readMoreBtn');
+    const newBtnText = newReadMoreBtn.querySelector('.btn-text');
+    
+    newReadMoreBtn.addEventListener('click', () => {
+        if (isExpanded) {
+            // Kısa metni göster
+            aboutIntro.innerHTML = shortFormattedText;
+            newBtnText.textContent = 'Devamını Oku';
+            isExpanded = false;
+        } else {
+            // Tam metni göster
+            const fullFormattedText = formatAboutText(fullText);
+            aboutIntro.innerHTML = fullFormattedText;
+            newBtnText.textContent = 'Daha Az Göster';
+            isExpanded = true;
+        }
+        
+        console.log(`About section ${isExpanded ? 'genişletildi' : 'kısaltıldı'}`);
+    });
+}
+
+// ===== FAQ CONTENT LOADING =====
+function loadFAQContent() {
+    if (!database) {
+        console.error('Database not initialized for FAQ content');
+        return;
+    }
+    
+    console.log('Loading FAQ content from Firebase...');
+    
+    // Firebase'den soru-cevap verilerini oku
+    database.ref('soru_cevap').once('value')
+        .then((snapshot) => {
+            const data = snapshot.val();
+            
+            if (data) {
+                const soruCevaplar = Object.values(data);
+                renderFAQContent(soruCevaplar);
+            } else {
+                renderEmptyFAQ();
+            }
+        })
+        .catch((error) => {
+            console.error('Error loading FAQ content:', error);
+            renderEmptyFAQ();
+        });
+}
+
+// FAQ içeriğini render et
+function renderFAQContent(soruCevaplar) {
+    const faqTabs = document.getElementById('faqTabs');
+    const faqContent = document.getElementById('faqContent');
+    
+    if (!faqTabs || !faqContent) {
+        console.error('FAQ elements not found');
+        return;
+    }
+    
+    // Kategorilere göre grupla
+    const groupedByKategori = {};
+    soruCevaplar.forEach(item => {
+        if (!groupedByKategori[item.kategori]) {
+            groupedByKategori[item.kategori] = [];
+        }
+        groupedByKategori[item.kategori].push(item);
+    });
+    
+    // Kategori isimlerini Türkçe'ye çevir
+    const kategoriNames = {
+        'genel': 'Genel',
+        'kurulum': 'Kurulum', 
+        'destek': 'Destek'
+    };
+    
+    // Tab'ları oluştur
+    let tabsHTML = '';
+    let contentHTML = '';
+    let isFirst = true;
+    
+    Object.keys(groupedByKategori).forEach(kategori => {
+        const items = groupedByKategori[kategori];
+        const kategoriName = kategoriNames[kategori] || kategori.charAt(0).toUpperCase() + kategori.slice(1);
+        
+        // Tab butonu
+        tabsHTML += `
+            <button class="faq-tab ${isFirst ? 'active' : ''}" data-tab="${kategori}">
+                ${kategoriName}
+            </button>
+        `;
+        
+        // Tab içeriği
+        contentHTML += `
+            <div class="faq-tab-content ${isFirst ? 'active' : ''}" id="${kategori}">
+                <div class="faq-columns">
+                    <div class="faq-column">
+                        ${renderFAQItems(items.slice(0, Math.ceil(items.length / 2)))}
+                    </div>
+                    <div class="faq-column">
+                        ${renderFAQItems(items.slice(Math.ceil(items.length / 2)))}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        isFirst = false;
+    });
+    
+    faqTabs.innerHTML = tabsHTML;
+    faqContent.innerHTML = contentHTML;
+    
+    // Tab event listener'larını ekle
+    initializeFAQTabs();
+    
+    console.log('FAQ content rendered successfully');
+}
+
+// FAQ item'larını render et
+function renderFAQItems(items) {
+    return items.map(item => `
+        <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+                <span>${item.baslik}</span>
+                <span class="faq-icon">▶</span>
+            </button>
+            <div class="faq-answer">
+                <p>${item.cevap}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Boş FAQ render et
+function renderEmptyFAQ() {
+    const faqTabs = document.getElementById('faqTabs');
+    const faqContent = document.getElementById('faqContent');
+    
+    if (faqTabs && faqContent) {
+        faqTabs.innerHTML = `
+            <button class="faq-tab active" data-tab="genel">Genel</button>
+        `;
+        
+        faqContent.innerHTML = `
+            <div class="faq-tab-content active" id="genel">
+                <div class="faq-columns">
+                    <div class="faq-column">
+                        <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                            <p>Henüz soru-cevap eklenmemiş.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// FAQ tab'larını başlat
+function initializeFAQTabs() {
+    const faqTabs = document.querySelectorAll('.faq-tab');
+    const faqTabContents = document.querySelectorAll('.faq-tab-content');
+    
+    faqTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.getAttribute('data-tab');
+            
+            // Tüm tab'ları deaktif et
+            faqTabs.forEach(t => t.classList.remove('active'));
+            faqTabContents.forEach(content => content.classList.remove('active'));
+            
+            // Seçilen tab'ı aktif et
+            tab.classList.add('active');
+            const targetContent = document.getElementById(targetTab);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+    
+    // FAQ item'larını başlat
+    initializeFAQItems();
+}
+
+// FAQ item'larını başlat
+function initializeFAQItems() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const isExpanded = question.getAttribute('aria-expanded') === 'true';
+            const answer = question.nextElementSibling;
+            const icon = question.querySelector('.faq-icon');
+            
+            if (isExpanded) {
+                question.setAttribute('aria-expanded', 'false');
+                answer.style.maxHeight = '0';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                question.setAttribute('aria-expanded', 'true');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                icon.style.transform = 'rotate(90deg)';
+            }
+        });
+    });
 }
 
 // ===== SCROLL-TRIGGERED ANIMATIONS =====
@@ -1005,11 +1560,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize Firebase functionality first
     loadDynamicHeroBackground();
     initializeHeroBackgroundListener();
+    loadAboutDescription();
+    loadFAQContent();
     
     // Initialize all other functionality
-    initializeMobileMenu();
     initializeCityDistrictSelection();
     initializeSearchFunctionality();
+    initializeCitySelectionModal();
     initializeSmoothScrolling();
     initializeHeaderScrollEffect();
     initializeFormValidation();
@@ -1043,12 +1600,7 @@ if (searchButton) {
     });
 }
 
-// Track menu interactions
-if (mobileToggle) {
-    mobileToggle.addEventListener('click', () => {
-        trackUserInteraction('click', 'navigation', 'mobile_menu_toggle');
-    });
-}
+// Header functionality is now handled by header.html
 
 // ===== FIREBASE INTEGRATION ===== //
 
@@ -1285,6 +1837,278 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
     
     // Make function global for onclick handlers
     window.goToPropertyDetail = goToPropertyDetail;
+
+    // ===== TESTIMONIALS FUNCTIONS =====
+    let currentTestimonialSlide = 0;
+    let testimonialsData = [];
+    // Giriş kontrolü kaldırıldı - tüm kullanıcılar videoları izleyebilir
+
+    // Testimonials'ları Firebase'den yükle
+    function loadTestimonialsFromFirebase() {
+        const slider = document.getElementById('testimonialsSlider');
+        const navigation = document.getElementById('testimonialsNavigation');
+        
+        if (!slider) return;
+        
+        // Loading state
+        slider.innerHTML = `
+            <div class="testimonials-loading" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                <div class="loading"></div>
+                <p style="margin-top: 1rem;">Müşteri yorumları yükleniyor...</p>
+            </div>
+        `;
+        
+        database.ref('testimonials').once('value')
+            .then((snapshot) => {
+                console.log('Testimonials snapshot:', snapshot.val());
+                testimonialsData = [];
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+                    console.log('Testimonial data:', data);
+                    if (data) {
+                        testimonialsData.push({
+                            id: childSnapshot.key,
+                            ...data
+                        });
+                    }
+                });
+                
+                console.log('Filtered testimonials:', testimonialsData);
+                
+                if (testimonialsData.length === 0) {
+                    slider.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                            <p>Henüz müşteri yorumu bulunmuyor.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Tarihe göre sırala (en yeni önce)
+                testimonialsData.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                
+                renderTestimonials();
+                setupTestimonialSlider();
+                
+                // Navigation'ı göster
+                const navigation = document.getElementById('testimonialsNavigation');
+                if (navigation) {
+                    navigation.style.display = 'flex';
+                }
+            })
+            .catch((error) => {
+                console.error('Testimonials yükleme hatası:', error);
+                slider.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--error-color);">
+                        <p>Müşteri yorumları yüklenirken hata oluştu.</p>
+                    </div>
+                `;
+            });
+    }
+
+    // Testimonials'ları render et
+    function renderTestimonials() {
+        const slider = document.getElementById('testimonialsSlider');
+        if (!slider) return;
+        
+        console.log('Rendering testimonials:', testimonialsData);
+        
+        // CSS'te grid layout tanımlandı, inline style'a gerek yok
+        
+        // Navigasyonu göster
+        const navigation = document.getElementById('testimonialsNavigation');
+        if (navigation) {
+            navigation.style.display = 'flex';
+        }
+        
+        let html = '';
+        testimonialsData.forEach((testimonial, index) => {
+            console.log('Rendering testimonial:', testimonial);
+            const customerPhoto = testimonial.photoUrl || 'images/e' + ((index % 7) + 1) + '.png';
+            const logoImage = index < 5 ? 'images/emlak.png' : 'images/emlaksendelogo.png';
+            
+            html += `
+                <div class="testimonial-card" data-testimonial="${index + 1}" data-video-url="${testimonial.videoUrl}">
+                    <img src="images/people.png" alt="People" class="testimonial-bg-image">
+                    <div class="card-logo">
+                        <img src="${logoImage}" alt="EMLAKSENDE" class="testimonial-logo">
+                    </div>
+                    <div class="customer-photo" onclick="playTestimonialVideo('${testimonial.id}', '${testimonial.videoUrl}')">
+                        <img src="${customerPhoto}" alt="${testimonial.customerName}" class="photo-bg">
+                        <div class="photo-overlay"></div>
+                        <div class="play-button">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="play-icon">
+                                <path d="M8 5V19L19 12L8 5Z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="customer-info">
+                        <h3 class="customer-name">${testimonial.customerName}</h3>
+                        <p class="customer-job">${testimonial.customerJob}</p>
+                    </div>
+                </div>
+            `;
+        });
+        
+        console.log('Generated HTML:', html);
+        slider.innerHTML = html;
+        console.log('Slider innerHTML set, slider element:', slider);
+        
+        // Slider setup'ı çağır
+        setupTestimonialSlider();
+    }
+
+    // Testimonial slider'ı kur
+    function setupTestimonialSlider() {
+        const navigation = document.getElementById('testimonialsNavigation');
+        const sliderDots = document.getElementById('sliderDots');
+        const sliderPrev = document.getElementById('sliderPrev');
+        const sliderNext = document.getElementById('sliderNext');
+        
+        console.log('Setting up slider, navigation:', navigation, 'sliderDots:', sliderDots);
+        
+        if (!navigation || !sliderDots) {
+            console.log('Navigation or sliderDots not found, returning');
+            return;
+        }
+        
+        // Navigation'ı göster
+        navigation.style.display = 'flex';
+        
+        // Dots oluştur
+        sliderDots.innerHTML = '';
+        const totalSlides = Math.ceil(testimonialsData.length / 4); // Her slaytta 4 testimonial (desktop)
+        
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dot.setAttribute('data-slide', i);
+            dot.setAttribute('aria-label', `Slayt ${i + 1}`);
+            dot.addEventListener('click', () => goToSlide(i));
+            sliderDots.appendChild(dot);
+        }
+        
+        // Navigation event listeners
+        if (sliderPrev) {
+            sliderPrev.addEventListener('click', () => {
+                if (currentTestimonialSlide > 0) {
+                    goToSlide(currentTestimonialSlide - 1);
+                }
+            });
+        }
+        
+        if (sliderNext) {
+            sliderNext.addEventListener('click', () => {
+                if (currentTestimonialSlide < totalSlides - 1) {
+                    goToSlide(currentTestimonialSlide + 1);
+                }
+            });
+        }
+        
+        // İlk slaytı göster
+        goToSlide(0);
+    }
+
+    // Belirli bir slayta git
+    function goToSlide(slideIndex) {
+        const slider = document.getElementById('testimonialsSlider');
+        const dots = document.querySelectorAll('.slider-dots .dot');
+        const totalSlides = Math.ceil(testimonialsData.length / 4);
+        
+        console.log('goToSlide called with:', slideIndex, 'totalSlides:', totalSlides, 'slider:', slider);
+        
+        if (!slider || slideIndex < 0 || slideIndex >= totalSlides) {
+            console.log('goToSlide early return - slider:', slider, 'slideIndex:', slideIndex, 'totalSlides:', totalSlides);
+            return;
+        }
+        
+        currentTestimonialSlide = slideIndex;
+        
+        // Dots güncelle
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === slideIndex);
+        });
+        
+        // Slider pozisyonunu güncelle
+        const slideWidth = 100 / totalSlides;
+        const transformValue = `translateX(-${slideIndex * slideWidth}%)`;
+        console.log('Setting slider transform to:', transformValue);
+        slider.style.transform = transformValue;
+    }
+
+    // Video oynatma fonksiyonu
+    function playTestimonialVideo(testimonialId, videoUrl) {
+        // Video modal'ı oluştur ve göster
+        showVideoModal(videoUrl);
+    }
+
+    // Video modal'ı göster
+    function showVideoModal(videoUrl) {
+        // Mevcut modal'ı kaldır
+        const existingModal = document.getElementById('videoModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        // Yeni modal oluştur
+        const modal = document.createElement('div');
+        modal.id = 'videoModal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 2rem;
+        `;
+        
+        modal.innerHTML = `
+            <div style="position: relative; max-width: 90%; max-height: 90%; background: #000; border-radius: 8px; overflow: hidden;">
+                <button id="closeVideoModal" style="position: absolute; top: 1rem; right: 1rem; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; z-index: 10001; display: flex; align-items: center; justify-content: center;">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+                <video controls autoplay style="width: 100%; height: auto; max-height: 80vh;">
+                    <source src="${videoUrl}" type="video/mp4">
+                    Tarayıcınız video oynatmayı desteklemiyor.
+                </video>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Modal'ı kapatma event listener'ı
+        const closeBtn = document.getElementById('closeVideoModal');
+        closeBtn.addEventListener('click', () => {
+            modal.remove();
+        });
+        
+        // Modal dışına tıklayınca kapatma
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+        
+        // ESC tuşu ile kapatma
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', handleEsc);
+            }
+        };
+        document.addEventListener('keydown', handleEsc);
+    }
+
+    // Global fonksiyonları window'a ekle
+    window.playTestimonialVideo = playTestimonialVideo;
+    window.loadTestimonialsFromFirebase = loadTestimonialsFromFirebase;
     
     // Load properties when page loads
     document.addEventListener('DOMContentLoaded', () => {
@@ -1299,6 +2123,13 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
                 loadPropertiesFromFirebase();
             } else {
                 console.log('Properties grid not found - not on index page');
+            }
+            
+            // Load testimonials if we're on the index page
+            const testimonialsSlider = document.getElementById('testimonialsSlider');
+            if (testimonialsSlider) {
+                console.log('Loading testimonials from Firebase...');
+                loadTestimonialsFromFirebase();
             }
         }, 500);
     });
