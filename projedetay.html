@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proje Detayı - EMLAKSENDE</title>
+    <title id="pageTitle">Proje Detayı - EMLAKSENDE</title>
+    <meta name="description" id="pageDescription" content="Proje detayları, arsa bilgileri ve konum özellikleri. EMLAKSENDE'de proje detaylarını inceleyin.">
+    <meta name="keywords" id="pageKeywords" content="proje detayı, arsa detayı, proje bilgileri, konum özellikleri, emlak projesi">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1165,6 +1167,78 @@
 
 
 
+    </script>
+    
+    <!-- SEO Management Script -->
+    <script>
+        // ===== SEO MANAGEMENT FOR PROJEDETAY.HTML =====
+        function loadPageSEO() {
+            if (typeof firebase === 'undefined' || !firebase.database) {
+                console.error('Firebase not available for SEO');
+                return;
+            }
+            
+            const database = firebase.database();
+            const currentPage = 'projedetay.html';
+            const safePageId = currentPage.replace(/\./g, '_DOT_').replace(/[#$\[\]]/g, '_');
+            
+            console.log('Loading SEO for projedetay page:', safePageId);
+            
+            database.ref(`sayfalar/${safePageId}`).once('value')
+                .then((snapshot) => {
+                    const seoData = snapshot.val();
+                    if (seoData) {
+                        console.log('SEO data loaded for projedetay:', seoData);
+                        updatePageSEO(seoData);
+                    } else {
+                        console.log('No SEO data found for projedetay page');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading SEO data for projedetay:', error);
+                });
+        }
+        
+        function updatePageSEO(seoData) {
+            try {
+                // Update page title
+                if (seoData.seo_title) {
+                    const titleElement = document.getElementById('pageTitle');
+                    if (titleElement) {
+                        titleElement.textContent = seoData.seo_title;
+                        document.title = seoData.seo_title;
+                    }
+                }
+                
+                // Update meta description
+                if (seoData.seo_description) {
+                    const descElement = document.getElementById('pageDescription');
+                    if (descElement) {
+                        descElement.setAttribute('content', seoData.seo_description);
+                    }
+                }
+                
+                // Update meta keywords
+                if (seoData.seo_keywords) {
+                    const keywordsElement = document.getElementById('pageKeywords');
+                    if (keywordsElement) {
+                        keywordsElement.setAttribute('content', seoData.seo_keywords);
+                    }
+                }
+                
+                console.log('SEO data updated successfully for projedetay page');
+            } catch (error) {
+                console.error('Error updating SEO data for projedetay:', error);
+            }
+        }
+        
+        // Load SEO when page is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for Firebase to be initialized
+            setTimeout(() => {
+                loadPageSEO();
+            }, 1000);
+        });
     </script>
     
     <!-- Include Components Script -->

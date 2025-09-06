@@ -7317,9 +7317,9 @@
             // Şehirleri ekle
             turkiyeApiData.cities.forEach(city => {
                 const option = document.createElement('option');
-                option.value = city.id;
+                option.value = city.name; // ID yerine şehir adını kullan
                 option.textContent = city.name;
-                if (currentValue == city.id) {
+                if (currentValue == city.name) {
                     option.selected = true;
                 }
                 citySelect.appendChild(option);
@@ -7515,7 +7515,7 @@
             // İlçeleri ekle
             turkiyeApiData.districts.forEach(district => {
                 const option = document.createElement('option');
-                option.value = district.id;
+                option.value = district.name; // ID yerine ilçe adını kullan
                 option.textContent = district.name;
                 districtSelect.appendChild(option);
             });
@@ -7546,11 +7546,15 @@
         // Şehir seçimi değiştiğinde
         function onCityChange() {
             const citySelect = document.getElementById('ilanSehir');
-            const cityId = citySelect.value;
-            selectedCityId = cityId;
+            const cityName = citySelect.value;
+            selectedCityId = cityName;
             
-            if (cityId) {
-                loadDistricts(cityId);
+            if (cityName) {
+                // Şehir adından ID'yi bul
+                const city = turkiyeApiData.cities.find(c => c.name === cityName);
+                if (city) {
+                    loadDistricts(city.id);
+                }
             } else {
                 clearDistricts();
             }
@@ -7559,8 +7563,8 @@
         // İlçe seçimi değiştiğinde
         function onDistrictChange() {
             const districtSelect = document.getElementById('ilanIlce');
-            const districtId = districtSelect.value;
-            selectedDistrictId = districtId;
+            const districtName = districtSelect.value;
+            selectedDistrictId = districtName;
             
             // Mahalle input alanını temizle
             const mahalleInput = document.getElementById('ilanMahalle');

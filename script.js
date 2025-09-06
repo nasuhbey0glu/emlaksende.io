@@ -1751,7 +1751,7 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
             
             html += `
                 <div class="testimonial-card" data-testimonial="${index + 1}" data-video-url="${testimonial.videoUrl}">
-                    <img src="images/people.png" alt="People" class="testimonial-bg-image">
+                    <img src="${testimonial.photoUrl || 'images/people.png'}" alt="Customer Background" class="testimonial-bg-image">
                     <div class="card-logo">
                         <img src="${logoImage}" alt="EMLAKSENDE" class="testimonial-logo">
                     </div>
@@ -1799,7 +1799,11 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
         
         // Dots oluştur
         sliderDots.innerHTML = '';
-        const totalSlides = Math.ceil(testimonialsData.length / 4); // Her slaytta 4 testimonial (desktop)
+        // Responsive slide count - desktop: 4, tablet: 2, mobile: 1
+        const isMobile = window.innerWidth <= 767;
+        const isTablet = window.innerWidth <= 1199 && window.innerWidth > 767;
+        const testimonialsPerSlide = isMobile ? 1 : (isTablet ? 2 : 4);
+        const totalSlides = Math.ceil(testimonialsData.length / testimonialsPerSlide);
         
         for (let i = 0; i < totalSlides; i++) {
             const dot = document.createElement('button');
@@ -1836,7 +1840,12 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
     function goToSlide(slideIndex) {
         const slider = document.getElementById('testimonialsSlider');
         const dots = document.querySelectorAll('.slider-dots .dot');
-        const totalSlides = Math.ceil(testimonialsData.length / 4);
+        
+        // Responsive slide count
+        const isMobile = window.innerWidth <= 767;
+        const isTablet = window.innerWidth <= 1199 && window.innerWidth > 767;
+        const testimonialsPerSlide = isMobile ? 1 : (isTablet ? 2 : 4);
+        const totalSlides = Math.ceil(testimonialsData.length / testimonialsPerSlide);
         
         console.log('goToSlide called with:', slideIndex, 'totalSlides:', totalSlides, 'slider:', slider);
         
@@ -1852,10 +1861,12 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
             dot.classList.toggle('active', index === slideIndex);
         });
         
-        // Slider pozisyonunu güncelle
-        const slideWidth = 100 / totalSlides;
-        const transformValue = `translateX(-${slideIndex * slideWidth}%)`;
-        console.log('Setting slider transform to:', transformValue);
+        // Slider pozisyonunu güncelle - responsive gap değerleri
+        const cardWidth = isMobile ? 280 : (isTablet ? 300 : 280); // testimonial card width
+        const gap = isMobile ? 16 : (isTablet ? 20 : 32); // responsive gap
+        const slideWidth = cardWidth + gap;
+        const transformValue = `translateX(-${slideIndex * slideWidth}px)`;
+        console.log('Setting slider transform to:', transformValue, 'cardWidth:', cardWidth, 'gap:', gap);
         slider.style.transform = transformValue;
     }
 

@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projeler - EMLAKSENDE</title>
+    <title id="pageTitle">Projeler - EMLAKSENDE</title>
+    <meta name="description" id="pageDescription" content="EMLAKSENDE'de en güncel projeler. Arsa projeleri, imar projeleri ve yatırım projeleri için detaylı bilgi alın.">
+    <meta name="keywords" id="pageKeywords" content="projeler, arsa projeleri, imar projeleri, yatırım projeleri, emlak projeleri">
     
     <!-- Firebase SDKs - Load first -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -54,22 +56,13 @@
             flex-direction: column;
         }
 
-        .page-header {
-            margin-bottom: 20px;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1;
-        }
 
         .page-title {
             font-size: 32px;
             font-weight: 800;
             color: #1E2A47;
             letter-spacing: 1px;
-            margin: 0;
+            margin: 0 0 20px 0;
         }
 
         .page-subtitle {
@@ -79,42 +72,95 @@
             margin-top: 4px;
         }
 
+        .active-count-container {
+            margin-bottom: 30px;
+            padding: 15px 0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
         .active-count {
-            font-size: 14px;
-            font-weight: 500;
-            color: #6b7280;
-            margin-top: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #97D2AD;
+            background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid #d4edda;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(151, 210, 173, 0.1);
         }
 
         /* Mobile Toggle */
         .mobile-filter-toggle {
             display: none;
-            margin-bottom: 20px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            justify-content: flex-start;
+            width: 100%;
         }
 
         .hamburger-btn {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 12px 16px;
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #97D2AD 0%, #7bb89a 100%);
+            border: none;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(151, 210, 173, 0.3);
+            transition: all 0.3s ease;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 160px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hamburger-btn:hover {
+            background: linear-gradient(135deg, #7bb89a 0%, #6ba88a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(151, 210, 173, 0.4);
+        }
+
+        .hamburger-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(151, 210, 173, 0.3);
         }
 
         .hamburger-icon {
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 4px;
+            align-items: center;
+            transition: all 0.3s ease;
         }
 
         .hamburger-line-filter {
-            width: 20px;
-            height: 2px;
-            background: #333;
+            width: 24px;
+            height: 3px;
+            background: #ffffff;
             border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-btn:hover .hamburger-line-filter {
+            background: #ffffff;
+            transform: scale(1.1);
+        }
+
+        /* Açılı kapanır animasyon */
+        .hamburger-btn.active .hamburger-line-filter:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger-btn.active .hamburger-line-filter:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.active .hamburger-line-filter:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
         }
 
         /* Sidebar */
@@ -401,6 +447,7 @@
             margin-bottom: 15px;
             display: -webkit-box;
             -webkit-line-clamp: 3;
+            line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -527,7 +574,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.5);
-            z-index: 1000;
+            z-index: 999999;
             display: none;
         }
 
@@ -543,6 +590,7 @@
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             overflow-y: auto;
+            z-index: 1000000;
         }
 
         .mobile-drawer.open {
@@ -575,10 +623,14 @@
             .mobile-filter-toggle { 
                 display: flex; 
                 justify-content: flex-start; 
+                margin-top: 40px;
+                margin-bottom: 40px;
             }
-            .page-header {
+            
+            .active-count-container {
                 text-align: center;
                 margin-bottom: 30px;
+                padding: 10px 0;
             }
             
             .nav-search {
@@ -641,8 +693,27 @@
                 right: 20px; /* Menü açıldığında sağdan 20px içeride göster */
             }
 
-            .page-title {
-                font-size: 2rem;
+            .page-title { 
+                font-size: 24px; 
+                margin: 0 0 20px 0;
+                text-align: center;
+                width: 100%;
+                display: block;
+            }
+            .active-count { 
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+            
+            .mobile-filter-toggle {
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+            
+            .hamburger-btn {
+                min-width: 140px;
+                padding: 10px 16px;
+                font-size: 13px;
             }
 
             .projects-grid {
@@ -699,10 +770,12 @@
             <!-- Left Side with Title and Filters -->
             <div class="page-left">
                 <!-- Header -->
-                <header class="page-header">
-                    <h1 class="page-title">PROJELER</h1>
-                    <div class="active-count" id="activeCount">Aktif proje sayısı: Yükleniyor...</div>
-                </header>
+                <h1 class="page-title">PROJELER</h1>
+                
+                <!-- Active Count -->
+                <div class="active-count-container">
+                    <div class="active-count" id="activeCount">Aktif Proje Sayısı: Yükleniyor...</div>
+                </div>
 
                 <!-- Sidebar (desktop) -->
                 <aside class="sidebar" aria-label="Filtre menüsü">
@@ -1024,7 +1097,7 @@
         function updateActiveCount() {
             const activeCountElement = document.getElementById('activeCount');
             if (activeCountElement) {
-                activeCountElement.textContent = filteredProjects.length;
+                activeCountElement.textContent = `Aktif Proje Sayısı: ${filteredProjects.length}`;
             }
         }
 
@@ -1223,6 +1296,78 @@
                 updateActiveCount();
             });
         }
+    </script>
+    
+    <!-- SEO Management Script -->
+    <script>
+        // ===== SEO MANAGEMENT FOR PROJELER.HTML =====
+        function loadPageSEO() {
+            if (typeof firebase === 'undefined' || !firebase.database) {
+                console.error('Firebase not available for SEO');
+                return;
+            }
+            
+            const database = firebase.database();
+            const currentPage = 'projeler.html';
+            const safePageId = currentPage.replace(/\./g, '_DOT_').replace(/[#$\[\]]/g, '_');
+            
+            console.log('Loading SEO for projeler page:', safePageId);
+            
+            database.ref(`sayfalar/${safePageId}`).once('value')
+                .then((snapshot) => {
+                    const seoData = snapshot.val();
+                    if (seoData) {
+                        console.log('SEO data loaded for projeler:', seoData);
+                        updatePageSEO(seoData);
+                    } else {
+                        console.log('No SEO data found for projeler page');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading SEO data for projeler:', error);
+                });
+        }
+        
+        function updatePageSEO(seoData) {
+            try {
+                // Update page title
+                if (seoData.seo_title) {
+                    const titleElement = document.getElementById('pageTitle');
+                    if (titleElement) {
+                        titleElement.textContent = seoData.seo_title;
+                        document.title = seoData.seo_title;
+                    }
+                }
+                
+                // Update meta description
+                if (seoData.seo_description) {
+                    const descElement = document.getElementById('pageDescription');
+                    if (descElement) {
+                        descElement.setAttribute('content', seoData.seo_description);
+                    }
+                }
+                
+                // Update meta keywords
+                if (seoData.seo_keywords) {
+                    const keywordsElement = document.getElementById('pageKeywords');
+                    if (keywordsElement) {
+                        keywordsElement.setAttribute('content', seoData.seo_keywords);
+                    }
+                }
+                
+                console.log('SEO data updated successfully for projeler page');
+            } catch (error) {
+                console.error('Error updating SEO data for projeler:', error);
+            }
+        }
+        
+        // Load SEO when page is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for Firebase to be initialized
+            setTimeout(() => {
+                loadPageSEO();
+            }, 1000);
+        });
     </script>
     
     <!-- Include Header and Footer -->

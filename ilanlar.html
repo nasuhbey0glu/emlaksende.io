@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İlanlar - EMLAKSENDE</title>
+    <title id="pageTitle">İlanlar - EMLAKSENDE</title>
+    <meta name="description" id="pageDescription" content="EMLAKSENDE'de en güncel emlak ilanları. Arsa, tarla, bağ bahçe ve imarlı arsalar için detaylı arama yapın.">
+    <meta name="keywords" id="pageKeywords" content="emlak ilanları, arsa, tarla, bağ bahçe, imarlı arsa, emlak arama">
     
     <!-- Firebase SDKs - Load first -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -1118,6 +1120,7 @@
             .page-title { 
                 font-size: 24px; 
                 margin-bottom: 0;
+                text-align: center;
             }
             .active-count { 
                 font-size: 14px;
@@ -2288,6 +2291,78 @@
             updatePropertyGrid(filteredProperties);
             updateActiveCount(filteredProperties.length);
         }
+    </script>
+    
+    <!-- SEO Management Script -->
+    <script>
+        // ===== SEO MANAGEMENT FOR İLANLAR.HTML =====
+        function loadPageSEO() {
+            if (typeof firebase === 'undefined' || !firebase.database) {
+                console.error('Firebase not available for SEO');
+                return;
+            }
+            
+            const database = firebase.database();
+            const currentPage = 'ilanlar.html';
+            const safePageId = currentPage.replace(/\./g, '_DOT_').replace(/[#$\[\]]/g, '_');
+            
+            console.log('Loading SEO for ilanlar page:', safePageId);
+            
+            database.ref(`sayfalar/${safePageId}`).once('value')
+                .then((snapshot) => {
+                    const seoData = snapshot.val();
+                    if (seoData) {
+                        console.log('SEO data loaded for ilanlar:', seoData);
+                        updatePageSEO(seoData);
+                    } else {
+                        console.log('No SEO data found for ilanlar page');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading SEO data for ilanlar:', error);
+                });
+        }
+        
+        function updatePageSEO(seoData) {
+            try {
+                // Update page title
+                if (seoData.seo_title) {
+                    const titleElement = document.getElementById('pageTitle');
+                    if (titleElement) {
+                        titleElement.textContent = seoData.seo_title;
+                        document.title = seoData.seo_title;
+                    }
+                }
+                
+                // Update meta description
+                if (seoData.seo_description) {
+                    const descElement = document.getElementById('pageDescription');
+                    if (descElement) {
+                        descElement.setAttribute('content', seoData.seo_description);
+                    }
+                }
+                
+                // Update meta keywords
+                if (seoData.seo_keywords) {
+                    const keywordsElement = document.getElementById('pageKeywords');
+                    if (keywordsElement) {
+                        keywordsElement.setAttribute('content', seoData.seo_keywords);
+                    }
+                }
+                
+                console.log('SEO data updated successfully for ilanlar page');
+            } catch (error) {
+                console.error('Error updating SEO data for ilanlar:', error);
+            }
+        }
+        
+        // Load SEO when page is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for Firebase to be initialized
+            setTimeout(() => {
+                loadPageSEO();
+            }, 1000);
+        });
     </script>
     
     <!-- Include Components Script -->
