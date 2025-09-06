@@ -827,31 +827,8 @@
                         </div>
                     </div>
 
-                    <div class="filter-group">
-                        <div class="group-label" data-target="feature-filter">
-                            Özellikler
-                            <svg class="collapse-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6,9 12,15 18,9"></polyline>
-                            </svg>
-                        </div>
-                        <div class="filter-content" id="feature-filter">
-                            <div class="form-row">
-                                <select class="form-select" id="featureFilter" aria-label="Özellik">
-                                    <option value="">Tüm Özellikler</option>
-                                    <option value="elektrik">Elektrik</option>
-                                    <option value="su">Su</option>
-                                    <option value="dogalgaz">Doğalgaz</option>
-                                    <option value="kanalizasyon">Kanalizasyon</option>
-                                    <option value="ana_yola_yakin">Anayola Yakın</option>
-                                    <option value="denize_yakin">Denize Yakın</option>
-                                    <option value="projeli">Projeli</option>
-                                    <option value="ifrazli">İfrazlı</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
-                    <button class="save-filters-btn" id="saveFiltersBtn" onclick="applyFilters()">
+                    <button class="save-filters-btn" id="saveFiltersBtn">
                         Filtreleri Kaydet
                     </button>
                 </aside>
@@ -922,22 +899,9 @@
                 </div>
             </div>
 
-            <div class="filter-group">
-                <div class="group-label">Özellikler</div>
-                <div class="form-row">
-                    <select class="form-select" id="mobileFeatureFilter">
-                        <option value="">Tüm Özellikler</option>
-                        <option value="elektrik">Elektrik</option>
-                        <option value="su">Su</option>
-                        <option value="dogalgaz">Doğalgaz</option>
-                        <option value="kanalizasyon">Kanalizasyon</option>
-                        <option value="ana_yola_yakin">Anayola Yakın</option>
-                        <option value="denize_yakin">Denize Yakın</option>
-                        <option value="projeli">Projeli</option>
-                        <option value="ifrazli">İfrazlı</option>
-                    </select>
-                </div>
-            </div>
+            <button class="save-filters-btn" id="mobileSaveFiltersBtn">
+                Filtreleri Kaydet
+            </button>
         </div>
     </div>
 
@@ -1150,9 +1114,32 @@
 
         // Apply filters
         function applyFilters() {
-            const minProjects = parseInt(document.getElementById('minProjectsFilter').value) || 0;
-            const maxProjects = parseInt(document.getElementById('maxProjectsFilter').value) || Infinity;
-            const feature = document.getElementById('featureFilter').value;
+            console.log('applyFilters called');
+            
+            // Check if mobile drawer is open
+            const isMobileDrawerOpen = document.getElementById('mobileDrawer').classList.contains('open');
+            console.log('Mobile drawer open:', isMobileDrawerOpen);
+            
+            // Get filter values based on which form is active
+            let minProjects, maxProjects, city, district, neighborhood;
+            
+            if (isMobileDrawerOpen) {
+                // Mobile drawer is open, use mobile selectors
+                minProjects = parseInt(document.getElementById('mobileMinProjectsFilter').value) || 0;
+                maxProjects = parseInt(document.getElementById('mobileMaxProjectsFilter').value) || Infinity;
+                city = document.getElementById('mobileCityFilter').value;
+                district = document.getElementById('mobileDistrictFilter').value;
+                neighborhood = document.getElementById('mobileNeighborhoodFilter').value;
+            } else {
+                // Desktop form
+                minProjects = parseInt(document.getElementById('minProjectsFilter').value) || 0;
+                maxProjects = parseInt(document.getElementById('maxProjectsFilter').value) || Infinity;
+                city = document.getElementById('cityFilter').value;
+                district = document.getElementById('districtFilter').value;
+                neighborhood = document.getElementById('neighborhoodFilter').value;
+            }
+            
+            console.log('Filter values:', { minProjects, maxProjects, city, district, neighborhood });
             
             filteredProjects = allProjects.filter(project => {
                 const ilanSayisi = project.ilanlar ? Object.keys(project.ilanlar).length : 0;
@@ -1162,46 +1149,34 @@
                     return false;
                 }
                 
-                // Özellik filtresi
-                if (feature) {
-                    let hasFeature = false;
-                    
-                    // Altyapı özellikleri kontrolü
-                    if (project.altyapi_ozellikleri && project.altyapi_ozellikleri[feature]) {
-                        hasFeature = true;
-                    }
-                    
-                    // Konum özellikleri kontrolü
-                    if (project.konum_ozellikleri && project.konum_ozellikleri[feature]) {
-                        hasFeature = true;
-                    }
-                    
-                    // Genel özellikler kontrolü
-                    if (project.genel_ozellikler && project.genel_ozellikler[feature]) {
-                        hasFeature = true;
-                    }
-                    
-                    if (!hasFeature) {
-                        return false;
-                    }
-                }
+                // Konum filtreleri (şimdilik basit implementasyon)
+                // Projeler için konum bilgisi yoksa tüm projeleri göster
+                // İleride projelerin konum bilgisi eklendiğinde bu kısım güncellenebilir
                 
                 return true;
             });
             
+            console.log(`Filtered ${filteredProjects.length} projects from ${allProjects.length} total`);
             updateProjectGrid();
             updateActiveCount();
         }
 
         // Clear filters
         function clearFilters() {
+            // Clear desktop filters
             document.getElementById('cityFilter').selectedIndex = 0;
             document.getElementById('districtFilter').selectedIndex = 0;
             document.getElementById('neighborhoodFilter').selectedIndex = 0;
             document.getElementById('minProjectsFilter').value = '';
             document.getElementById('maxProjectsFilter').value = '';
-            document.getElementById('featureFilter').selectedIndex = 0;
             document.getElementById('sortSelect').selectedIndex = 0;
+            
+            // Clear mobile filters
+            document.getElementById('mobileCityFilter').selectedIndex = 0;
+            document.getElementById('mobileDistrictFilter').selectedIndex = 0;
+            document.getElementById('mobileNeighborhoodFilter').selectedIndex = 0;
+            document.getElementById('mobileMinProjectsFilter').value = '';
+            document.getElementById('mobileMaxProjectsFilter').value = '';
             
             filteredProjects = [...allProjects];
             updateProjectGrid();
@@ -1247,16 +1222,53 @@
         const mobileFilterToggle = document.getElementById('mobileFilterToggle');
         const mobileDrawer = document.getElementById('mobileDrawer');
         const drawerClose = document.getElementById('drawerClose');
+        const mobileSaveFiltersBtn = document.getElementById('mobileSaveFiltersBtn');
 
         if (mobileFilterToggle && mobileDrawer) {
             mobileFilterToggle.addEventListener('click', () => {
                 mobileDrawer.classList.add('open');
+                mobileFilterToggle.classList.add('active');
             });
         }
 
         if (drawerClose && mobileDrawer) {
             drawerClose.addEventListener('click', () => {
                 mobileDrawer.classList.remove('open');
+                mobileFilterToggle.classList.remove('active');
+            });
+        }
+
+        // Close drawer when clicking outside
+        if (mobileDrawer) {
+            mobileDrawer.addEventListener('click', function(e) {
+                if (e.target === mobileDrawer) {
+                    mobileDrawer.classList.remove('open');
+                    mobileFilterToggle.classList.remove('active');
+                }
+            });
+        }
+
+        // Desktop save filters button
+        const saveFiltersBtn = document.getElementById('saveFiltersBtn');
+        if (saveFiltersBtn) {
+            saveFiltersBtn.addEventListener('click', function() {
+                console.log('Desktop save filters button clicked');
+                applyFilters();
+            });
+        }
+
+        // Mobile save filters button
+        if (mobileSaveFiltersBtn) {
+            mobileSaveFiltersBtn.addEventListener('click', function() {
+                console.log('Mobile save filters button clicked');
+                applyFilters();
+                // Close mobile drawer after applying filters
+                if (mobileDrawer) {
+                    mobileDrawer.classList.remove('open');
+                    if (mobileFilterToggle) {
+                        mobileFilterToggle.classList.remove('active');
+                    }
+                }
             });
         }
 

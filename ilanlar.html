@@ -1418,6 +1418,10 @@
                  mobileFilterToggle.addEventListener('click', function() {
                      mobileDrawer.classList.add('open');
                      mobileFilterToggle.classList.add('active');
+                     // Re-add event listeners for mobile drawer elements
+                     setTimeout(() => {
+                         addMobileDrawerEventListeners();
+                     }, 100);
                  });
              }
 
@@ -1473,6 +1477,7 @@
              const mobileSaveFiltersBtn = document.getElementById('mobileSaveFiltersBtn');
              if (mobileSaveFiltersBtn) {
                  mobileSaveFiltersBtn.addEventListener('click', function() {
+                     console.log('Mobile save filters button clicked');
                      collectAndApplyFilters();
                      // Close mobile drawer after applying filters
                      if (mobileDrawer) {
@@ -1486,23 +1491,52 @@
 
              // Function to collect and apply filters
              function collectAndApplyFilters() {
+                 console.log('collectAndApplyFilters called');
                  // Collect all filter values
                  currentFilters = {};
                  
+                 // Check if mobile drawer is open
+                 const isMobileDrawerOpen = document.getElementById('mobileDrawer').classList.contains('open');
+                 console.log('Mobile drawer open:', isMobileDrawerOpen);
+                 
                  // Try to get values from both desktop and mobile forms
-                 const citySelect = document.querySelector('select[aria-label="Şehir"]') || document.querySelector('.mobile-drawer select:nth-of-type(1)');
-                 const districtSelect = document.querySelector('select[aria-label="İlçe"]') || document.querySelector('.mobile-drawer select:nth-of-type(2)');
-                 const neighborhoodSelect = document.querySelector('select[aria-label="Mahalle"]') || document.querySelector('.mobile-drawer select:nth-of-type(3)');
+                 let citySelect, districtSelect, neighborhoodSelect, minPriceInput, maxPriceInput, imarDurumuSelect, minMetrekareInput, maxMetrekareInput, adaNoInput, parselNoInput, tapuDurumuSelect;
                  
-                 const minPriceInput = document.querySelector('input[aria-label="Minimum fiyat"]') || document.querySelector('.mobile-drawer input[placeholder="₺ Min"]');
-                 const maxPriceInput = document.querySelector('input[aria-label="Maksimum fiyat"]') || document.querySelector('.mobile-drawer input[placeholder="₺ Max"]');
-                 
-                 const imarDurumuSelect = document.querySelector('select[aria-label="İmar Durumu"]') || document.querySelector('.mobile-drawer select:nth-of-type(4)');
-                 const minMetrekareInput = document.querySelector('input[aria-label="Minimum metrekare"]') || document.querySelector('.mobile-drawer input[placeholder="Min m²"]');
-                 const maxMetrekareInput = document.querySelector('input[aria-label="Maksimum metrekare"]') || document.querySelector('.mobile-drawer input[placeholder="Max m²"]');
-                 const adaNoInput = document.querySelector('input[aria-label="Ada No"]') || document.querySelector('.mobile-drawer input[placeholder="Ada No"]');
-                 const parselNoInput = document.querySelector('input[aria-label="Parsel No"]') || document.querySelector('.mobile-drawer input[placeholder="Parsel No"]');
-                 const tapuDurumuSelect = document.querySelector('select[aria-label="Tapu Durumu"]') || document.querySelector('.mobile-drawer select:nth-of-type(5)');
+                 if (isMobileDrawerOpen) {
+                     // Mobile drawer is open, use mobile selectors
+                     citySelect = document.querySelector('.mobile-drawer .filter-group:nth-of-type(1) select:nth-of-type(1)');
+                     districtSelect = document.querySelector('.mobile-drawer .filter-group:nth-of-type(1) select:nth-of-type(2)');
+                     neighborhoodSelect = document.querySelector('.mobile-drawer .filter-group:nth-of-type(1) select:nth-of-type(3)');
+                     minPriceInput = document.querySelector('.mobile-drawer .filter-group:nth-of-type(2) input[placeholder="₺ Min"]');
+                     maxPriceInput = document.querySelector('.mobile-drawer .filter-group:nth-of-type(2) input[placeholder="₺ Max"]');
+                     imarDurumuSelect = document.querySelector('.mobile-drawer .filter-group:nth-of-type(3) select:nth-of-type(1)');
+                     minMetrekareInput = document.querySelector('.mobile-drawer .filter-group:nth-of-type(3) input[placeholder="Min m²"]');
+                     maxMetrekareInput = document.querySelector('.mobile-drawer .filter-group:nth-of-type(3) input[placeholder="Max m²"]');
+                     adaNoInput = document.querySelector('.mobile-drawer .filter-group:nth-of-type(3) input[placeholder="Ada No"]');
+                     parselNoInput = document.querySelector('.mobile-drawer .filter-group:nth-of-type(3) input[placeholder="Parsel No"]');
+                     tapuDurumuSelect = document.querySelector('.mobile-drawer .filter-group:nth-of-type(3) select:nth-of-type(2)');
+                 } else {
+                     // Desktop form
+                     citySelect = document.querySelector('select[aria-label="Şehir"]');
+                     districtSelect = document.querySelector('select[aria-label="İlçe"]');
+                     neighborhoodSelect = document.querySelector('select[aria-label="Mahalle"]');
+                     minPriceInput = document.querySelector('input[aria-label="Minimum fiyat"]');
+                     maxPriceInput = document.querySelector('input[aria-label="Maksimum fiyat"]');
+                     imarDurumuSelect = document.querySelector('select[aria-label="İmar Durumu"]');
+                     minMetrekareInput = document.querySelector('input[aria-label="Minimum metrekare"]');
+                     maxMetrekareInput = document.querySelector('input[aria-label="Maksimum metrekare"]');
+                     adaNoInput = document.querySelector('input[aria-label="Ada No"]');
+                     parselNoInput = document.querySelector('input[aria-label="Parsel No"]');
+                     tapuDurumuSelect = document.querySelector('select[aria-label="Tapu Durumu"]');
+                 }
+                
+                // Debug: Log all found elements
+                console.log('Found elements:');
+                console.log('citySelect:', citySelect, 'value:', citySelect?.value);
+                console.log('districtSelect:', districtSelect, 'value:', districtSelect?.value);
+                console.log('neighborhoodSelect:', neighborhoodSelect, 'value:', neighborhoodSelect?.value);
+                console.log('imarDurumuSelect:', imarDurumuSelect, 'value:', imarDurumuSelect?.value);
+                console.log('tapuDurumuSelect:', tapuDurumuSelect, 'value:', tapuDurumuSelect?.value);
                  
                  if (citySelect && citySelect.value) currentFilters.city = citySelect.value;
                  if (districtSelect && districtSelect.value) currentFilters.district = districtSelect.value;
@@ -1776,7 +1810,7 @@
                 if (urlParams.has('zoning')) {
                     const zoning = urlParams.get('zoning');
                     setTimeout(() => {
-                        const zoningSelects = document.querySelectorAll('select[aria-label="İmar Durumu"], .mobile-drawer select:nth-of-type(4)');
+                        const zoningSelects = document.querySelectorAll('select[aria-label="İmar Durumu"], .mobile-drawer .filter-group:nth-of-type(3) select:nth-of-type(1)');
                         zoningSelects.forEach(select => {
                             select.value = zoning;
                         });
@@ -1822,6 +1856,9 @@
             
             // Add event listeners for cascading filters
             addCascadingFilterListeners();
+            
+            // Add mobile drawer event listeners
+            addMobileDrawerEventListeners();
         }
 
         // Update select options
@@ -1841,6 +1878,46 @@
                     select.appendChild(optionElement);
                 });
             });
+        }
+
+        // Add event listeners specifically for mobile drawer elements
+        function addMobileDrawerEventListeners() {
+            console.log('Adding mobile drawer event listeners...');
+            
+            // City change listeners for mobile drawer
+            const mobileCitySelects = document.querySelectorAll('.mobile-drawer select:nth-of-type(1)');
+            mobileCitySelects.forEach(select => {
+                // Remove existing listeners to avoid duplicates
+                select.removeEventListener('change', handleMobileCityChange);
+                select.addEventListener('change', handleMobileCityChange);
+            });
+
+            // District change listeners for mobile drawer
+            const mobileDistrictSelects = document.querySelectorAll('.mobile-drawer select:nth-of-type(2)');
+            mobileDistrictSelects.forEach(select => {
+                select.removeEventListener('change', handleMobileDistrictChange);
+                select.addEventListener('change', handleMobileDistrictChange);
+            });
+        }
+
+        // Handle mobile city change
+        function handleMobileCityChange() {
+            const selectedCity = this.value;
+            console.log('Mobile city changed to:', selectedCity);
+            updateDistrictOptions(selectedCity);
+            // Reset district and neighborhood selections
+            resetSelects(['.mobile-drawer select:nth-of-type(2)']);
+            resetSelects(['.mobile-drawer select:nth-of-type(3)']);
+        }
+
+        // Handle mobile district change
+        function handleMobileDistrictChange() {
+            const selectedCity = getSelectedCity();
+            const selectedDistrict = this.value;
+            console.log('Mobile district changed to:', selectedDistrict);
+            updateNeighborhoodOptions(selectedCity, selectedDistrict);
+            // Reset neighborhood selection
+            resetSelects(['.mobile-drawer select:nth-of-type(3)']);
         }
 
         // Add cascading filter listeners
@@ -1874,7 +1951,9 @@
         function getSelectedCity() {
             const citySelect = document.querySelector('select[aria-label="Şehir"]');
             const mobileCitySelect = document.querySelector('.mobile-drawer select:nth-of-type(1)');
-            return (citySelect && citySelect.value) || (mobileCitySelect && mobileCitySelect.value) || '';
+            const selectedCity = (citySelect && citySelect.value) || (mobileCitySelect && mobileCitySelect.value) || '';
+            console.log('Selected city:', selectedCity);
+            return selectedCity;
         }
 
         // Update district options based on selected city
@@ -1978,14 +2057,16 @@
         function updateImarDurumuOptions() {
             const options = imarDurumuOptions.map(option => option.name).sort();
             updateSelectOptions('select[aria-label="İmar Durumu"]', options, 'İmar Durumu');
-            updateSelectOptions('.mobile-drawer select:nth-of-type(4)', options, 'İmar Durumu');
+            // Mobile drawer'da imar durumu 4. select
+            updateSelectOptions('.mobile-drawer .filter-group:nth-of-type(3) select:nth-of-type(1)', options, 'İmar Durumu');
         }
 
         // Update tapu durumu select options
         function updateTapuDurumuOptions() {
             const options = tapuDurumuOptions.map(option => option.name).sort();
             updateSelectOptions('select[aria-label="Tapu Durumu"]', options, 'Tapu Durumu');
-            updateSelectOptions('.mobile-drawer select:nth-of-type(5)', options, 'Tapu Durumu');
+            // Mobile drawer'da tapu durumu 5. select
+            updateSelectOptions('.mobile-drawer .filter-group:nth-of-type(3) select:nth-of-type(2)', options, 'Tapu Durumu');
         }
 
         // Update property grid with given properties
