@@ -557,186 +557,8 @@ function initializeTestimonialsAnimations() {
 }
 
 // ===== TESTIMONIALS SLIDER =====
-function initializeTestimonialsSlider() {
-    const slider = document.getElementById('testimonialsSlider');
-    const prevBtn = document.getElementById('sliderPrev');
-    const nextBtn = document.getElementById('sliderNext');
-    const dots = document.querySelectorAll('.dot');
-    const cards = document.querySelectorAll('.testimonial-card');
-    
-    if (!slider || !prevBtn || !nextBtn || dots.length === 0) return;
-    
-    let currentSlide = 0;
-    let cardsPerView = 5; // Default desktop
-    let autoplayInterval;
-    let isTransitioning = false;
-    
-    // Determine cards per view based on screen size
-    function updateCardsPerView() {
-        const width = window.innerWidth;
-        if (width < 768) {
-            cardsPerView = 1; // Mobile
-        } else if (width < 1200) {
-            cardsPerView = 3; // Tablet
-        } else {
-            cardsPerView = 5; // Desktop
-        }
-        
-        // Update card widths
-        cards.forEach(card => {
-            if (width < 768) {
-                card.style.width = '100%';
-            } else if (width < 1200) {
-                card.style.width = 'calc(33.333% - 16px)';
-            } else {
-                card.style.width = 'calc(20% - 19.2px)';
-            }
-        });
-    }
-    
-    // Calculate maximum slides
-    function getMaxSlides() {
-        return Math.max(0, cards.length - cardsPerView);
-    }
-    
-    // Update slider position
-    function updateSlider() {
-        if (isTransitioning) return;
-        
-        isTransitioning = true;
-        const maxSlides = getMaxSlides();
-        currentSlide = Math.max(0, Math.min(currentSlide, maxSlides));
-        
-        const slideWidth = 100 / cardsPerView;
-        const translateX = -(currentSlide * slideWidth);
-        
-        slider.style.transform = `translateX(${translateX}%)`;
-        
-        // Update dots
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentSlide);
-        });
-        
-        // Update arrow states
-        prevBtn.style.opacity = currentSlide === 0 ? '0.6' : '1';
-        nextBtn.style.opacity = currentSlide === maxSlides ? '0.6' : '1';
-        
-        setTimeout(() => {
-            isTransitioning = false;
-        }, 500);
-    }
-    
-    // Next slide
-    function nextSlide() {
-        const maxSlides = getMaxSlides();
-        if (currentSlide < maxSlides) {
-            currentSlide++;
-            updateSlider();
-        }
-    }
-    
-    // Previous slide
-    function prevSlide() {
-        if (currentSlide > 0) {
-            currentSlide--;
-            updateSlider();
-        }
-    }
-    
-    // Go to specific slide
-    function goToSlide(slideIndex) {
-        const maxSlides = getMaxSlides();
-        currentSlide = Math.max(0, Math.min(slideIndex, maxSlides));
-        updateSlider();
-    }
-    
-    // Autoplay functionality
-    function startAutoplay() {
-        autoplayInterval = setInterval(() => {
-            const maxSlides = getMaxSlides();
-            if (currentSlide >= maxSlides) {
-                currentSlide = 0;
-            } else {
-                currentSlide++;
-            }
-            updateSlider();
-        }, 4000); // 4 seconds
-    }
-    
-    function stopAutoplay() {
-        if (autoplayInterval) {
-            clearInterval(autoplayInterval);
-        }
-    }
-    
-    // Event listeners
-    nextBtn.addEventListener('click', () => {
-        nextSlide();
-        stopAutoplay();
-        setTimeout(startAutoplay, 8000); // Restart autoplay after 8 seconds
-    });
-    
-    prevBtn.addEventListener('click', () => {
-        prevSlide();
-        stopAutoplay();
-        setTimeout(startAutoplay, 8000);
-    });
-    
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            goToSlide(index);
-            stopAutoplay();
-            setTimeout(startAutoplay, 8000);
-        });
-    });
-    
-    // Touch/Swipe support for mobile
-    let startX = 0;
-    let endX = 0;
-    
-    slider.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    }, { passive: true });
-    
-    slider.addEventListener('touchend', (e) => {
-        endX = e.changedTouches[0].clientX;
-        handleSwipe();
-    }, { passive: true });
-    
-    function handleSwipe() {
-        const threshold = 50;
-        const diff = startX - endX;
-        
-        if (Math.abs(diff) > threshold) {
-            if (diff > 0) {
-                // Swipe left - next slide
-                nextSlide();
-            } else {
-                // Swipe right - previous slide
-                prevSlide();
-            }
-            stopAutoplay();
-            setTimeout(startAutoplay, 8000);
-        }
-    }
-    
-    // Pause autoplay on hover
-    slider.addEventListener('mouseenter', stopAutoplay);
-    slider.addEventListener('mouseleave', startAutoplay);
-    
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        updateCardsPerView();
-        updateSlider();
-    });
-    
-    // Initialize
-    updateCardsPerView();
-    updateSlider();
-    startAutoplay();
-    
-    console.log('Testimonials slider başlatıldı');
-}
+// Bu fonksiyon Firebase testimonials sistemi ile çakıştığı için kaldırıldı
+// Yeni sistem loadTestimonialsFromFirebase() ve setupTestimonialSlider() fonksiyonlarını kullanıyor
 
 // ===== FAQ FUNCTIONALITY =====
 function initializeFAQ() {
@@ -1574,7 +1396,7 @@ document.addEventListener('DOMContentLoaded', function() {
     optimizePerformance();
     initializeScrollAnimations();
     initializePropertiesInteraction();
-    initializeTestimonialsSlider();
+    // initializeTestimonialsSlider(); // Bu fonksiyon Firebase testimonials ile çakışıyor, kaldırıldı
     initializeFAQ();
     initializeAboutSection();
     initializeFooterFunctionality();
@@ -2009,6 +1831,7 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
         goToSlide(0);
     }
 
+
     // Belirli bir slayta git
     function goToSlide(slideIndex) {
         const slider = document.getElementById('testimonialsSlider');
@@ -2115,7 +1938,7 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
         console.log('DOMContentLoaded fired!');
         // Wait a bit for Firebase SDK to be fully loaded, then initialize
         setTimeout(() => {
-            // Only load properties if we're on the index page
+            // Check if we're on index page
             const grid = document.getElementById('propertiesGrid');
             console.log('Properties grid found:', grid);
             if (grid) {
@@ -2125,15 +1948,89 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
                 console.log('Properties grid not found - not on index page');
             }
             
+            
             // Load testimonials if we're on the index page
             const testimonialsSlider = document.getElementById('testimonialsSlider');
             if (testimonialsSlider) {
                 console.log('Loading testimonials from Firebase...');
                 loadTestimonialsFromFirebase();
             }
+
+            // Load SEO data for current page
+            loadPageSEO();
         }, 500);
     });
     
 } else {
     console.error('Firebase SDK not loaded');
 }
+
+// ===== SEO MANAGEMENT =====
+function loadPageSEO() {
+    if (!database) {
+        console.error('Database not initialized');
+        return;
+    }
+
+    // Get current page filename
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    console.log('Loading SEO for page:', currentPage);
+
+    // Convert filename to Firebase-safe key
+    const safePageId = currentPage.replace(/\./g, '_DOT_').replace(/[#$\[\]]/g, '_');
+    console.log('Firebase key:', safePageId);
+
+    database.ref(`sayfalar/${safePageId}`).once('value')
+        .then((snapshot) => {
+            const seoData = snapshot.val();
+            if (seoData) {
+                console.log('SEO data loaded:', seoData);
+                updatePageSEO(seoData);
+            } else {
+                console.log('No SEO data found for page:', currentPage);
+            }
+        })
+        .catch((error) => {
+            console.error('Error loading SEO data:', error);
+        });
+}
+
+function updatePageSEO(seoData) {
+    try {
+        // Update page title
+        if (seoData.seo_title) {
+            const titleElement = document.getElementById('pageTitle');
+            if (titleElement) {
+                titleElement.textContent = seoData.seo_title;
+                document.title = seoData.seo_title;
+            }
+        }
+
+        // Update meta description
+        if (seoData.seo_description) {
+            const descElement = document.getElementById('pageDescription');
+            if (descElement) {
+                descElement.setAttribute('content', seoData.seo_description);
+            }
+        }
+
+        // Update meta keywords
+        if (seoData.seo_keywords) {
+            const keywordsElement = document.getElementById('pageKeywords');
+            if (keywordsElement) {
+                keywordsElement.setAttribute('content', seoData.seo_keywords);
+            }
+        }
+
+        // Note: URL slug is not updated to prevent page reload issues
+        // The slug is stored in Firebase for SEO purposes but URL remains as index.html
+        if (seoData.slug) {
+            console.log('Page slug available:', seoData.slug, 'but URL remains:', window.location.pathname);
+        }
+
+        console.log('SEO data updated successfully');
+    } catch (error) {
+        console.error('Error updating SEO data:', error);
+    }
+}
+

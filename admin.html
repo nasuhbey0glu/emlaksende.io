@@ -1763,6 +1763,10 @@
             }
         }
     </style>
+    
+    <!-- Quill.js CDN -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 </head>
 <body>
     <!-- Login Screen -->
@@ -2288,11 +2292,15 @@
                                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
                                         <div>
                                             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Şehir *</label>
-                                            <input type="text" id="ilanSehir" placeholder="Şehir giriniz" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
+                                            <select id="ilanSehir" onchange="onCityChange()" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
+                                                <option value="">Şehir Seçin</option>
+                                            </select>
                                         </div>
                                         <div>
                                             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">İlçe *</label>
-                                            <input type="text" id="ilanIlce" placeholder="İlçe giriniz" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
+                                            <select id="ilanIlce" onchange="onDistrictChange()" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
+                                                <option value="">İlçe Seçin</option>
+                                            </select>
                                         </div>
                                         <div>
                                             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Mahalle *</label>
@@ -2728,106 +2736,31 @@
                                     <div style="margin-top: 2rem;">
                                         <label style="display: block; margin-bottom: 1rem; color: var(--text-primary); font-weight: 500; font-size: 1.1rem;">📝 İlan Açıklaması</label>
                                         
-                                        <div class="editor-container">
-                                            <!-- Toolbar -->
-                                            <div class="editor-toolbar">
-                                                <button type="button" class="editor-btn" onclick="execCommand('bold')" title="Kalın (Ctrl+B)">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M12 6a1 1 0 011 1v2a1 1 0 11-2 0V7a1 1 0 011-1zM8 6a1 1 0 011 1v6a1 1 0 11-2 0V7a1 1 0 011-1zM6 4a1 1 0 000 2h8a1 1 0 100-2H6z"/>
-                                                    </svg>
-                                                </button>
-                                                <button type="button" class="editor-btn" onclick="execCommand('italic')" title="İtalik (Ctrl+I)">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M8 3a1 1 0 01.707.293l4 4a1 1 0 01-1.414 1.414L10 6.414V16a1 1 0 11-2 0V6.414L5.707 8.707a1 1 0 01-1.414-1.414l4-4A1 1 0 018 3z"/>
-                                                    </svg>
-                                                </button>
-                                                <button type="button" class="editor-btn" onclick="execCommand('underline')" title="Altı Çizili (Ctrl+U)">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
-                                                    </svg>
-                                                </button>
-                                                
-                                                <div class="editor-separator"></div>
-                                                
-                                                <button type="button" class="editor-btn" onclick="execCommand('insertUnorderedList')" title="Madde İşareti">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
-                                                    </svg>
-                                                </button>
-                                                <button type="button" class="editor-btn" onclick="execCommand('insertOrderedList')" title="Numaralı Liste">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
-                                                    </svg>
-                                                </button>
-                                                
-                                                <div class="editor-separator"></div>
-                                                
-                                                <button type="button" class="editor-btn" onclick="execCommand('formatBlock', 'h3')" title="Başlık 3">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
-                                                    </svg>
-                                                </button>
-                                                <button type="button" class="editor-btn" onclick="execCommand('formatBlock', 'h4')" title="Başlık 4">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
-                                                    </svg>
-                                                </button>
-                                                <button type="button" class="editor-btn" onclick="execCommand('formatBlock', 'p')" title="Paragraf">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
-                                                    </svg>
-                                                </button>
-                                                
-                                                <div class="editor-separator"></div>
-                                                
-                                                <button type="button" class="editor-btn" onclick="execCommand('justifyLeft')" title="Sola Hizala">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
-                                                    </svg>
-                                                </button>
-                                                <button type="button" class="editor-btn" onclick="execCommand('justifyCenter')" title="Ortala">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
-                                                    </svg>
-                                                </button>
-                                                <button type="button" class="editor-btn" onclick="execCommand('justifyRight')" title="Sağa Hizala">
-                                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            
-                                            <!-- Content Area -->
-                                            <div class="editor-content" 
-                                                 id="ilanAciklama" 
-                                                 contenteditable="true" 
-                                                 oninput="updateEditorStats()"
-                                                 onkeydown="handleEditorKeydown(event)"
-                                                 onpaste="handleEditorPaste(event)"></div>
-                                            
-                                            <!-- Stats Bar -->
-                                            <div class="editor-stats">
-                                                <div class="editor-word-count">
-                                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                        <!-- Quill.js Editor Container -->
+                                        <div id="quillEditor" style="height: 300px; margin-bottom: 1rem;"></div>
+                                        
+                                        <!-- Editor Actions -->
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                            <div style="display: flex; align-items: center; color: var(--text-secondary); font-size: 0.9rem;">
+                                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.5rem;">
                                                         <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
                                                         <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z" clip-rule="evenodd"/>
                                                     </svg>
-                                                    <span id="wordCount">0 kelime</span>
+                                                <span id="quillWordCount">0 kelime</span>
                                                 </div>
-                                                <div class="editor-actions">
-                                                    <button type="button" class="btn-editor-action" onclick="clearEditor()">
+                                            <div style="display: flex; gap: 0.5rem;">
+                                                <button type="button" class="btn btn-secondary" onclick="clearQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
                                                         <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
                                                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                                         </svg>
                                                         Temizle
                                                     </button>
-                                                    <button type="button" class="btn-editor-action primary" onclick="insertSampleText()">
+                                                <button type="button" class="btn btn-primary" onclick="insertQuillSampleText()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
                                                         <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
                                                             <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
                                                         </svg>
                                                         Örnek Metin
                                                     </button>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -3702,6 +3635,112 @@
                                 </div>
                             </div>
                         </div>
+                    `,
+                    'sayfalar': `
+                        <div class="content-header">
+                            <h2 class="content-title">Sayfa Yönetimi</h2>
+                            <button class="btn btn-primary" onclick="showAddPageForm()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                                Yeni Sayfa Ekle
+                            </button>
+                        </div>
+                        
+                        <div id="pageAlert" class="alert"></div>
+                        
+                        <!-- Add/Edit Page Form -->
+                        <div id="pageForm" style="display: none; margin-bottom: 2rem;">
+                            <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                    <h3 style="margin: 0; color: var(--text-primary);" id="pageFormHeader">Yeni Sayfa Ekle</h3>
+                                    <button class="btn btn-secondary" onclick="hidePageForm()">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Kapat
+                                    </button>
+                                </div>
+                                
+                                <!-- Form Content -->
+                                <form id="pageFormContent" style="display: grid; gap: 1.5rem;">
+                                    <!-- Row 1: Sayfa Dosyası ve Başlık -->
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                        <div>
+                                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Sayfa Dosyası *</label>
+                                            <input type="text" id="pageFile" placeholder="index.html" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                        </div>
+                                        <div>
+                                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Sayfa Başlığı *</label>
+                                            <input type="text" id="pageFormTitle" placeholder="Ana Sayfa" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Row 2: Slug -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">URL Slug *</label>
+                                        <input type="text" id="pageSlug" placeholder="/" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                        <small style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">
+                                            Web sitesinde görünecek URL kısmı (örn: /, /hakkimizda, /iletisim)
+                                        </small>
+                                    </div>
+                                    
+                                    <!-- Row 3: SEO Başlık -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">SEO Başlığı *</label>
+                                        <input type="text" id="pageSeoTitle" placeholder="Ana Sayfa | Firma Adı" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                        <small style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">
+                                            Arama motorlarında görünecek başlık (60 karakter önerilir)
+                                        </small>
+                                    </div>
+                                    
+                                    <!-- Row 4: SEO Açıklama -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">SEO Açıklaması *</label>
+                                        <textarea id="pageSeoDescription" placeholder="Firma hakkında kısa açıklama" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; min-height: 80px; resize: vertical;"></textarea>
+                                        <small style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">
+                                            Arama motorlarında görünecek açıklama (160 karakter önerilir)
+                                        </small>
+                                    </div>
+                                    
+                                    <!-- Row 5: SEO Anahtar Kelimeler -->
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">SEO Anahtar Kelimeler</label>
+                                        <input type="text" id="pageSeoKeywords" placeholder="firma, web, hizmet" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                        <small style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">
+                                            Virgülle ayrılmış anahtar kelimeler
+                                        </small>
+                                    </div>
+                                    
+                                    <!-- Form Actions -->
+                                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                        <button type="button" class="btn btn-secondary" onclick="hidePageForm()">
+                                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            İptal
+                                        </button>
+                                        <button type="button" class="btn btn-primary" onclick="savePage()">
+                                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Sayfayı Kaydet
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Page List -->
+                        <div id="pageList" style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+                            <h3 style="margin: 0 0 1.5rem 0; color: var(--text-primary);">Sayfa Listesi</h3>
+                            <div id="pageListContent">
+                                <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                    <div class="loading"></div>
+                                    <p style="margin-top: 1rem;">Sayfalar yükleniyor...</p>
+                                </div>
+                            </div>
+                        </div>
                     `
                 };
 
@@ -3767,6 +3806,9 @@
                             break;
                         case 'kullanicilar':
                             loadUsers();
+                            break;
+                        case 'sayfalar':
+                            loadPages();
                             break;
                     }
                 }, 100);
@@ -3836,6 +3878,9 @@
                     userDropdown.style.display = 'none';
                 }
             });
+
+            // Quill.js editörünü başlat
+            initializeQuillEditor();
         });
 
         // File Upload Functions
@@ -5124,11 +5169,10 @@
                     selectedCevreler.clear();
                     updateCevrelerSummary();
                     
-                    // Editor'ü temizle
-                    const editor = document.getElementById('ilanAciklama');
-                    if (editor) {
-                        editor.innerHTML = '';
-                        updateEditorStats();
+                    // Quill.js editörünü temizle
+                    if (quillEditor) {
+                        quillEditor.setContents([]);
+                        updateQuillWordCount();
                     }
                     
                     // Harita konumunu temizle
@@ -5321,6 +5365,29 @@
                     element.focus();
                     return;
                 }
+            }
+
+            // Şehir, ilçe, mahalle validasyonu
+            const sehir = document.getElementById('ilanSehir').value;
+            const ilce = document.getElementById('ilanIlce').value;
+            const mahalle = document.getElementById('ilanMahalle').value;
+
+            if (!sehir) {
+                showGenericAlert('ilanAlert', 'Lütfen bir şehir seçin.', 'error');
+                document.getElementById('ilanSehir').focus();
+                return;
+            }
+
+            if (!ilce) {
+                showGenericAlert('ilanAlert', 'Lütfen bir ilçe seçin.', 'error');
+                document.getElementById('ilanIlce').focus();
+                return;
+            }
+
+            if (!mahalle) {
+                showGenericAlert('ilanAlert', 'Lütfen bir mahalle seçin.', 'error');
+                document.getElementById('ilanMahalle').focus();
+                return;
             }
             
             // Tapu görseli yükle
@@ -5519,7 +5586,24 @@
                     document.getElementById('ilanMetrekareFiyat').value = ilan.metrekareFiyat || '';
                     document.getElementById('ilanAdaNo').value = ilan.adaNo || '';
                     document.getElementById('ilanParselNo').value = ilan.parselNo || '';
-                    document.getElementById('ilanSehir').value = ilan.sehir || '';
+                    // Şehir, ilçe, mahalle değerlerini yükle
+                    if (ilan.sehir) {
+                        document.getElementById('ilanSehir').value = ilan.sehir;
+                        selectedCityId = ilan.sehir;
+                        // İlçeleri yükle
+                        loadDistricts(ilan.sehir).then(() => {
+                            if (ilan.ilce) {
+                                document.getElementById('ilanIlce').value = ilan.ilce;
+                                selectedDistrictId = ilan.ilce;
+                            }
+                        });
+                    }
+                    
+                    // Mahalle değerini direkt olarak yükle
+                    if (ilan.mahalle) {
+                        document.getElementById('ilanMahalle').value = ilan.mahalle;
+                    }
+                    
                     document.getElementById('ilanLats').value = ilan.latitude || ilan.location?.lat || '';
                     document.getElementById('ilanLangs').value = ilan.longitude || ilan.location?.lng || '';
                     
@@ -5530,11 +5614,10 @@
                         document.getElementById('ilan3SeneArtis').value = ilan.priceProjections.year3?.increaseRate || '';
                     }
                     
-                    // İlan açıklamasını doldur
-                    const editor = document.getElementById('ilanAciklama');
-                    if (editor && ilan.aciklama) {
-                        editor.innerHTML = ilan.aciklama;
-                        updateEditorStats();
+                    // İlan açıklamasını Quill.js editörüne yükle
+                    if (quillEditor && ilan.aciklama) {
+                        quillEditor.clipboard.dangerouslyPasteHTML(ilan.aciklama);
+                        updateQuillWordCount();
                     }
                     
                     // Fotoğrafları yükle
@@ -6985,21 +7068,513 @@
             updateEditorStats();
         }
 
-        // Editor içeriğini al
-        function getEditorContent() {
-            const editor = document.getElementById('ilanAciklama');
-            if (!editor) return '';
+        // Quill.js editör instance'ı
+        let quillEditor = null;
+
+        // TurkiyeAPI entegrasyonu için değişkenler
+        let turkiyeApiData = {
+            cities: [],
+            districts: [],
+            neighborhoods: []
+        };
+        let selectedCityId = null;
+        let selectedDistrictId = null;
+
+        // Quill.js editörünü başlat
+        function initializeQuillEditor() {
+            if (quillEditor) {
+                quillEditor = null;
+            }
             
-            return editor.innerHTML;
+            const quillContainer = document.getElementById('quillEditor');
+            if (!quillContainer) return;
+            
+            // Quill.js konfigürasyonu
+            const quillOptions = {
+                theme: 'snow',
+                placeholder: 'İlan açıklamasını buraya yazın...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
+                        [{ 'align': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            };
+            
+            quillEditor = new Quill(quillContainer, quillOptions);
+            
+            // Kelime sayısını güncelle
+            quillEditor.on('text-change', function() {
+                updateQuillWordCount();
+            });
         }
 
-        // Editor'ü temizle
+        // Quill.js kelime sayısını güncelle
+        function updateQuillWordCount() {
+            const wordCountElement = document.getElementById('quillWordCount');
+            if (quillEditor && wordCountElement) {
+                const text = quillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+
+        // Quill.js editörünü temizle
+        function clearQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (quillEditor) {
+                    quillEditor.setContents([]);
+                    updateQuillWordCount();
+                }
+            }
+        }
+
+        // Quill.js editörüne örnek metin ekle
+        function insertQuillSampleText() {
+            if (!quillEditor) return;
+            
+            const sampleContent = `
+                <h3>🏠 İlan Açıklaması</h3>
+                <p>Bu <strong>mükemmel arsa</strong> satışa sunulmuştur. <em>Merkezi konumda</em> bulunan bu arsa, yatırım için ideal bir fırsattır.</p>
+                
+                <h4>📍 Konum Özellikleri:</h4>
+                <ul>
+                    <li>Şehir merkezine yakın</li>
+                    <li>Toplu taşıma imkanları</li>
+                    <li>Okul ve hastane yakını</li>
+                </ul>
+                
+                <h4>💰 Yatırım Potansiyeli:</h4>
+                <p>Bu bölgede <u>emlak değerleri</u> sürekli artış göstermektedir. Gelecekteki projeler ile birlikte değer artışı beklenmektedir.</p>
+            `;
+            
+            quillEditor.clipboard.dangerouslyPasteHTML(sampleContent);
+            updateQuillWordCount();
+        }
+
+        // Editor içeriğini al (Quill.js için güncellenmiş)
+        function getEditorContent() {
+            if (quillEditor) {
+                return quillEditor.root.innerHTML;
+            }
+            return '';
+        }
+
+        // ===== TÜRKİYE API ENTEGRASYONU =====
+
+        const API_BASE = "https://turkiyeapi.dev/api/v1";
+        const cache = { provinces: null, districtsByProvinceId: new Map() };
+
+        // TurkiyeAPI'den şehirleri yükle
+        async function loadCities() {
+            console.log('Şehirler yükleniyor...');
+            try {
+                if (!cache.provinces) {
+                    console.log('API\'den şehirler çekiliyor...');
+                    const response = await fetch(`${API_BASE}/provinces?limit=1000&fields=id,name`);
+                    console.log('API yanıtı:', response.status, response.statusText);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('API verisi:', data);
+                    
+                    if (data && data.data && Array.isArray(data.data)) {
+                        cache.provinces = data.data.sort((a,b) => a.name.localeCompare(b.name, "tr"));
+                        console.log('Şehirler başarıyla yüklendi:', cache.provinces.length);
+                    } else {
+                        throw new Error('Geçersiz API yanıtı');
+                    }
+                }
+                turkiyeApiData.cities = cache.provinces;
+                populateCityDropdown();
+            } catch (error) {
+                console.error('API hatası:', error);
+                console.log('Fallback şehir listesi yükleniyor...');
+                // Fallback: Manuel şehir listesi
+                loadFallbackCities();
+            }
+        }
+
+        // Fallback şehir listesi
+        function loadFallbackCities() {
+            console.log('Fallback şehir listesi yükleniyor...');
+            turkiyeApiData.cities = [
+                { id: 1, name: 'Adana' },
+                { id: 2, name: 'Adıyaman' },
+                { id: 3, name: 'Afyonkarahisar' },
+                { id: 4, name: 'Ağrı' },
+                { id: 5, name: 'Amasya' },
+                { id: 6, name: 'Ankara' },
+                { id: 7, name: 'Antalya' },
+                { id: 8, name: 'Artvin' },
+                { id: 9, name: 'Aydın' },
+                { id: 10, name: 'Balıkesir' },
+                { id: 11, name: 'Bilecik' },
+                { id: 12, name: 'Bingöl' },
+                { id: 13, name: 'Bitlis' },
+                { id: 14, name: 'Bolu' },
+                { id: 15, name: 'Burdur' },
+                { id: 16, name: 'Bursa' },
+                { id: 17, name: 'Çanakkale' },
+                { id: 18, name: 'Çankırı' },
+                { id: 19, name: 'Çorum' },
+                { id: 20, name: 'Denizli' },
+                { id: 21, name: 'Diyarbakır' },
+                { id: 22, name: 'Edirne' },
+                { id: 23, name: 'Elazığ' },
+                { id: 24, name: 'Erzincan' },
+                { id: 25, name: 'Erzurum' },
+                { id: 26, name: 'Eskişehir' },
+                { id: 27, name: 'Gaziantep' },
+                { id: 28, name: 'Giresun' },
+                { id: 29, name: 'Gümüşhane' },
+                { id: 30, name: 'Hakkari' },
+                { id: 31, name: 'Hatay' },
+                { id: 32, name: 'Isparta' },
+                { id: 33, name: 'Mersin' },
+                { id: 34, name: 'İstanbul' },
+                { id: 35, name: 'İzmir' },
+                { id: 36, name: 'Kars' },
+                { id: 37, name: 'Kastamonu' },
+                { id: 38, name: 'Kayseri' },
+                { id: 39, name: 'Kırklareli' },
+                { id: 40, name: 'Kırşehir' },
+                { id: 41, name: 'Kocaeli' },
+                { id: 42, name: 'Konya' },
+                { id: 43, name: 'Kütahya' },
+                { id: 44, name: 'Malatya' },
+                { id: 45, name: 'Manisa' },
+                { id: 46, name: 'Kahramanmaraş' },
+                { id: 47, name: 'Mardin' },
+                { id: 48, name: 'Muğla' },
+                { id: 49, name: 'Muş' },
+                { id: 50, name: 'Nevşehir' },
+                { id: 51, name: 'Niğde' },
+                { id: 52, name: 'Ordu' },
+                { id: 53, name: 'Rize' },
+                { id: 54, name: 'Sakarya' },
+                { id: 55, name: 'Samsun' },
+                { id: 56, name: 'Siirt' },
+                { id: 57, name: 'Sinop' },
+                { id: 58, name: 'Sivas' },
+                { id: 59, name: 'Tekirdağ' },
+                { id: 60, name: 'Tokat' },
+                { id: 61, name: 'Trabzon' },
+                { id: 62, name: 'Tunceli' },
+                { id: 63, name: 'Şanlıurfa' },
+                { id: 64, name: 'Uşak' },
+                { id: 65, name: 'Van' },
+                { id: 66, name: 'Yozgat' },
+                { id: 67, name: 'Zonguldak' },
+                { id: 68, name: 'Aksaray' },
+                { id: 69, name: 'Bayburt' },
+                { id: 70, name: 'Karaman' },
+                { id: 71, name: 'Kırıkkale' },
+                { id: 72, name: 'Batman' },
+                { id: 73, name: 'Şırnak' },
+                { id: 74, name: 'Bartın' },
+                { id: 75, name: 'Ardahan' },
+                { id: 76, name: 'Iğdır' },
+                { id: 77, name: 'Yalova' },
+                { id: 78, name: 'Karabük' },
+                { id: 79, name: 'Kilis' },
+                { id: 80, name: 'Osmaniye' },
+                { id: 81, name: 'Düzce' }
+            ];
+            console.log('Fallback şehir listesi yüklendi:', turkiyeApiData.cities.length);
+            populateCityDropdown();
+        }
+
+        // Şehir dropdown'ını doldur
+        function populateCityDropdown() {
+            const citySelect = document.getElementById('ilanSehir');
+            if (!citySelect) {
+                console.warn('Şehir dropdown elementi bulunamadı! 1 saniye sonra tekrar denenecek...');
+                // 1 saniye sonra tekrar dene
+                setTimeout(() => {
+                    populateCityDropdown();
+                }, 1000);
+                return;
+            }
+
+            console.log('Şehir dropdown dolduruluyor...', turkiyeApiData.cities.length, 'şehir');
+            
+            // Mevcut seçimi sakla
+            const currentValue = citySelect.value;
+            
+            // Dropdown'ı temizle
+            citySelect.innerHTML = '<option value="">Şehir Seçin</option>';
+            
+            // Şehirleri ekle
+            turkiyeApiData.cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city.id;
+                option.textContent = city.name;
+                if (currentValue == city.id) {
+                    option.selected = true;
+                }
+                citySelect.appendChild(option);
+            });
+            
+            console.log('Şehir dropdown başarıyla dolduruldu');
+        }
+
+        // Seçilen şehre göre ilçeleri yükle
+        async function loadDistricts(cityId) {
+            if (!cityId) {
+                clearDistricts();
+                return;
+            }
+
+            console.log('İlçeler yükleniyor, şehir ID:', cityId);
+            try {
+                let list = cache.districtsByProvinceId.get(cityId);
+                if (!list) {
+                    console.log('API\'den ilçeler çekiliyor...');
+                    const response = await fetch(`${API_BASE}/districts?provinceId=${cityId}&limit=2000&fields=id,name`);
+                    console.log('API yanıtı:', response.status, response.statusText);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('API verisi:', data);
+                    
+                    if (data && data.data && Array.isArray(data.data)) {
+                        list = data.data.sort((a,b) => a.name.localeCompare(b.name, "tr"));
+                        cache.districtsByProvinceId.set(cityId, list);
+                        console.log('İlçeler başarıyla yüklendi:', list.length);
+                    } else {
+                        throw new Error('Geçersiz API yanıtı');
+                    }
+                }
+                turkiyeApiData.districts = list;
+                populateDistrictDropdown();
+            } catch (error) {
+                console.error('API hatası:', error);
+                console.log('Fallback ilçe listesi yükleniyor...');
+                // Fallback: Manuel ilçe listesi
+                loadFallbackDistricts(cityId);
+            }
+        }
+
+        // Fallback ilçe listesi
+        function loadFallbackDistricts(cityId) {
+            console.log('Fallback ilçe listesi yükleniyor, şehir ID:', cityId);
+            
+            // Şehir adını bul
+            const city = turkiyeApiData.cities.find(c => c.id == cityId);
+            const cityName = city ? city.name : 'Bilinmeyen';
+            
+            if (cityId == 34) { // İstanbul
+                turkiyeApiData.districts = [
+                    { id: 1, name: 'Adalar' },
+                    { id: 2, name: 'Arnavutköy' },
+                    { id: 3, name: 'Ataşehir' },
+                    { id: 4, name: 'Avcılar' },
+                    { id: 5, name: 'Bağcılar' },
+                    { id: 6, name: 'Bahçelievler' },
+                    { id: 7, name: 'Bakırköy' },
+                    { id: 8, name: 'Başakşehir' },
+                    { id: 9, name: 'Bayrampaşa' },
+                    { id: 10, name: 'Beşiktaş' },
+                    { id: 11, name: 'Beykoz' },
+                    { id: 12, name: 'Beylikdüzü' },
+                    { id: 13, name: 'Beyoğlu' },
+                    { id: 14, name: 'Büyükçekmece' },
+                    { id: 15, name: 'Çatalca' },
+                    { id: 16, name: 'Çekmeköy' },
+                    { id: 17, name: 'Esenler' },
+                    { id: 18, name: 'Esenyurt' },
+                    { id: 19, name: 'Eyüpsultan' },
+                    { id: 20, name: 'Fatih' },
+                    { id: 21, name: 'Gaziosmanpaşa' },
+                    { id: 22, name: 'Güngören' },
+                    { id: 23, name: 'Kadıköy' },
+                    { id: 24, name: 'Kağıthane' },
+                    { id: 25, name: 'Kartal' },
+                    { id: 26, name: 'Küçükçekmece' },
+                    { id: 27, name: 'Maltepe' },
+                    { id: 28, name: 'Pendik' },
+                    { id: 29, name: 'Sancaktepe' },
+                    { id: 30, name: 'Sarıyer' },
+                    { id: 31, name: 'Silivri' },
+                    { id: 32, name: 'Sultanbeyli' },
+                    { id: 33, name: 'Sultangazi' },
+                    { id: 34, name: 'Şile' },
+                    { id: 35, name: 'Şişli' },
+                    { id: 36, name: 'Tuzla' },
+                    { id: 37, name: 'Ümraniye' },
+                    { id: 38, name: 'Üsküdar' },
+                    { id: 39, name: 'Zeytinburnu' }
+                ];
+            } else if (cityId == 6) { // Ankara
+                turkiyeApiData.districts = [
+                    { id: 1, name: 'Akyurt' },
+                    { id: 2, name: 'Altındağ' },
+                    { id: 3, name: 'Ayaş' },
+                    { id: 4, name: 'Bala' },
+                    { id: 5, name: 'Beypazarı' },
+                    { id: 6, name: 'Çamlıdere' },
+                    { id: 7, name: 'Çankaya' },
+                    { id: 8, name: 'Çubuk' },
+                    { id: 9, name: 'Elmadağ' },
+                    { id: 10, name: 'Etimesgut' },
+                    { id: 11, name: 'Evren' },
+                    { id: 12, name: 'Gölbaşı' },
+                    { id: 13, name: 'Güdül' },
+                    { id: 14, name: 'Haymana' },
+                    { id: 15, name: 'Kalecik' },
+                    { id: 16, name: 'Kazan' },
+                    { id: 17, name: 'Keçiören' },
+                    { id: 18, name: 'Kızılcahamam' },
+                    { id: 19, name: 'Mamak' },
+                    { id: 20, name: 'Nallıhan' },
+                    { id: 21, name: 'Polatlı' },
+                    { id: 22, name: 'Pursaklar' },
+                    { id: 23, name: 'Sincan' },
+                    { id: 24, name: 'Şereflikoçhisar' },
+                    { id: 25, name: 'Yenimahalle' }
+                ];
+            } else if (cityId == 35) { // İzmir
+                turkiyeApiData.districts = [
+                    { id: 1, name: 'Aliağa' },
+                    { id: 2, name: 'Balçova' },
+                    { id: 3, name: 'Bayındır' },
+                    { id: 4, name: 'Bayraklı' },
+                    { id: 5, name: 'Bergama' },
+                    { id: 6, name: 'Beydağ' },
+                    { id: 7, name: 'Bornova' },
+                    { id: 8, name: 'Buca' },
+                    { id: 9, name: 'Çeşme' },
+                    { id: 10, name: 'Çiğli' },
+                    { id: 11, name: 'Dikili' },
+                    { id: 12, name: 'Foça' },
+                    { id: 13, name: 'Gaziemir' },
+                    { id: 14, name: 'Güzelbahçe' },
+                    { id: 15, name: 'Karabağlar' },
+                    { id: 16, name: 'Karaburun' },
+                    { id: 17, name: 'Karşıyaka' },
+                    { id: 18, name: 'Kemalpaşa' },
+                    { id: 19, name: 'Kınık' },
+                    { id: 20, name: 'Kiraz' },
+                    { id: 21, name: 'Konak' },
+                    { id: 22, name: 'Menderes' },
+                    { id: 23, name: 'Menemen' },
+                    { id: 24, name: 'Narlıdere' },
+                    { id: 25, name: 'Ödemiş' },
+                    { id: 26, name: 'Seferihisar' },
+                    { id: 27, name: 'Selçuk' },
+                    { id: 28, name: 'Tire' },
+                    { id: 29, name: 'Torbalı' },
+                    { id: 30, name: 'Urla' }
+                ];
+            } else {
+                // Diğer şehirler için genel ilçe listesi
+                turkiyeApiData.districts = [
+                    { id: 1, name: 'Merkez' },
+                    { id: 2, name: 'Alt Merkez' },
+                    { id: 3, name: 'Kuzey' },
+                    { id: 4, name: 'Güney' },
+                    { id: 5, name: 'Doğu' },
+                    { id: 6, name: 'Batı' }
+                ];
+            }
+            
+            console.log(`${cityName} için ${turkiyeApiData.districts.length} ilçe yüklendi`);
+            populateDistrictDropdown();
+        }
+
+        // İlçe dropdown'ını doldur
+        function populateDistrictDropdown() {
+            const districtSelect = document.getElementById('ilanIlce');
+            if (!districtSelect) {
+                console.warn('İlçe dropdown elementi bulunamadı! 1 saniye sonra tekrar denenecek...');
+                // 1 saniye sonra tekrar dene
+                setTimeout(() => {
+                    populateDistrictDropdown();
+                }, 1000);
+                return;
+            }
+
+            console.log('İlçe dropdown dolduruluyor...', turkiyeApiData.districts.length, 'ilçe');
+
+            // Dropdown'ı temizle
+            districtSelect.innerHTML = '<option value="">İlçe Seçin</option>';
+            
+            // İlçeleri ekle
+            turkiyeApiData.districts.forEach(district => {
+                const option = document.createElement('option');
+                option.value = district.id;
+                option.textContent = district.name;
+                districtSelect.appendChild(option);
+            });
+
+            // Mahalle input alanını temizle
+            const mahalleInput = document.getElementById('ilanMahalle');
+            if (mahalleInput) {
+                mahalleInput.value = '';
+            }
+            
+            console.log('İlçe dropdown başarıyla dolduruldu');
+        }
+
+        // İlçeleri temizle
+        function clearDistricts() {
+            const districtSelect = document.getElementById('ilanIlce');
+            if (districtSelect) {
+                districtSelect.innerHTML = '<option value="">İlçe Seçin</option>';
+            }
+            // Mahalle input alanını temizle
+            const mahalleInput = document.getElementById('ilanMahalle');
+            if (mahalleInput) {
+                mahalleInput.value = '';
+            }
+        }
+
+
+        // Şehir seçimi değiştiğinde
+        function onCityChange() {
+            const citySelect = document.getElementById('ilanSehir');
+            const cityId = citySelect.value;
+            selectedCityId = cityId;
+            
+            if (cityId) {
+                loadDistricts(cityId);
+            } else {
+                clearDistricts();
+            }
+        }
+
+        // İlçe seçimi değiştiğinde
+        function onDistrictChange() {
+            const districtSelect = document.getElementById('ilanIlce');
+            const districtId = districtSelect.value;
+            selectedDistrictId = districtId;
+            
+            // Mahalle input alanını temizle
+            const mahalleInput = document.getElementById('ilanMahalle');
+            if (mahalleInput) {
+                mahalleInput.value = '';
+            }
+        }
+
+        // Editor'ü temizle (eski fonksiyon - Quill.js için güncellenmiş)
         function clearEditor() {
             if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
-                const editor = document.getElementById('ilanAciklama');
-                if (editor) {
-                    editor.innerHTML = '';
-                    updateEditorStats();
+                if (quillEditor) {
+                    quillEditor.setContents([]);
+                    updateQuillWordCount();
                 }
             }
         }
@@ -7055,14 +7630,16 @@
         showAddIlanForm = function() {
             originalShowAddIlanFormWithEditor();
             
-            // Editor sistemini başlat
+            // Quill.js editörünü ve şehirleri başlat
             setTimeout(() => {
-                initializeEditor();
-                const editor = document.getElementById('ilanAciklama');
-                if (editor) {
-                    editor.innerHTML = '';
-                    updateEditorStats();
+                initializeQuillEditor();
+                if (quillEditor) {
+                    quillEditor.setContents([]);
+                    updateQuillWordCount();
                 }
+                
+                // Şehirleri yükle (DOM hazır olduğunda)
+                loadCities();
             }, 500);
         };
 
@@ -7074,6 +7651,13 @@
         window.getEditorContent = getEditorContent;
         window.clearEditor = clearEditor;
         window.insertSampleText = insertSampleText;
+        window.clearQuillEditor = clearQuillEditor;
+        window.insertQuillSampleText = insertQuillSampleText;
+        window.initializeQuillEditor = initializeQuillEditor;
+        window.updateQuillWordCount = updateQuillWordCount;
+        window.onCityChange = onCityChange;
+        window.onDistrictChange = onDistrictChange;
+        window.loadCities = loadCities;
 
         // ===== PROJE YÖNETİMİ FONKSİYONLARI =====
         
@@ -8947,6 +9531,262 @@
         window.loadUsers = loadUsers;
         window.editUser = editUser;
         window.deleteUser = deleteUser;
+
+        // ==================== SAYFA YÖNETİMİ ====================
+
+        let editingPageId = null;
+
+        // Sayfa ekleme formunu göster
+        function showAddPageForm() {
+            const form = document.getElementById('pageForm');
+            if (form) {
+                form.style.display = 'block';
+                editingPageId = null;
+                document.getElementById('pageFormHeader').textContent = 'Yeni Sayfa Ekle';
+                clearPageForm();
+            }
+        }
+
+        // Sayfa formunu gizle
+        function hidePageForm() {
+            const form = document.getElementById('pageForm');
+            if (form) {
+                form.style.display = 'none';
+                editingPageId = null;
+                clearPageForm();
+            }
+        }
+
+        // Sayfa formunu temizle
+        function clearPageForm() {
+            document.getElementById('pageFile').value = '';
+            document.getElementById('pageFormTitle').value = '';
+            document.getElementById('pageSlug').value = '';
+            document.getElementById('pageSeoTitle').value = '';
+            document.getElementById('pageSeoDescription').value = '';
+            document.getElementById('pageSeoKeywords').value = '';
+        }
+
+        // Sayfa kaydet
+        function savePage() {
+            const pageFile = document.getElementById('pageFile').value.trim();
+            const pageTitle = document.getElementById('pageFormTitle').value.trim();
+            const pageSlug = document.getElementById('pageSlug').value.trim();
+            const pageSeoTitle = document.getElementById('pageSeoTitle').value.trim();
+            const pageSeoDescription = document.getElementById('pageSeoDescription').value.trim();
+            const pageSeoKeywords = document.getElementById('pageSeoKeywords').value.trim();
+
+            // Debug için değerleri kontrol et
+            console.log('Form değerleri:', {
+                pageFile,
+                pageTitle,
+                pageSlug,
+                pageSeoTitle,
+                pageSeoDescription,
+                pageSeoKeywords
+            });
+
+            // Validasyon
+            if (!pageFile) {
+                showGenericAlert('pageAlert', 'Sayfa dosyası boş olamaz!', 'error');
+                return;
+            }
+
+            if (!pageTitle) {
+                showGenericAlert('pageAlert', 'Sayfa başlığı boş olamaz!', 'error');
+                return;
+            }
+
+            if (!pageSlug) {
+                showGenericAlert('pageAlert', 'URL slug boş olamaz!', 'error');
+                return;
+            }
+
+            if (!pageSeoTitle) {
+                showGenericAlert('pageAlert', 'SEO başlığı boş olamaz!', 'error');
+                return;
+            }
+
+            if (!pageSeoDescription) {
+                showGenericAlert('pageAlert', 'SEO açıklaması boş olamaz!', 'error');
+                return;
+            }
+
+            // Dosya adını Firebase path için güvenli hale getir
+            const safePageId = pageFile.replace(/\./g, '_DOT_').replace(/[#$\[\]]/g, '_');
+            
+            const pageData = {
+                file_name: pageFile, // Orijinal dosya adını sakla
+                title: pageTitle,
+                slug: pageSlug,
+                seo_title: pageSeoTitle,
+                seo_description: pageSeoDescription,
+                seo_keywords: pageSeoKeywords,
+                updated_at: new Date().toISOString()
+            };
+
+            if (editingPageId) {
+                // Güncelleme
+                database.ref(`sayfalar/${editingPageId}`).update(pageData)
+                    .then(() => {
+                        showGenericAlert('pageAlert', 'Sayfa başarıyla güncellendi!', 'success');
+                        hidePageForm();
+                        loadPages();
+                    })
+                    .catch((error) => {
+                        showGenericAlert('pageAlert', 'Güncelleme sırasında hata oluştu!', 'error');
+                        console.error('Error updating page:', error);
+                    });
+            } else {
+                // Yeni ekleme
+                database.ref(`sayfalar/${safePageId}`).set(pageData)
+                    .then(() => {
+                        showGenericAlert('pageAlert', 'Sayfa başarıyla eklendi!', 'success');
+                        hidePageForm();
+                        loadPages();
+                    })
+                    .catch((error) => {
+                        showGenericAlert('pageAlert', 'Ekleme sırasında hata oluştu!', 'error');
+                        console.error('Error adding page:', error);
+                    });
+            }
+        }
+
+        // Sayfa düzenle
+        function editPage(pageId) {
+            database.ref(`sayfalar/${pageId}`).once('value')
+                .then((snapshot) => {
+                    const page = snapshot.val();
+                    if (!page) {
+                        showGenericAlert('pageAlert', 'Sayfa bulunamadı!', 'error');
+                        return;
+                    }
+
+                    editingPageId = pageId;
+                    document.getElementById('pageFormHeader').textContent = 'Sayfa Düzenle';
+                    
+                    // Form alanlarını doldur
+                    document.getElementById('pageFile').value = page.file_name || pageId;
+                    document.getElementById('pageFormTitle').value = page.title || '';
+                    document.getElementById('pageSlug').value = page.slug || '';
+                    document.getElementById('pageSeoTitle').value = page.seo_title || '';
+                    document.getElementById('pageSeoDescription').value = page.seo_description || '';
+                    document.getElementById('pageSeoKeywords').value = page.seo_keywords || '';
+
+                    // Formu göster
+                    const form = document.getElementById('pageForm');
+                    if (form) {
+                        form.style.display = 'block';
+                    }
+                })
+                .catch((error) => {
+                    showGenericAlert('pageAlert', 'Sayfa yüklenirken hata oluştu!', 'error');
+                    console.error('Error loading page:', error);
+                });
+        }
+
+        // Sayfa sil
+        function deletePage(pageId) {
+            if (confirm('Bu sayfayı silmek istediğinizden emin misiniz?')) {
+                database.ref(`sayfalar/${pageId}`).remove()
+                    .then(() => {
+                        showGenericAlert('pageAlert', 'Sayfa başarıyla silindi!', 'success');
+                        loadPages();
+                    })
+                    .catch((error) => {
+                        showGenericAlert('pageAlert', 'Silme sırasında hata oluştu!', 'error');
+                        console.error('Error deleting page:', error);
+                    });
+            }
+        }
+
+        // Sayfa listesini yükle
+        function loadPages() {
+            const pageListContent = document.getElementById('pageListContent');
+            if (!pageListContent) return;
+
+            pageListContent.innerHTML = `
+                <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                    <div class="loading"></div>
+                    <p style="margin-top: 1rem;">Sayfalar yükleniyor...</p>
+                </div>
+            `;
+
+            database.ref('sayfalar').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data && Object.keys(data).length > 0) {
+                        let html = '';
+                        Object.keys(data).forEach(pageId => {
+                            const page = data[pageId];
+                            html += `
+                                <div style="background: var(--main-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                        <div>
+                                            <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary);">${page.title || 'Başlık Yok'}</h4>
+                                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                <strong>Dosya:</strong> ${page.file_name || pageId} | 
+                                                <strong>URL:</strong> ${page.slug || '/'} | 
+                                                <strong>Güncelleme:</strong> ${page.updated_at ? new Date(page.updated_at).toLocaleDateString('tr-TR') : 'Bilinmiyor'}
+                                            </p>
+                                        </div>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button class="btn btn-secondary" onclick="editPage('${pageId}')" style="padding: 0.5rem;">
+                                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="btn btn-danger" onclick="deletePage('${pageId}')" style="padding: 0.5rem;">
+                                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div style="background: var(--card-bg); border-radius: 6px; padding: 1rem; margin-top: 1rem;">
+                                        <h5 style="margin: 0 0 0.5rem 0; color: var(--text-primary); font-size: 0.9rem;">SEO Bilgileri</h5>
+                                        <p style="margin: 0 0 0.5rem 0; color: var(--text-secondary); font-size: 0.85rem;">
+                                            <strong>SEO Başlık:</strong> ${page.seo_title || 'Belirtilmemiş'}
+                                        </p>
+                                        <p style="margin: 0 0 0.5rem 0; color: var(--text-secondary); font-size: 0.85rem;">
+                                            <strong>SEO Açıklama:</strong> ${page.seo_description ? (page.seo_description.length > 100 ? page.seo_description.substring(0, 100) + '...' : page.seo_description) : 'Belirtilmemiş'}
+                                        </p>
+                                        <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">
+                                            <strong>Anahtar Kelimeler:</strong> ${page.seo_keywords || 'Belirtilmemiş'}
+                                        </p>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        pageListContent.innerHTML = html;
+                    } else {
+                        pageListContent.innerHTML = `
+                            <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                <p>Henüz hiç sayfa eklenmemiş.</p>
+                                <button class="btn btn-primary" onclick="showAddPageForm()" style="margin-top: 1rem;">
+                                    İlk Sayfayı Ekle
+                                </button>
+                            </div>
+                        `;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading pages:', error);
+                    pageListContent.innerHTML = `
+                        <div style="text-align: center; color: var(--error-color); padding: 2rem;">
+                            <p>Sayfalar yüklenirken hata oluştu!</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // Global fonksiyonları dışa aktar
+        window.showAddPageForm = showAddPageForm;
+        window.hidePageForm = hidePageForm;
+        window.savePage = savePage;
+        window.editPage = editPage;
+        window.deletePage = deletePage;
+        window.loadPages = loadPages;
 
         // ==================== DASHBOARD YÖNETİMİ ====================
         

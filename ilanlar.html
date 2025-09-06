@@ -101,10 +101,11 @@
         }
 
         .page-header {
-            margin-bottom: 20px;
+            margin-bottom: 0;
             background: #ffffff;
             z-index: -1;
             position: relative;
+            padding: 20px 0 0 0;
         }
 
         .page-title {
@@ -115,11 +116,22 @@
             margin: 0;
         }
 
+        .active-count-container {
+            margin-bottom: 30px;
+            padding: 15px 0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
         .active-count {
-            font-size: 14px;
-            font-weight: 500;
-            color: #6b7280;
-            margin-top: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #97D2AD;
+            background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid #97D2AD;
+            box-shadow: 0 2px 8px rgba(151, 210, 173, 0.2);
         }
 
         /* Mobile Toggle */
@@ -1038,7 +1050,14 @@
              }
             .page-header {
                 text-align: center;
+                margin-bottom: 0;
+                padding: 15px 0 0 0;
+            }
+            
+            .active-count-container {
+                text-align: center;
                 margin-bottom: 30px;
+                padding: 10px 0;
             }
             
             /* Header styles are now included from header.html */
@@ -1098,9 +1117,11 @@
             }
             .page-title { 
                 font-size: 24px; 
+                margin-bottom: 0;
             }
             .active-count { 
-                font-size: 13px; 
+                font-size: 14px;
+                padding: 6px 12px;
             }
             
             .property-card {
@@ -1218,8 +1239,12 @@
                 <!-- Header -->
                 <header class="page-header">
                     <h1 class="page-title">İLANLAR</h1>
-                    <div class="active-count" id="activeCount">Aktif ilan sayısı: Yükleniyor...</div>
                 </header>
+                
+                <!-- Active Count -->
+                <div class="active-count-container">
+                    <div class="active-count" id="activeCount">Aktif ilan sayısı: Yükleniyor...</div>
+                </div>
 
                 <!-- Sidebar (desktop) -->
                 <aside class="sidebar" aria-label="Filtre menüsü">
@@ -1594,6 +1619,63 @@
         let allProperties = [];
         let filteredProperties = [];
         let currentFilters = {};
+
+        function loadAllProperties() {
+            console.log('Loading all properties from Firebase...');
+            
+            if (typeof firebase === 'undefined' || !database) {
+                console.error('Firebase not initialized');
+                const errorPlaceholder = document.getElementById('loadingPlaceholder');
+                if (errorPlaceholder) {
+                    errorPlaceholder.innerHTML = '<p>Firebase bağlantısı kurulamadı.</p>';
+                }
+                return;
+            }
+
+            database.ref('ilanlar').once('value')
+                .then((snapshot) => {
+                    const propertiesData = snapshot.val();
+                    
+                    if (!propertiesData) {
+                        console.log('No properties found');
+                        updatePropertyGrid([]);
+                        updateActiveCount(0);
+                        return;
+                    }
+
+                    // Convert Firebase object to array
+                    allProperties = [];
+                    Object.keys(propertiesData).forEach(key => {
+                        const property = propertiesData[key];
+                        property.id = key;
+                        allProperties.push(property);
+                    });
+
+                    console.log(`Loaded ${allProperties.length} properties:`, allProperties);
+                    
+                    // Sort by creation date (newest first)
+                    allProperties.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                    
+                    // Load filter options after loading properties
+                    loadFilterOptions();
+                    
+                    // Load additional filter data from Firebase
+                    loadAdditionalFilterData();
+                    
+                    // Apply URL parameters if any
+                    applyUrlParameters();
+                    
+                    // Initially show all properties
+                    filteredProperties = [...allProperties];
+                    updatePropertyGrid(filteredProperties);
+                    updateActiveCount(filteredProperties.length);
+                })
+                .catch((error) => {
+                    console.error('Error loading properties:', error);
+                    updatePropertyGrid([]);
+                    updateActiveCount(0);
+                });
+        }
         let imarDurumuOptions = [];
         let tapuDurumuOptions = [];
 

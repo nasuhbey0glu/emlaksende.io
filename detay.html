@@ -106,12 +106,21 @@
             box-sizing: border-box;
         }
 
-        /* Icon Rail */
-        .icon-rail {
+        /* Icon Rail - Desktop görünümde başlığın altında */
+        .icon-rail-desktop {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+            margin-bottom: 30px;
+            justify-content: flex-start;
+        }
+
+        /* Icon Rail - Mobile görünümde gallery içinde */
+        .icon-rail-mobile {
             position: absolute;
             left: -80px;
             top: 20px;
-            display: flex;
+            display: none; /* Desktop'ta gizli */
             flex-direction: column;
             gap: 20px;
             z-index: 5;
@@ -790,7 +799,7 @@
                 padding: 0 clamp(16px, 2vw, 20px);
             }
 
-            .icon-rail {
+            .icon-rail-mobile {
                 left: clamp(-60px, -5vw, -70px);
             }
 
@@ -812,13 +821,18 @@
                 padding: 0 clamp(16px, 2vw, 24px);
             }
 
-            .icon-rail {
+            .icon-rail-desktop {
+                display: none; /* Tablet'te gizle */
+            }
+            
+            .icon-rail-mobile {
                 position: static;
                 flex-direction: row;
                 justify-content: center;
                 order: 4;
                 left: auto;
                 top: auto;
+                display: flex; /* Tablet'te göster */
             }
 
             .gallery {
@@ -940,7 +954,11 @@
                 max-width: 100%;
             }
 
-            .icon-rail {
+            .icon-rail-desktop {
+                display: none !important; /* Mobile'da gizle */
+            }
+            
+            .icon-rail-mobile {
                 position: static !important;
                 left: auto !important;
                 top: auto !important;
@@ -949,6 +967,7 @@
                 margin: 20px 0;
                 max-width: 100%;
                 order: 4; /* Thumbnails'in altına taşı */
+                display: flex !important; /* Mobile'da göster */
             }
 
             .main-image-container {
@@ -1173,7 +1192,7 @@
         }
 
         .ozellikler-container {
-            max-width: 1360px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 24px;
         }
@@ -1398,7 +1417,7 @@
 
         @media (max-width: 767px) {
             .ozellikler-container {
-                padding: 0 16px;
+                padding: 0 clamp(12px, 2vw, 16px);
                 max-width: 100%;
                 overflow-x: hidden;
             }
@@ -1750,13 +1769,32 @@
             <span id="breadcrumbNeighborhood">...</span> > 
             <span id="breadcrumbTitle">İlan detayları yükleniyor...</span>
         </div>
-        <h1 class="page-title" style="font-size: 23px; margin-bottom: 40px;" id="pageTitle">Yükleniyor...</h1>
+        <h1 class="page-title" style="font-size: 23px; margin-bottom: 20px;" id="pageTitle">Yükleniyor...</h1>
+        
+        <!-- Icon Rail - Desktop görünümde başlığın altında -->
+        <div class="icon-rail-desktop">
+            <button class="icon-btn" aria-label="Favorilere Ekle">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                </svg>
+            </button>
+            <button class="icon-btn" aria-label="Yazdır">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 8H5C3.34 8 2 9.34 2 11V17H6V21H18V17H22V11C22 9.34 20.66 8 19 8ZM16 19H8V14H16V19ZM19 12C18.45 12 18 11.55 18 11S18.45 10 19 10 20 10.45 20 11 19.55 12 19 12ZM18 3H6V7H18V3Z"/>
+                </svg>
+            </button>
+            <button class="icon-btn" aria-label="Paylaş">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12S8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5S19.66 2 18 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12S4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.34C15.11 18.55 15.08 18.77 15.08 19C15.08 20.61 16.39 21.92 18 21.92S20.92 20.61 20.92 19C20.92 17.39 19.61 16.08 18 16.08Z"/>
+                </svg>
+            </button>
+        </div>
         
         <div class="detail-grid">
             <!-- Gallery -->
             <div class="gallery">
-                <!-- Icon Rail -->
-                <div class="icon-rail">
+                <!-- Icon Rail - Mobile görünümde gallery içinde -->
+                <div class="icon-rail-mobile">
                     <button class="icon-btn" aria-label="Favorilere Ekle">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
