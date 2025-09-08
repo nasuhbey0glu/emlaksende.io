@@ -459,7 +459,7 @@ select {
     }
     
     .about-logo {
-        justify-content: center;
+        justify-content: flex-start;
         margin-bottom: 24px;
     }
     
@@ -527,17 +527,24 @@ select {
     
     /* Search Module Mobile */
     .search-module {
-        padding: 0 11px;
-        margin-bottom: 20px;
-        max-width: 98%;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
     }
     
     .search-container {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 8px;
         padding: 16px;
-        width: 300px;
+        width: 310px !important;
+        height: 280px !important;
         border-radius: 32px;
+        min-width: 310px !important;
+        min-height: 280px !important;
+        max-width: 310px !important;
+        max-height: 280px !important;
+        box-sizing: border-box !important;
+        margin-bottom: 20px;
     }
     
     .search-select {
@@ -596,7 +603,7 @@ select {
     }
     
     .process-title {
-        font-size: clamp(22.5px, 3.75vw, 40px);
+        font-size: 26px;
     }
 }
 
@@ -624,6 +631,7 @@ select {
     .search-container {
         padding: 12px;
         width: 280px;
+        height: auto;
     }
     
     .search-select {
@@ -688,8 +696,8 @@ select {
     }
     
     .step-icon {
-        width: 70px;
-        height: 70px;
+        width: 109px;
+        height: 109px;
         margin-bottom: 16px;
     }
     
@@ -699,7 +707,7 @@ select {
     }
     
     .step-title {
-        font-size: 15px;
+        font-size: 25px;
     }
     
     .step-description {
@@ -1080,6 +1088,8 @@ select {
         flex-direction: column;
         gap: 12px;
         margin-bottom: 20px;
+        align-items: flex-start;
+        padding-right: 150px;
     }
     
     .about-logo-img {
@@ -1164,17 +1174,19 @@ select {
     color: #ffffff;
     display: block;
     margin-bottom: 8px;
+    font-size: 26px;
 }
 
 .title-highlight {
     color: #A2D1AD;
     display: inline-block;
     margin-right: 16px;
+    font-size: 26px;
 }
 
 .title-arrow {
     color: #A2D1AD;
-    font-size: 0.8em;
+    font-size: 26px;
     display: inline-block;
     animation: arrowPulse 2s infinite;
 }
@@ -1238,12 +1250,12 @@ select {
     transition: color 0.3s ease;
 }
 
-.step-icon-img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    transition: all 0.3s ease;
-}
+    .step-icon-img {
+        width: 125px;
+        height: 125px;
+        object-fit: contain;
+        transition: all 0.3s ease;
+    }
 
 .step-icon:hover .step-svg {
     color: #b0c151;
@@ -1362,7 +1374,7 @@ select {
 }
 
 .properties-title {
-    font-size: clamp(18px, 2.5vw, 24px);
+    font-size: clamp(23.4px, 3.25vw, 31.2px);
     font-weight: 600;
     color: #2d2d2d;
     margin: 0;
@@ -1434,8 +1446,8 @@ select {
 
 /* Title Logo */
 .title-logo {
-    width: 31px;
-    height: 31px;
+    width: 40px;
+    height: 40px;
     object-fit: contain;
     margin-right: 8px;
 }
@@ -1710,6 +1722,10 @@ select {
     align-items: flex-start;
     gap: 12px;
     margin-top: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .property-info {
@@ -1721,8 +1737,8 @@ select {
 
 .property-location {
     color: #97D2AD;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 17px;
+    font-weight: 700;
     margin: 0;
 }
 
@@ -1845,9 +1861,10 @@ select {
     transition: transform 0.3s ease !important;
     justify-content: flex-start !important;
     max-width: none !important;
-    margin: 0 auto !important;
-    overflow: hidden !important;
+    margin: 0 !important;
+    overflow: visible !important;
     width: max-content !important;
+    transform: translateX(0);
 }
 
 /* Testimonial Card */

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destek - EmlakSende</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 40px;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .sidebar {
+            background: transparent;
+            padding: 0;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            margin-top: 20px;
+        }
+        
+        .sidebar-header {
+            color: #000000;
+            padding: 0 0 20px 0;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #000000;
+            margin-bottom: 20px;
+        }
+        
+        .support-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .tab {
+            background: transparent;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            color: #666666;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .tab:hover {
+            background-color: #f5f5f5;
+            color: #333333;
+            transform: translateX(8px);
+        }
+        
+        .tab.active {
+            background-color: #000000;
+            color: white;
+            transform: translateX(12px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .content-area {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            padding: 40px;
+            min-height: 600px;
+            margin: 30px 0;
+        }
+        
+        .content {
+            color: #333333;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        
+        .content h3 {
+            color: #000000;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 10px;
+        }
+        
+        .content h5 {
+            color: #000000;
+            font-size: 1.3rem;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+        
+        .content p {
+            margin-bottom: 15px;
+            color: #444444;
+        }
+        
+        .content ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        .content li {
+            margin-bottom: 8px;
+            color: #444444;
+        }
+        
+        .content strong {
+            color: #000000;
+            font-weight: 600;
+        }
+        
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: #000000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .mobile-menu-toggle:hover {
+            background: #333333;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px 15px;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 300px;
+                height: 100vh;
+                background: #ffffff;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                padding: 20px;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+                overflow-y: auto;
+                margin-top: 0;
+            }
+            
+            .sidebar.open {
+                left: 0;
+            }
+            
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+            
+            .sidebar-overlay.open {
+                display: block;
+            }
+            
+            .content-area {
+                order: 1;
+                margin: 0;
+                padding: 20px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .support-tabs {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .tab {
+                text-align: left;
+                padding: 15px 20px;
+                transform: none;
+            }
+            
+            .tab:hover,
+            .tab.active {
+                transform: translateX(8px);
+            }
+        }
+        
+        /* Desktop görünümü için ekstra ayarlar */
+        @media (min-width: 1025px) {
+            .mobile-menu-toggle {
+                display: none !important;
+            }
+            
+            .sidebar-overlay {
+                display: none !important;
+            }
+            
+            .sidebar {
+                position: sticky !important;
+                top: 20px !important;
+                left: auto !important;
+                width: auto !important;
+                height: auto !important;
+                background: transparent !important;
+                z-index: auto !important;
+                transition: none !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                overflow-y: visible !important;
+                margin-top: 20px !important;
+            }
+            
+            .container {
+                grid-template-columns: 350px 1fr !important;
+                gap: 40px !important;
+                padding: 40px 20px !important;
+            }
+            
+            .content-area {
+                margin: 30px 0 !important;
+                padding: 40px !important;
+                width: auto !important;
+                box-sizing: border-box !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px 10px;
+            }
+            
+            .content-area {
+                padding: 15px;
+                margin: 0;
+            }
+            
+            .content h3 {
+                font-size: 1.5rem;
+            }
+            
+            .content p {
+                font-size: 0.9rem;
+            }
+            
+            .sidebar {
+                width: 280px;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #666666;
+        }
+        
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f0f0f0;
+            border-top: 2px solid #000000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            📋 Destek Kategorileri
+        </button>
+        
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                Destek Kategorileri
+            </div>
+            <div class="support-tabs" id="tabList">
+                <button class="tab active" data-tab="destekAlin">Destek Alın</button>
+                <button class="tab" data-tab="kullanimKosullari">Kullanım Koşulları</button>
+                <button class="tab" data-tab="gizlilikPolitikasi">Gizlilik Politikası</button>
+                <button class="tab" data-tab="kvkkAydinlatMetni">KVKK Aydınlat Metni</button>
+                <button class="tab" data-tab="uyelikSozlesmesi">Üyelik Sözleşmesi</button>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <div class="content" id="content">
+                <div class="loading">İçerik yükleniyor...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBZ1_56GJ5tOhK5Eth6cXscv8jnM4bpdEI",
+            authDomain: "emlaksende-8646a.firebaseapp.com",
+            databaseURL: "https://emlaksende-8646a-default-rtdb.firebaseio.com/",
+            projectId: "emlaksende-8646a",
+            storageBucket: "emlaksende-8646a.firebasestorage.app",
+            messagingSenderId: "861976091519",
+            appId: "1:861976091519:web:a24b7811322e3fc97dd84a"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Tab data mapping
+        const tabData = {
+            'destekAlin': {
+                title: 'Destek Alın',
+                subtitle: 'Size nasıl yardımcı olabiliriz?'
+            },
+            'kullanimKosullari': {
+                title: 'Kullanım Koşulları',
+                subtitle: 'Platform kullanım şartları'
+            },
+            'gizlilikPolitikasi': {
+                title: 'Gizlilik Politikası',
+                subtitle: 'Kişisel verilerinizin korunması'
+            },
+            'kvkkAydinlatMetni': {
+                title: 'KVKK Aydınlat Metni',
+                subtitle: 'Kişisel verilerin işlenmesi hakkında'
+            },
+            'uyelikSozlesmesi': {
+                title: 'Üyelik Sözleşmesi',
+                subtitle: 'Üyelik şartları ve koşulları'
+            }
+        };
+
+        let currentTab = 'destekAlin';
+        let supportData = {};
+
+        // Load support data from Firebase
+        function loadSupportData() {
+            database.ref('destek').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        supportData = data;
+                        console.log('Destek verileri Firebase\'den yüklendi:', supportData);
+                        showContent(currentTab);
+                    } else {
+                        console.log('Firebase\'de destek verisi bulunamadı');
+                        showContent(currentTab);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Destek verileri yüklenirken hata:', error);
+                    document.getElementById('content').innerHTML = 
+                        '<div style="color: #e74c3c; text-align: center; padding: 2rem;">Veriler yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.</div>';
+                });
+        }
+
+        // Show content for selected tab
+        function showContent(tabKey) {
+            const content = supportData[tabKey];
+            const tabInfo = tabData[tabKey];
+            
+            const contentElement = document.getElementById('content');
+            
+            if (content) {
+                contentElement.innerHTML = content;
+            } else {
+                contentElement.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #666;">
+                        <h3>İçerik Bulunamadı</h3>
+                        <p>Bu bölüm için henüz içerik eklenmemiş.</p>
+                        <p>Firebase'de <strong>destek/${tabKey}</strong> yolunda veri bulunamadı.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Handle tab click
+        function handleTabClick(event) {
+            event.preventDefault();
+            
+            const tabLink = event.target;
+            const tabKey = tabLink.getAttribute('data-tab');
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            tabLink.classList.add('active');
+            
+            // Update content
+            currentTab = tabKey;
+            showContent(tabKey);
+            
+            // Close mobile menu after selection
+            closeMobileMenu();
+        }
+
+        // Mobile menu functions
+        function openMobileMenu() {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('sidebarOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click listeners to tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', handleTabClick);
+            });
+            
+            // Mobile menu event listeners
+            document.getElementById('mobileMenuToggle').addEventListener('click', openMobileMenu);
+            document.getElementById('sidebarOverlay').addEventListener('click', closeMobileMenu);
+            
+            // Close menu on escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeMobileMenu();
+                }
+            });
+            
+            // Load data
+            loadSupportData();
+            
+        });
+    </script>
+    
+    <!-- Include Header Only -->
+    <script>
+        // Header yükleme fonksiyonu
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const headerHtml = await response.text();
+                
+                // Header container'ı bul veya oluştur
+                let headerContainer = document.getElementById('header-container');
+                if (!headerContainer) {
+                    headerContainer = document.createElement('div');
+                    headerContainer.id = 'header-container';
+                    document.body.insertBefore(headerContainer, document.body.firstChild);
+                }
+                
+                headerContainer.innerHTML = headerHtml;
+                
+                // Header yüklendikten sonra mobile menu'yu initialize et
+                initializeMobileMenu();
+                
+            } catch (error) {
+                console.error('Header yüklenirken hata oluştu:', error);
+            }
+        }
+
+        // Mobile menu initialization (header yüklendikten sonra çağrılır)
+        function initializeMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (menuToggle && navMenu) {
+                menuToggle.addEventListener('click', function() {
+                    // Toggle show class on navigation menu
+                    navMenu.classList.toggle('show');
+                    
+                    // Update aria-expanded for accessibility
+                    const isExpanded = navMenu.classList.contains('show');
+                    menuToggle.setAttribute('aria-expanded', isExpanded);
+                });
+
+                // Close mobile menu when clicking on a link
+                const navLinks = navMenu.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        navMenu.classList.remove('show');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    const isClickInsideNav = navMenu.contains(event.target);
+                    const isClickOnToggle = menuToggle.contains(event.target);
+                    
+                    if (!isClickInsideNav && !isClickOnToggle && navMenu.classList.contains('show')) {
+                        navMenu.classList.remove('show');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                // Handle Escape key to close mobile menu
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && navMenu.classList.contains('show')) {
+                        navMenu.classList.remove('show');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        menuToggle.focus();
+                    }
+                });
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+        });
+    </script>
+</body>
+</html>

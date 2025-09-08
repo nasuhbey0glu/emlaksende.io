@@ -1861,13 +1861,24 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
             dot.classList.toggle('active', index === slideIndex);
         });
         
-        // Slider pozisyonunu güncelle - responsive gap değerleri
+        // Slider pozisyonunu güncelle - düzeltilmiş hesaplama
         const cardWidth = isMobile ? 280 : (isTablet ? 300 : 280); // testimonial card width
         const gap = isMobile ? 16 : (isTablet ? 20 : 32); // responsive gap
-        const slideWidth = cardWidth + gap;
+        const slideWidth = (cardWidth + gap) * testimonialsPerSlide; // Her slaytta gösterilecek kart sayısına göre genişlik
         const transformValue = `translateX(-${slideIndex * slideWidth}px)`;
-        console.log('Setting slider transform to:', transformValue, 'cardWidth:', cardWidth, 'gap:', gap);
+        console.log('Setting slider transform to:', transformValue, 'cardWidth:', cardWidth, 'gap:', gap, 'testimonialsPerSlide:', testimonialsPerSlide, 'slideWidth:', slideWidth);
+        
+        // Transform değerini zorla uygula
         slider.style.transform = transformValue;
+        slider.style.webkitTransform = transformValue;
+        slider.style.mozTransform = transformValue;
+        slider.style.msTransform = transformValue;
+        
+        // Debug: Transform değerinin uygulanıp uygulanmadığını kontrol et
+        setTimeout(() => {
+            const computedStyle = window.getComputedStyle(slider);
+            console.log('Applied transform:', computedStyle.transform);
+        }, 100);
     }
 
     // Video oynatma fonksiyonu

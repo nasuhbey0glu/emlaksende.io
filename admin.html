@@ -1919,6 +1919,30 @@
                             <span class="nav-text">Kullanıcılar</span>
                         </a>
                     </div>
+                    
+                    <div class="nav-section-title">Genel Ayarlar</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link" data-page="genel-ayarlar">
+                            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                            </svg>
+                            <span class="nav-text">Genel Ayarlar</span>
+                            <svg class="nav-arrow" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                        <div class="nav-submenu" id="genel-ayarlar-submenu">
+                            <a href="#" class="nav-link" data-page="destek">
+                                <span class="nav-text">Destek</span>
+                            </a>
+                            <a href="#" class="nav-link" data-page="kurumsal">
+                                <span class="nav-text">Kurumsal</span>
+                            </a>
+                            <a href="#" class="nav-link" data-page="hizmetler">
+                                <span class="nav-text">Hizmetler</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </aside>
@@ -3514,13 +3538,31 @@
                                 <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
                                     📝 Açıklama Metni
                                 </label>
-                                <textarea 
-                                    id="hakkimizdaText" 
-                                    placeholder="Hakkımızda açıklamanızı buraya yazın..."
-                                    style="width: 100%; min-height: 200px; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; line-height: 1.6; resize: vertical; font-family: inherit;"
-                                ></textarea>
-                                <div style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">
-                                    <span id="hakkimizdaCharCount">0</span> karakter
+                                
+                                <!-- Quill.js Editor Container -->
+                                <div id="hakkimizdaQuillEditor" style="height: 300px; margin-bottom: 1rem;"></div>
+                                
+                                <!-- Editor Actions -->
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="display: flex; align-items: center; gap: 1rem;">
+                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                            <span id="hakkimizdaWordCount">0 kelime</span>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearHakkimizdaQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                        <button type="button" class="btn btn-primary" onclick="insertHakkimizdaSampleText()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Örnek Metin
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -3741,6 +3783,353 @@
                                 </div>
                             </div>
                         </div>
+                    `,
+                    'genel-ayarlar': `
+                        <div class="content-header">
+                            <h2 class="content-title">Genel Ayarlar</h2>
+                        </div>
+                        
+                        <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); text-align: center;">
+                            <div style="margin-bottom: 2rem;">
+                                <svg width="64" height="64" fill="currentColor" viewBox="0 0 20 20" style="color: var(--primary-color); margin: 0 auto 1rem;">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                                </svg>
+                                <h3 style="margin: 0 0 1rem 0; color: var(--text-primary);">Genel Ayarlar Yönetimi</h3>
+                                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Web sitenizin genel ayarlarını yönetmek için aşağıdaki kategorilerden birini seçin:</p>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; max-width: 800px; margin: 0 auto;">
+                                <!-- Destek Kartı -->
+                                <div style="background: var(--main-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.3s ease;" onclick="updateContentArea('destek', 'Destek Yönetimi')">
+                                    <div style="margin-bottom: 1rem;">
+                                        <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20" style="color: #3B82F6;">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.759 8.071 16 9.007 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a3.996 3.996 0 01-.724-1.955l1.525-1.525a3.996 3.996 0 012.183.078l1.525-1.525A5.98 5.98 0 004 10c0 .993.241 1.929.668 2.754l1.524-1.525zm1.525 1.525a3.996 3.996 0 002.183-.078l1.525 1.525A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary);">Destek</h4>
+                                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Destek alın, kullanım koşulları, gizlilik politikası ve yasal metinleri yönetin.</p>
+                                </div>
+                                
+                                <!-- Kurumsal Kartı -->
+                                <div style="background: var(--main-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.3s ease;" onclick="updateContentArea('kurumsal', 'Kurumsal Yönetimi')">
+                                    <div style="margin-bottom: 1rem;">
+                                        <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20" style="color: #10B981;">
+                                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary);">Kurumsal</h4>
+                                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Misyon, vizyon, nasıl çalışır ve iletişim bilgilerini yönetin.</p>
+                                </div>
+                                
+                                <!-- Hizmetler Kartı -->
+                                <div style="background: var(--main-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.3s ease;" onclick="updateContentArea('hizmetler', 'Hizmetler Yönetimi')">
+                                    <div style="margin-bottom: 1rem;">
+                                        <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20" style="color: #F59E0B;">
+                                            <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h2zm3-2a1 1 0 00-1 1v1h4V5a1 1 0 00-1-1H9zM4 8h12v6H4V8z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary);">Hizmetler</h4>
+                                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Danışmanlık hizmetleri ve diğer hizmet metinlerini yönetin.</p>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
+                                    <strong>İpucu:</strong> Yukarıdaki kartlardan birine tıklayarak ilgili ayarları yönetebilirsiniz.
+                                </p>
+                            </div>
+                        </div>
+                    `,
+                    'destek': `
+                        <div class="content-header">
+                            <h2 class="content-title">Destek Yönetimi</h2>
+                        </div>
+                        
+                        <div id="destekAlert" class="alert"></div>
+                        
+                        <!-- Destek Formu -->
+                        <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+                            <h3 style="margin: 0 0 2rem 0; color: var(--text-primary);">Destek Metinleri</h3>
+                            
+                            <!-- Destek Alın -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    📞 Destek Alın
+                                </label>
+                                <div id="destekAlinQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="destekAlinWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearDestekAlinQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Kullanım Koşulları -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    📋 Kullanım Koşulları
+                                </label>
+                                <div id="kullanimKosullariQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="kullanimKosullariWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearKullanimKosullariQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gizlilik Politikası -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    🔒 Gizlilik Politikası
+                                </label>
+                                <div id="gizlilikPolitikasiQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="gizlilikPolitikasiWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearGizlilikPolitikasiQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- KVKK Aydınlat Metni -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    📄 KVKK Aydınlat Metni
+                                </label>
+                                <div id="kvkkAydinlatMetniQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="kvkkAydinlatMetniWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearKvkkAydinlatMetniQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Üyelik Sözleşmesi -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    📝 Üyelik Sözleşmesi
+                                </label>
+                                <div id="uyelikSozlesmesiQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="uyelikSozlesmesiWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearUyelikSozlesmesiQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                                <button type="button" class="btn btn-secondary" onclick="loadDestekData()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Yenile
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="saveDestekData()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Kaydet
+                                </button>
+                            </div>
+                        </div>
+                    `,
+                    'kurumsal': `
+                        <div class="content-header">
+                            <h2 class="content-title">Kurumsal Yönetimi</h2>
+                        </div>
+                        
+                        <div id="kurumsalAlert" class="alert"></div>
+                        
+                        <!-- Kurumsal Formu -->
+                        <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+                            <h3 style="margin: 0 0 2rem 0; color: var(--text-primary);">Kurumsal Metinleri</h3>
+                            
+                            <!-- Misyon -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    🎯 Misyon
+                                </label>
+                                <div id="misyonQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="misyonWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearMisyonQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Vizyon -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    👁️ Vizyon
+                                </label>
+                                <div id="vizyonQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="vizyonWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearVizyonQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Nasıl Çalışır -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    ⚙️ Nasıl Çalışır
+                                </label>
+                                <div id="nasilCalisirQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="nasilCalisirWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearNasilCalisirQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- İletişim -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    📞 İletişim
+                                </label>
+                                <div id="iletisimQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="iletisimWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearIletisimQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                                <button type="button" class="btn btn-secondary" onclick="loadKurumsalData()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Yenile
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="saveKurumsalData()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Kaydet
+                                </button>
+                            </div>
+                        </div>
+                    `,
+                    'hizmetler': `
+                        <div class="content-header">
+                            <h2 class="content-title">Hizmetler Yönetimi</h2>
+                        </div>
+                        
+                        <div id="hizmetlerAlert" class="alert"></div>
+                        
+                        <!-- Hizmetler Formu -->
+                        <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+                            <h3 style="margin: 0 0 2rem 0; color: var(--text-primary);">Hizmetler Metinleri</h3>
+                            
+                            <!-- Danışmanlık -->
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                    💼 Danışmanlık
+                                </label>
+                                <div id="danismanlikQuillEditor" style="height: 300px; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                        <span id="danismanlikWordCount">0 kelime</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-secondary" onclick="clearDanismanlikQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Temizle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                                <button type="button" class="btn btn-secondary" onclick="loadHizmetlerData()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Yenile
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="saveHizmetlerData()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Kaydet
+                                </button>
+                            </div>
+                        </div>
                     `
                 };
 
@@ -3809,6 +4198,21 @@
                             break;
                         case 'sayfalar':
                             loadPages();
+                            break;
+                        case 'genel-ayarlar':
+                            // Ana genel ayarlar sayfası - özel bir işlem gerekmiyor
+                            break;
+                        case 'destek':
+                            loadDestekData();
+                            setupDestekHandlers();
+                            break;
+                        case 'kurumsal':
+                            loadKurumsalData();
+                            setupKurumsalHandlers();
+                            break;
+                        case 'hizmetler':
+                            loadHizmetlerData();
+                            setupHizmetlerHandlers();
                             break;
                     }
                 }, 100);
@@ -5588,13 +5992,37 @@
                     document.getElementById('ilanParselNo').value = ilan.parselNo || '';
                     // Şehir, ilçe, mahalle değerlerini yükle
                     if (ilan.sehir) {
-                        document.getElementById('ilanSehir').value = ilan.sehir;
-                        selectedCityId = ilan.sehir;
-                        // İlçeleri yükle
-                        loadDistricts(ilan.sehir).then(() => {
-                            if (ilan.ilce) {
-                                document.getElementById('ilanIlce').value = ilan.ilce;
-                                selectedDistrictId = ilan.ilce;
+                        // Önce şehirleri yükle
+                        loadCities().then(() => {
+                            // Şehir adından ID'yi bul
+                            const city = turkiyeApiData.cities.find(c => c.name === ilan.sehir);
+                            if (city) {
+                                document.getElementById('ilanSehir').value = city.id;
+                                selectedCityId = city.id;
+                                // İlçeleri yükle
+                                loadDistricts(city.id).then(() => {
+                                    if (ilan.ilce) {
+                                        // İlçe adından ID'yi bul
+                                        const district = turkiyeApiData.districts.find(d => d.name === ilan.ilce);
+                                        if (district) {
+                                            document.getElementById('ilanIlce').value = district.id;
+                                            selectedDistrictId = district.id;
+                                        } else {
+                                            document.getElementById('ilanIlce').value = ilan.ilce;
+                                            selectedDistrictId = ilan.ilce;
+                                        }
+                                    }
+                                });
+                            } else {
+                                // Eski format için fallback
+                                document.getElementById('ilanSehir').value = ilan.sehir;
+                                selectedCityId = ilan.sehir;
+                                loadDistricts(ilan.sehir).then(() => {
+                                    if (ilan.ilce) {
+                                        document.getElementById('ilanIlce').value = ilan.ilce;
+                                        selectedDistrictId = ilan.ilce;
+                                    }
+                                });
                             }
                         });
                     }
@@ -5614,11 +6042,14 @@
                         document.getElementById('ilan3SeneArtis').value = ilan.priceProjections.year3?.increaseRate || '';
                     }
                     
-                    // İlan açıklamasını Quill.js editörüne yükle
-                    if (quillEditor && ilan.aciklama) {
-                        quillEditor.clipboard.dangerouslyPasteHTML(ilan.aciklama);
-                        updateQuillWordCount();
-                    }
+                    // Quill.js editörünü başlat ve ilan açıklamasını yükle
+                    setTimeout(() => {
+                        initializeQuillEditor();
+                        if (quillEditor && ilan.aciklama) {
+                            quillEditor.clipboard.dangerouslyPasteHTML(ilan.aciklama);
+                            updateQuillWordCount();
+                        }
+                    }, 100);
                     
                     // Fotoğrafları yükle
                     if (ilan.photos && Array.isArray(ilan.photos)) {
@@ -8418,43 +8849,122 @@
 
         // ===== HAKKIMIZDA FONKSİYONLARI =====
         
+        // Hakkımızda Quill editör instance'ı
+        let hakkimizdaQuillEditor = null;
+
+        // Hakkımızda Quill editörünü başlat
+        function initializeHakkimizdaQuillEditor() {
+            if (hakkimizdaQuillEditor) {
+                hakkimizdaQuillEditor = null;
+            }
+            
+            const quillContainer = document.getElementById('hakkimizdaQuillEditor');
+            if (!quillContainer) return;
+            
+            // Quill.js konfigürasyonu
+            const quillOptions = {
+                theme: 'snow',
+                placeholder: 'Hakkımızda açıklamanızı buraya yazın...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            };
+            
+            hakkimizdaQuillEditor = new Quill(quillContainer, quillOptions);
+            
+            // Kelime sayısını güncelle
+            hakkimizdaQuillEditor.on('text-change', function() {
+                updateHakkimizdaWordCount();
+                updateHakkimizdaPreview();
+            });
+        }
+
+        // Hakkımızda kelime sayısını güncelle
+        function updateHakkimizdaWordCount() {
+            const wordCountElement = document.getElementById('hakkimizdaWordCount');
+            if (hakkimizdaQuillEditor && wordCountElement) {
+                const text = hakkimizdaQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+
+        // Hakkımızda önizlemeyi güncelle
+        function updateHakkimizdaPreview() {
+            const preview = document.getElementById('hakkimizdaPreview');
+            if (hakkimizdaQuillEditor && preview) {
+                const content = hakkimizdaQuillEditor.root.innerHTML;
+                if (content.trim()) {
+                    preview.innerHTML = content;
+                    preview.style.color = 'var(--text-primary)';
+                    preview.style.fontStyle = 'normal';
+                } else {
+                    preview.innerHTML = 'Henüz açıklama metni girilmedi...';
+                    preview.style.color = 'var(--text-secondary)';
+                    preview.style.fontStyle = 'italic';
+                }
+            }
+        }
+
+        // Hakkımızda editörünü temizle
+        function clearHakkimizdaQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (hakkimizdaQuillEditor) {
+                    hakkimizdaQuillEditor.setContents([]);
+                    updateHakkimizdaWordCount();
+                    updateHakkimizdaPreview();
+                }
+            }
+        }
+
+        // Hakkımızda editörüne örnek metin ekle
+        function insertHakkimizdaSampleText() {
+            if (!hakkimizdaQuillEditor) return;
+            
+            const sampleContent = `
+                <h2>🏢 Hakkımızda</h2>
+                <p><strong>EmlakSende</strong> olarak, <em>emlak sektöründe</em> güvenilir ve profesyonel hizmet anlayışımızla müşterilerimize en iyi deneyimi sunmayı hedefliyoruz.</p>
+                
+                <h3>🎯 Misyonumuz</h3>
+                <p>Müşteri memnuniyetini ön planda tutarak, <u>kaliteli emlak çözümleri</u> sunmak ve sektörde öncü olmaktır.</p>
+                
+                <h3>👥 Ekibimiz</h3>
+                <ul>
+                    <li>Deneyimli emlak danışmanları</li>
+                    <li>Uzman teknik ekip</li>
+                    <li>Müşteri hizmetleri uzmanları</li>
+                </ul>
+                
+                <h3>📞 İletişim</h3>
+                <p>Bizimle iletişime geçmek için <strong>7/24</strong> hizmetinizdeyiz.</p>
+            `;
+            
+            hakkimizdaQuillEditor.clipboard.dangerouslyPasteHTML(sampleContent);
+            updateHakkimizdaWordCount();
+            updateHakkimizdaPreview();
+        }
+
         // Hakkımızda event handler'larını kur
         function setupHakkimizdaHandlers() {
-            const textArea = document.getElementById('hakkimizdaText');
-            const charCount = document.getElementById('hakkimizdaCharCount');
-            const preview = document.getElementById('hakkimizdaPreview');
-            
-            if (textArea && charCount && preview) {
-                // Karakter sayısını güncelle
-                textArea.addEventListener('input', function() {
-                    const count = this.value.length;
-                    charCount.textContent = count;
-                    
-                    // Önizlemeyi güncelle
-                    if (this.value.trim()) {
-                        preview.innerHTML = formatAboutTextForPreview(this.value);
-                        preview.style.color = 'var(--text-primary)';
-                        preview.style.fontStyle = 'normal';
-                    } else {
-                        preview.innerHTML = 'Henüz açıklama metni girilmedi...';
-                        preview.style.color = 'var(--text-secondary)';
-                        preview.style.fontStyle = 'italic';
-                    }
-                });
-                
-                // İlk yüklemede karakter sayısını ayarla
-                const count = textArea.value.length;
-                charCount.textContent = count;
-            }
+            // Quill editörünü başlat
+            setTimeout(() => {
+                initializeHakkimizdaQuillEditor();
+            }, 100);
         }
         
         // Hakkımızda verilerini yükle
         function loadHakkimizdaData() {
-            const textArea = document.getElementById('hakkimizdaText');
             const preview = document.getElementById('hakkimizdaPreview');
-            const charCount = document.getElementById('hakkimizdaCharCount');
             
-            if (!textArea || !preview || !charCount) {
+            if (!preview) {
                 console.error('Hakkımızda form elemanları bulunamadı');
                 return;
             }
@@ -8468,21 +8978,28 @@
                     console.log('Hakkımızda verisi:', data);
                     
                     if (data && data.text) {
-                        textArea.value = data.text;
-                        charCount.textContent = data.text.length;
-                        
-                        // Önizlemeyi güncelle
-                        preview.innerHTML = formatAboutTextForPreview(data.text);
-                        preview.style.color = 'var(--text-primary)';
-                        preview.style.fontStyle = 'normal';
+                        // Quill editörüne HTML içeriğini yükle
+                        if (hakkimizdaQuillEditor) {
+                            // Eğer text düz metin ise, HTML olarak işle
+                            if (data.text.includes('<') && data.text.includes('>')) {
+                                // HTML formatında
+                                hakkimizdaQuillEditor.clipboard.dangerouslyPasteHTML(data.text);
+                            } else {
+                                // Düz metin formatında
+                                hakkimizdaQuillEditor.clipboard.dangerouslyPasteHTML(`<p>${data.text}</p>`);
+                            }
+                            updateHakkimizdaWordCount();
+                            updateHakkimizdaPreview();
+                        }
                         
                         showGenericAlert('hakkimizdaAlert', 'Hakkımızda verisi başarıyla yüklendi.', 'success');
                     } else {
-                        textArea.value = '';
-                        charCount.textContent = '0';
-                        preview.innerHTML = 'Henüz açıklama metni girilmedi...';
-                        preview.style.color = 'var(--text-secondary)';
-                        preview.style.fontStyle = 'italic';
+                        // Editörü temizle
+                        if (hakkimizdaQuillEditor) {
+                            hakkimizdaQuillEditor.setContents([]);
+                            updateHakkimizdaWordCount();
+                            updateHakkimizdaPreview();
+                        }
                         
                         showGenericAlert('hakkimizdaAlert', 'Henüz hakkımızda verisi bulunmamaktadır.', 'info');
                     }
@@ -8495,25 +9012,26 @@
         
         // Hakkımızda verilerini kaydet
         function saveHakkimizdaData() {
-            const textArea = document.getElementById('hakkimizdaText');
-            
-            if (!textArea) {
-                console.error('Hakkımızda textarea bulunamadı');
+            if (!hakkimizdaQuillEditor) {
+                console.error('Hakkımızda Quill editörü bulunamadı');
+                showGenericAlert('hakkimizdaAlert', 'Editör henüz yüklenmedi. Lütfen bekleyin.', 'error');
                 return;
             }
             
-            const text = textArea.value.trim();
+            const htmlContent = hakkimizdaQuillEditor.root.innerHTML;
+            const textContent = hakkimizdaQuillEditor.getText().trim();
             
-            if (!text) {
+            if (!textContent) {
                 showGenericAlert('hakkimizdaAlert', 'Lütfen açıklama metnini girin.', 'error');
                 return;
             }
             
             console.log('Hakkımızda verisi kaydediliyor...');
             
-            // Firebase'e kaydet
+            // Firebase'e HTML formatında kaydet
             database.ref('aciklama').set({
-                text: text,
+                text: htmlContent, // HTML formatında kaydet
+                textPlain: textContent, // Düz metin olarak da sakla
                 updatedAt: firebase.database.ServerValue.TIMESTAMP,
                 updatedBy: 'admin'
             })
@@ -8847,6 +9365,1083 @@
         window.loadHakkimizdaData = loadHakkimizdaData;
         window.saveHakkimizdaData = saveHakkimizdaData;
         window.formatAboutTextForPreview = formatAboutTextForPreview;
+        window.initializeHakkimizdaQuillEditor = initializeHakkimizdaQuillEditor;
+        window.updateHakkimizdaWordCount = updateHakkimizdaWordCount;
+        window.updateHakkimizdaPreview = updateHakkimizdaPreview;
+        window.clearHakkimizdaQuillEditor = clearHakkimizdaQuillEditor;
+        window.insertHakkimizdaSampleText = insertHakkimizdaSampleText;
+        
+        // ===== GENEL AYARLAR FONKSİYONLARI =====
+        
+        // Destek Quill editörleri
+        let destekAlinQuillEditor = null;
+        let kullanimKosullariQuillEditor = null;
+        let gizlilikPolitikasiQuillEditor = null;
+        let kvkkAydinlatMetniQuillEditor = null;
+        let uyelikSozlesmesiQuillEditor = null;
+        
+        // Kurumsal Quill editörleri
+        let misyonQuillEditor = null;
+        let vizyonQuillEditor = null;
+        let nasilCalisirQuillEditor = null;
+        let iletisimQuillEditor = null;
+        
+        // Hizmetler Quill editörü
+        let danismanlikQuillEditor = null;
+        
+        // Destek fonksiyonları
+        function setupDestekHandlers() {
+            setTimeout(() => {
+                initializeDestekQuillEditors();
+            }, 100);
+        }
+        
+        function initializeDestekQuillEditors() {
+            console.log('Destek Quill editörleri başlatılıyor...');
+            
+            const quillOptions = {
+                theme: 'snow',
+                placeholder: 'Metin girin...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            };
+            
+            // Destek Alın
+            const destekAlinContainer = document.getElementById('destekAlinQuillEditor');
+            console.log('Destek Alın container:', destekAlinContainer);
+            if (destekAlinContainer) {
+                destekAlinQuillEditor = new Quill(destekAlinContainer, quillOptions);
+                destekAlinQuillEditor.on('text-change', () => updateDestekAlinWordCount());
+                console.log('Destek Alın editörü başlatıldı');
+            } else {
+                console.log('Destek Alın container bulunamadı!');
+            }
+            
+            // Kullanım Koşulları
+            const kullanimKosullariContainer = document.getElementById('kullanimKosullariQuillEditor');
+            if (kullanimKosullariContainer) {
+                kullanimKosullariQuillEditor = new Quill(kullanimKosullariContainer, quillOptions);
+                kullanimKosullariQuillEditor.on('text-change', () => updateKullanimKosullariWordCount());
+            }
+            
+            // Gizlilik Politikası
+            const gizlilikPolitikasiContainer = document.getElementById('gizlilikPolitikasiQuillEditor');
+            if (gizlilikPolitikasiContainer) {
+                gizlilikPolitikasiQuillEditor = new Quill(gizlilikPolitikasiContainer, quillOptions);
+                gizlilikPolitikasiQuillEditor.on('text-change', () => updateGizlilikPolitikasiWordCount());
+            }
+            
+            // KVKK Aydınlat Metni
+            const kvkkAydinlatMetniContainer = document.getElementById('kvkkAydinlatMetniQuillEditor');
+            if (kvkkAydinlatMetniContainer) {
+                kvkkAydinlatMetniQuillEditor = new Quill(kvkkAydinlatMetniContainer, quillOptions);
+                kvkkAydinlatMetniQuillEditor.on('text-change', () => updateKvkkAydinlatMetniWordCount());
+            }
+            
+            // Üyelik Sözleşmesi
+            const uyelikSozlesmesiContainer = document.getElementById('uyelikSozlesmesiQuillEditor');
+            if (uyelikSozlesmesiContainer) {
+                uyelikSozlesmesiQuillEditor = new Quill(uyelikSozlesmesiContainer, quillOptions);
+                uyelikSozlesmesiQuillEditor.on('text-change', () => updateUyelikSozlesmesiWordCount());
+            }
+        }
+        
+        function updateDestekAlinWordCount() {
+            const wordCountElement = document.getElementById('destekAlinWordCount');
+            if (destekAlinQuillEditor && wordCountElement) {
+                const text = destekAlinQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function updateKullanimKosullariWordCount() {
+            const wordCountElement = document.getElementById('kullanimKosullariWordCount');
+            if (kullanimKosullariQuillEditor && wordCountElement) {
+                const text = kullanimKosullariQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function updateGizlilikPolitikasiWordCount() {
+            const wordCountElement = document.getElementById('gizlilikPolitikasiWordCount');
+            if (gizlilikPolitikasiQuillEditor && wordCountElement) {
+                const text = gizlilikPolitikasiQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function updateKvkkAydinlatMetniWordCount() {
+            const wordCountElement = document.getElementById('kvkkAydinlatMetniWordCount');
+            if (kvkkAydinlatMetniQuillEditor && wordCountElement) {
+                const text = kvkkAydinlatMetniQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function updateUyelikSozlesmesiWordCount() {
+            const wordCountElement = document.getElementById('uyelikSozlesmesiWordCount');
+            if (uyelikSozlesmesiQuillEditor && wordCountElement) {
+                const text = uyelikSozlesmesiQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function clearDestekAlinQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (destekAlinQuillEditor) {
+                    destekAlinQuillEditor.setContents([]);
+                    updateDestekAlinWordCount();
+                }
+            }
+        }
+        
+        function clearKullanimKosullariQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (kullanimKosullariQuillEditor) {
+                    kullanimKosullariQuillEditor.setContents([]);
+                    updateKullanimKosullariWordCount();
+                }
+            }
+        }
+        
+        function clearGizlilikPolitikasiQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (gizlilikPolitikasiQuillEditor) {
+                    gizlilikPolitikasiQuillEditor.setContents([]);
+                    updateGizlilikPolitikasiWordCount();
+                }
+            }
+        }
+        
+        function clearKvkkAydinlatMetniQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (kvkkAydinlatMetniQuillEditor) {
+                    kvkkAydinlatMetniQuillEditor.setContents([]);
+                    updateKvkkAydinlatMetniWordCount();
+                }
+            }
+        }
+        
+        function clearUyelikSozlesmesiQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (uyelikSozlesmesiQuillEditor) {
+                    uyelikSozlesmesiQuillEditor.setContents([]);
+                    updateUyelikSozlesmesiWordCount();
+                }
+            }
+        }
+        
+        function loadDestekData() {
+            console.log('Destek verileri yükleniyor...');
+            console.log('Editör durumları:', {
+                destekAlin: !!destekAlinQuillEditor,
+                kullanimKosullari: !!kullanimKosullariQuillEditor,
+                gizlilikPolitikasi: !!gizlilikPolitikasiQuillEditor,
+                kvkkAydinlatMetni: !!kvkkAydinlatMetniQuillEditor,
+                uyelikSozlesmesi: !!uyelikSozlesmesiQuillEditor
+            });
+            
+            // Editörlerin yüklenip yüklenmediğini kontrol et
+            if (!destekAlinQuillEditor || !kullanimKosullariQuillEditor || !gizlilikPolitikasiQuillEditor || !kvkkAydinlatMetniQuillEditor || !uyelikSozlesmesiQuillEditor) {
+                console.log('Editörler henüz yüklenmedi, 500ms sonra tekrar denenecek...');
+                setTimeout(() => {
+                    loadDestekData();
+                }, 500);
+                return;
+            }
+            
+            database.ref('destek').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    console.log('Destek verisi:', data);
+                    
+                    if (data) {
+                        if (data.destekAlin && destekAlinQuillEditor) {
+                            destekAlinQuillEditor.clipboard.dangerouslyPasteHTML(data.destekAlin);
+                            updateDestekAlinWordCount();
+                        }
+                        if (data.kullanimKosullari && kullanimKosullariQuillEditor) {
+                            kullanimKosullariQuillEditor.clipboard.dangerouslyPasteHTML(data.kullanimKosullari);
+                            updateKullanimKosullariWordCount();
+                        }
+                        if (data.gizlilikPolitikasi && gizlilikPolitikasiQuillEditor) {
+                            gizlilikPolitikasiQuillEditor.clipboard.dangerouslyPasteHTML(data.gizlilikPolitikasi);
+                            updateGizlilikPolitikasiWordCount();
+                        }
+                        if (data.kvkkAydinlatMetni && kvkkAydinlatMetniQuillEditor) {
+                            kvkkAydinlatMetniQuillEditor.clipboard.dangerouslyPasteHTML(data.kvkkAydinlatMetni);
+                            updateKvkkAydinlatMetniWordCount();
+                        }
+                        if (data.uyelikSozlesmesi && uyelikSozlesmesiQuillEditor) {
+                            uyelikSozlesmesiQuillEditor.clipboard.dangerouslyPasteHTML(data.uyelikSozlesmesi);
+                            updateUyelikSozlesmesiWordCount();
+                        }
+                        
+                        showGenericAlert('destekAlert', 'Destek verileri başarıyla yüklendi.', 'success');
+                    } else {
+                        showGenericAlert('destekAlert', 'Henüz destek verisi bulunmamaktadır.', 'info');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Destek verileri yüklenirken hata:', error);
+                    showGenericAlert('destekAlert', 'Veriler yüklenirken hata oluştu.', 'error');
+                });
+        }
+        
+        function saveDestekData() {
+            if (!destekAlinQuillEditor || !kullanimKosullariQuillEditor || !gizlilikPolitikasiQuillEditor || !kvkkAydinlatMetniQuillEditor || !uyelikSozlesmesiQuillEditor) {
+                showGenericAlert('destekAlert', 'Editörler henüz yüklenmedi. Lütfen bekleyin.', 'error');
+                return;
+            }
+            
+            const destekData = {
+                destekAlin: destekAlinQuillEditor.root.innerHTML,
+                kullanimKosullari: kullanimKosullariQuillEditor.root.innerHTML,
+                gizlilikPolitikasi: gizlilikPolitikasiQuillEditor.root.innerHTML,
+                kvkkAydinlatMetni: kvkkAydinlatMetniQuillEditor.root.innerHTML,
+                uyelikSozlesmesi: uyelikSozlesmesiQuillEditor.root.innerHTML,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP,
+                updatedBy: 'admin'
+            };
+            
+            console.log('Destek verisi kaydediliyor...');
+            
+            database.ref('destek').set(destekData)
+                .then(() => {
+                    showGenericAlert('destekAlert', 'Destek verileri başarıyla kaydedildi!', 'success');
+                })
+                .catch((error) => {
+                    console.error('Destek verisi kaydedilirken hata:', error);
+                    showGenericAlert('destekAlert', 'Veri kaydedilirken hata oluştu!', 'error');
+                });
+        }
+        
+        // Kurumsal fonksiyonları
+        function setupKurumsalHandlers() {
+            setTimeout(() => {
+                initializeKurumsalQuillEditors();
+            }, 100);
+        }
+        
+        function initializeKurumsalQuillEditors() {
+            const quillOptions = {
+                theme: 'snow',
+                placeholder: 'Metin girin...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            };
+            
+            // Misyon
+            const misyonContainer = document.getElementById('misyonQuillEditor');
+            if (misyonContainer) {
+                misyonQuillEditor = new Quill(misyonContainer, quillOptions);
+                misyonQuillEditor.on('text-change', () => updateMisyonWordCount());
+            }
+            
+            // Vizyon
+            const vizyonContainer = document.getElementById('vizyonQuillEditor');
+            if (vizyonContainer) {
+                vizyonQuillEditor = new Quill(vizyonContainer, quillOptions);
+                vizyonQuillEditor.on('text-change', () => updateVizyonWordCount());
+            }
+            
+            // Nasıl Çalışır
+            const nasilCalisirContainer = document.getElementById('nasilCalisirQuillEditor');
+            if (nasilCalisirContainer) {
+                nasilCalisirQuillEditor = new Quill(nasilCalisirContainer, quillOptions);
+                nasilCalisirQuillEditor.on('text-change', () => updateNasilCalisirWordCount());
+            }
+            
+            // İletişim
+            const iletisimContainer = document.getElementById('iletisimQuillEditor');
+            if (iletisimContainer) {
+                iletisimQuillEditor = new Quill(iletisimContainer, quillOptions);
+                iletisimQuillEditor.on('text-change', () => updateIletisimWordCount());
+            }
+        }
+        
+        function updateMisyonWordCount() {
+            const wordCountElement = document.getElementById('misyonWordCount');
+            if (misyonQuillEditor && wordCountElement) {
+                const text = misyonQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function updateVizyonWordCount() {
+            const wordCountElement = document.getElementById('vizyonWordCount');
+            if (vizyonQuillEditor && wordCountElement) {
+                const text = vizyonQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function updateNasilCalisirWordCount() {
+            const wordCountElement = document.getElementById('nasilCalisirWordCount');
+            if (nasilCalisirQuillEditor && wordCountElement) {
+                const text = nasilCalisirQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function updateIletisimWordCount() {
+            const wordCountElement = document.getElementById('iletisimWordCount');
+            if (iletisimQuillEditor && wordCountElement) {
+                const text = iletisimQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function clearMisyonQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (misyonQuillEditor) {
+                    misyonQuillEditor.setContents([]);
+                    updateMisyonWordCount();
+                }
+            }
+        }
+        
+        function clearVizyonQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (vizyonQuillEditor) {
+                    vizyonQuillEditor.setContents([]);
+                    updateVizyonWordCount();
+                }
+            }
+        }
+        
+        function clearNasilCalisirQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (nasilCalisirQuillEditor) {
+                    nasilCalisirQuillEditor.setContents([]);
+                    updateNasilCalisirWordCount();
+                }
+            }
+        }
+        
+        function clearIletisimQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (iletisimQuillEditor) {
+                    iletisimQuillEditor.setContents([]);
+                    updateIletisimWordCount();
+                }
+            }
+        }
+        
+        function loadKurumsalData() {
+            console.log('Kurumsal verileri yükleniyor...');
+            
+            // Editörlerin yüklenip yüklenmediğini kontrol et
+            if (!misyonQuillEditor || !vizyonQuillEditor || !nasilCalisirQuillEditor || !iletisimQuillEditor) {
+                console.log('Kurumsal editörleri henüz yüklenmedi, 500ms sonra tekrar denenecek...');
+                setTimeout(() => {
+                    loadKurumsalData();
+                }, 500);
+                return;
+            }
+            
+            database.ref('kurumsal').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    console.log('Kurumsal verisi:', data);
+                    
+                    if (data) {
+                        if (data.misyon && misyonQuillEditor) {
+                            misyonQuillEditor.clipboard.dangerouslyPasteHTML(data.misyon);
+                            updateMisyonWordCount();
+                        }
+                        if (data.vizyon && vizyonQuillEditor) {
+                            vizyonQuillEditor.clipboard.dangerouslyPasteHTML(data.vizyon);
+                            updateVizyonWordCount();
+                        }
+                        if (data.nasilCalisir && nasilCalisirQuillEditor) {
+                            nasilCalisirQuillEditor.clipboard.dangerouslyPasteHTML(data.nasilCalisir);
+                            updateNasilCalisirWordCount();
+                        }
+                        if (data.iletisim && iletisimQuillEditor) {
+                            iletisimQuillEditor.clipboard.dangerouslyPasteHTML(data.iletisim);
+                            updateIletisimWordCount();
+                        }
+                        
+                        showGenericAlert('kurumsalAlert', 'Kurumsal verileri başarıyla yüklendi.', 'success');
+                    } else {
+                        showGenericAlert('kurumsalAlert', 'Henüz kurumsal veri bulunmamaktadır.', 'info');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Kurumsal verileri yüklenirken hata:', error);
+                    showGenericAlert('kurumsalAlert', 'Veriler yüklenirken hata oluştu.', 'error');
+                });
+        }
+        
+        function saveKurumsalData() {
+            if (!misyonQuillEditor || !vizyonQuillEditor || !nasilCalisirQuillEditor || !iletisimQuillEditor) {
+                showGenericAlert('kurumsalAlert', 'Editörler henüz yüklenmedi. Lütfen bekleyin.', 'error');
+                return;
+            }
+            
+            const kurumsalData = {
+                misyon: misyonQuillEditor.root.innerHTML,
+                vizyon: vizyonQuillEditor.root.innerHTML,
+                nasilCalisir: nasilCalisirQuillEditor.root.innerHTML,
+                iletisim: iletisimQuillEditor.root.innerHTML,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP,
+                updatedBy: 'admin'
+            };
+            
+            console.log('Kurumsal verisi kaydediliyor...');
+            
+            database.ref('kurumsal').set(kurumsalData)
+                .then(() => {
+                    showGenericAlert('kurumsalAlert', 'Kurumsal verileri başarıyla kaydedildi!', 'success');
+                })
+                .catch((error) => {
+                    console.error('Kurumsal verisi kaydedilirken hata:', error);
+                    showGenericAlert('kurumsalAlert', 'Veri kaydedilirken hata oluştu!', 'error');
+                });
+        }
+        
+        // Hizmetler fonksiyonları
+        function setupHizmetlerHandlers() {
+            setTimeout(() => {
+                initializeHizmetlerQuillEditors();
+            }, 100);
+        }
+        
+        function initializeHizmetlerQuillEditors() {
+            const quillOptions = {
+                theme: 'snow',
+                placeholder: 'Metin girin...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            };
+            
+            // Danışmanlık
+            const danismanlikContainer = document.getElementById('danismanlikQuillEditor');
+            if (danismanlikContainer) {
+                danismanlikQuillEditor = new Quill(danismanlikContainer, quillOptions);
+                danismanlikQuillEditor.on('text-change', () => updateDanismanlikWordCount());
+            }
+        }
+        
+        function updateDanismanlikWordCount() {
+            const wordCountElement = document.getElementById('danismanlikWordCount');
+            if (danismanlikQuillEditor && wordCountElement) {
+                const text = danismanlikQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+        
+        function clearDanismanlikQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (danismanlikQuillEditor) {
+                    danismanlikQuillEditor.setContents([]);
+                    updateDanismanlikWordCount();
+                }
+            }
+        }
+        
+        function loadHizmetlerData() {
+            console.log('Hizmetler verileri yükleniyor...');
+            
+            // Editörlerin yüklenip yüklenmediğini kontrol et
+            if (!danismanlikQuillEditor) {
+                console.log('Hizmetler editörleri henüz yüklenmedi, 500ms sonra tekrar denenecek...');
+                setTimeout(() => {
+                    loadHizmetlerData();
+                }, 500);
+                return;
+            }
+            
+            database.ref('hizmetler').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    console.log('Hizmetler verisi:', data);
+                    
+                    if (data) {
+                        if (data.danismanlik && danismanlikQuillEditor) {
+                            danismanlikQuillEditor.clipboard.dangerouslyPasteHTML(data.danismanlik);
+                            updateDanismanlikWordCount();
+                        }
+                        
+                        showGenericAlert('hizmetlerAlert', 'Hizmetler verileri başarıyla yüklendi.', 'success');
+                    } else {
+                        showGenericAlert('hizmetlerAlert', 'Henüz hizmetler verisi bulunmamaktadır.', 'info');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Hizmetler verileri yüklenirken hata:', error);
+                    showGenericAlert('hizmetlerAlert', 'Veriler yüklenirken hata oluştu.', 'error');
+                });
+        }
+        
+        function saveHizmetlerData() {
+            if (!danismanlikQuillEditor) {
+                showGenericAlert('hizmetlerAlert', 'Editör henüz yüklenmedi. Lütfen bekleyin.', 'error');
+                return;
+            }
+            
+            const hizmetlerData = {
+                danismanlik: danismanlikQuillEditor.root.innerHTML,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP,
+                updatedBy: 'admin'
+            };
+            
+            console.log('Hizmetler verisi kaydediliyor...');
+            
+            database.ref('hizmetler').set(hizmetlerData)
+                .then(() => {
+                    showGenericAlert('hizmetlerAlert', 'Hizmetler verileri başarıyla kaydedildi!', 'success');
+                })
+                .catch((error) => {
+                    console.error('Hizmetler verisi kaydedilirken hata:', error);
+                    showGenericAlert('hizmetlerAlert', 'Veri kaydedilirken hata oluştu!', 'error');
+                });
+        }
+        
+        // Global fonksiyonları tanımla
+        window.setupDestekHandlers = setupDestekHandlers;
+        window.loadDestekData = loadDestekData;
+        window.saveDestekData = saveDestekData;
+        window.clearDestekAlinQuillEditor = clearDestekAlinQuillEditor;
+        window.clearKullanimKosullariQuillEditor = clearKullanimKosullariQuillEditor;
+        window.clearGizlilikPolitikasiQuillEditor = clearGizlilikPolitikasiQuillEditor;
+        window.clearKvkkAydinlatMetniQuillEditor = clearKvkkAydinlatMetniQuillEditor;
+        window.clearUyelikSozlesmesiQuillEditor = clearUyelikSozlesmesiQuillEditor;
+        
+        window.setupKurumsalHandlers = setupKurumsalHandlers;
+        window.loadKurumsalData = loadKurumsalData;
+        window.saveKurumsalData = saveKurumsalData;
+        window.clearMisyonQuillEditor = clearMisyonQuillEditor;
+        window.clearVizyonQuillEditor = clearVizyonQuillEditor;
+        window.clearNasilCalisirQuillEditor = clearNasilCalisirQuillEditor;
+        window.clearIletisimQuillEditor = clearIletisimQuillEditor;
+        
+        window.setupHizmetlerHandlers = setupHizmetlerHandlers;
+        window.loadHizmetlerData = loadHizmetlerData;
+        window.saveHizmetlerData = saveHizmetlerData;
+        window.clearDanismanlikQuillEditor = clearDanismanlikQuillEditor;
+        
+        // Ana sayfa geçiş fonksiyonunu global olarak tanımla
+        function updateContentArea(pageName, pageTitle) {
+            const contentTemplates = {
+                'ilanlar': `
+                    <div class="content-header">
+                        <h2 class="content-title">İlan Listesi</h2>
+                        <button class="btn btn-primary" onclick="showAddIlanForm()">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                            </svg>
+                            Yeni İlan Ekle
+                        </button>
+                    </div>
+                    
+                    <div id="ilanAlert" class="alert"></div>
+                    
+                    <!-- İlan Formu -->
+                    <div id="ilanForm" style="display: none; margin-bottom: 2rem;">
+                        <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                <h3 style="margin: 0; color: var(--text-primary);" id="ilanFormTitle">Yeni İlan Ekle</h3>
+                                <button class="btn btn-secondary" onclick="hideIlanForm()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Kapat
+                                </button>
+                            </div>
+                            
+                            <form id="ilanFormContent" style="display: grid; gap: 1.5rem;">
+                                <!-- İlan Bilgileri -->
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">İlan Başlığı *</label>
+                                        <input type="text" id="ilanBaslik" placeholder="İlan başlığını girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">İlan No *</label>
+                                        <input type="text" id="ilanNo" placeholder="İlan numarasını girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                    </div>
+                                </div>
+                                
+                                <!-- Diğer alanlar burada olacak -->
+                                <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                                    <p>İlan formu burada görünecek...</p>
+                                </div>
+                                
+                                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                    <button type="button" class="btn btn-secondary" onclick="hideIlanForm()">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        İptal
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="saveIlan()">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                        İlanı Kaydet
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- İlan Listesi -->
+                    <div id="ilanList" style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+                        <h3 style="margin: 0 0 1.5rem 0; color: var(--text-primary);">İlan Listesi</h3>
+                        <div id="ilanListContent">
+                            <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                <div class="loading"></div>
+                                <p style="margin-top: 1rem;">İlanlar yükleniyor...</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'genel-ayarlar': `
+                    <div class="content-header">
+                        <h2 class="content-title">Genel Ayarlar</h2>
+                    </div>
+                    
+                    <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); text-align: center;">
+                        <div style="margin-bottom: 2rem;">
+                            <svg width="64" height="64" fill="currentColor" viewBox="0 0 20 20" style="color: var(--primary-color); margin: 0 auto 1rem;">
+                                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                            </svg>
+                            <h3 style="margin: 0 0 1rem 0; color: var(--text-primary);">Genel Ayarlar Yönetimi</h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Web sitenizin genel ayarlarını yönetmek için aşağıdaki kategorilerden birini seçin:</p>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; max-width: 800px; margin: 0 auto;">
+                            <!-- Destek Kartı -->
+                            <div style="background: var(--main-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.3s ease;" onclick="updateContentArea('destek', 'Destek Yönetimi')">
+                                <div style="margin-bottom: 1rem;">
+                                    <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20" style="color: #3B82F6;">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.759 8.071 16 9.007 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a3.996 3.996 0 01-.724-1.955l1.525-1.525a3.996 3.996 0 012.183.078l1.525-1.525A5.98 5.98 0 004 10c0 .993.241 1.929.668 2.754l1.524-1.525zm1.525 1.525a3.996 3.996 0 002.183-.078l1.525 1.525A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary);">Destek</h4>
+                                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Destek alın, kullanım koşulları, gizlilik politikası ve yasal metinleri yönetin.</p>
+                            </div>
+                            
+                            <!-- Kurumsal Kartı -->
+                            <div style="background: var(--main-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.3s ease;" onclick="updateContentArea('kurumsal', 'Kurumsal Yönetimi')">
+                                <div style="margin-bottom: 1rem;">
+                                    <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20" style="color: #10B981;">
+                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary);">Kurumsal</h4>
+                                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Misyon, vizyon, nasıl çalışır ve iletişim bilgilerini yönetin.</p>
+                            </div>
+                            
+                            <!-- Hizmetler Kartı -->
+                            <div style="background: var(--main-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.3s ease;" onclick="updateContentArea('hizmetler', 'Hizmetler Yönetimi')">
+                                <div style="margin-bottom: 1rem;">
+                                    <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20" style="color: #F59E0B;">
+                                        <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h2zm3-2a1 1 0 00-1 1v1h4V5a1 1 0 00-1-1H9zM4 8h12v6H4V8z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary);">Hizmetler</h4>
+                                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Danışmanlık hizmetleri ve diğer hizmet metinlerini yönetin.</p>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
+                                <strong>İpucu:</strong> Yukarıdaki kartlardan birine tıklayarak ilgili ayarları yönetebilirsiniz.
+                            </p>
+                        </div>
+                    </div>
+                `,
+                'destek': `
+                    <div class="content-header">
+                        <h2 class="content-title">Destek Yönetimi</h2>
+                    </div>
+                    
+                    <div id="destekAlert" class="alert"></div>
+                    
+                    <!-- Destek Formu -->
+                    <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+                        <h3 style="margin: 0 0 2rem 0; color: var(--text-primary);">Destek Metinleri</h3>
+                        
+                        <!-- Destek Alın -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                📞 Destek Alın
+                            </label>
+                            <div id="destekAlinQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="destekAlinWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearDestekAlinQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Kullanım Koşulları -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                📋 Kullanım Koşulları
+                            </label>
+                            <div id="kullanimKosullariQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="kullanimKosullariWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearKullanimKosullariQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Gizlilik Politikası -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                🔒 Gizlilik Politikası
+                            </label>
+                            <div id="gizlilikPolitikasiQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="gizlilikPolitikasiWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearGizlilikPolitikasiQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- KVKK Aydınlat Metni -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                📄 KVKK Aydınlat Metni
+                            </label>
+                            <div id="kvkkAydinlatMetniQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="kvkkAydinlatMetniWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearKvkkAydinlatMetniQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Üyelik Sözleşmesi -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                📝 Üyelik Sözleşmesi
+                            </label>
+                            <div id="uyelikSozlesmesiQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="uyelikSozlesmesiWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearUyelikSozlesmesiQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary" onclick="loadDestekData()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                </svg>
+                                Yenile
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="saveDestekData()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Kaydet
+                            </button>
+                        </div>
+                    </div>
+                `,
+                'kurumsal': `
+                    <div class="content-header">
+                        <h2 class="content-title">Kurumsal Yönetimi</h2>
+                    </div>
+                    
+                    <div id="kurumsalAlert" class="alert"></div>
+                    
+                    <!-- Kurumsal Formu -->
+                    <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+                        <h3 style="margin: 0 0 2rem 0; color: var(--text-primary);">Kurumsal Metinleri</h3>
+                        
+                        <!-- Misyon -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                🎯 Misyon
+                            </label>
+                            <div id="misyonQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="misyonWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearMisyonQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Vizyon -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                👁️ Vizyon
+                            </label>
+                            <div id="vizyonQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="vizyonWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearVizyonQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Nasıl Çalışır -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                ⚙️ Nasıl Çalışır
+                            </label>
+                            <div id="nasilCalisirQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="nasilCalisirWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearNasilCalisirQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- İletişim -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                📞 İletişim
+                            </label>
+                            <div id="iletisimQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="iletisimWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearIletisimQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary" onclick="loadKurumsalData()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                </svg>
+                                Yenile
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="saveKurumsalData()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Kaydet
+                            </button>
+                        </div>
+                    </div>
+                `,
+                'hizmetler': `
+                    <div class="content-header">
+                        <h2 class="content-title">Hizmetler Yönetimi</h2>
+                    </div>
+                    
+                    <div id="hizmetlerAlert" class="alert"></div>
+                    
+                    <!-- Hizmetler Formu -->
+                    <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+                        <h3 style="margin: 0 0 2rem 0; color: var(--text-primary);">Hizmetler Metinleri</h3>
+                        
+                        <!-- Danışmanlık -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                                💼 Danışmanlık
+                            </label>
+                            <div id="danismanlikQuillEditor" style="height: 300px; margin-bottom: 1rem;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    <span id="danismanlikWordCount">0 kelime</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="btn btn-secondary" onclick="clearDanismanlikQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Temizle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary" onclick="loadHizmetlerData()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                </svg>
+                                Yenile
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="saveHizmetlerData()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Kaydet
+                            </button>
+                        </div>
+                    </div>
+                `
+            };
+
+            const template = contentTemplates[pageName] || `
+                <div class="content-header">
+                    <h2 class="content-title">${pageTitle}</h2>
+                    <button class="btn btn-primary">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                        </svg>
+                        Yeni Ekle
+                    </button>
+                </div>
+                
+                <div style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); text-align: center;">
+                    <h3 style="margin: 0 0 1rem 0; color: var(--text-primary);">${pageTitle}</h3>
+                    <p>${pageTitle} yönetim sayfası geliştirme aşamasındadır.</p>
+                    <div style="margin-top: 2rem;">
+                        <div class="loading"></div>
+                    </div>
+                </div>
+            `;
+
+            const contentArea = document.getElementById('contentArea');
+            if (contentArea) {
+                contentArea.innerHTML = template;
+                
+                // Auto-load data when page is displayed
+                setTimeout(() => {
+                    switch(pageName) {
+                        case 'genel-ayarlar':
+                            // Ana genel ayarlar sayfası - özel bir işlem gerekmiyor
+                            break;
+                        case 'destek':
+                            setupDestekHandlers();
+                            // Quill editörleri başlatıldıktan sonra veri yükle
+                            setTimeout(() => {
+                                loadDestekData();
+                            }, 200);
+                            break;
+                        case 'kurumsal':
+                            setupKurumsalHandlers();
+                            // Quill editörleri başlatıldıktan sonra veri yükle
+                            setTimeout(() => {
+                                loadKurumsalData();
+                            }, 200);
+                            break;
+                        case 'hizmetler':
+                            setupHizmetlerHandlers();
+                            // Quill editörleri başlatıldıktan sonra veri yükle
+                            setTimeout(() => {
+                                loadHizmetlerData();
+                            }, 200);
+                            break;
+                    }
+                }, 100);
+            }
+        }
+        
+        window.updateContentArea = updateContentArea;
+        
         window.showAddSoruCevapForm = showAddSoruCevapForm;
         window.hideSoruCevapForm = hideSoruCevapForm;
         window.saveSoruCevap = saveSoruCevap;

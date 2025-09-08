@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hizmetler - EmlakSende</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 200px);
+            margin: 2rem 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-right: 2rem;
+            height: fit-content;
+        }
+
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .tab-list {
+            list-style: none;
+        }
+
+        .tab-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .tab-link {
+            display: block;
+            padding: 1rem;
+            color: #666;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .tab-link:hover {
+            background-color: #f8f9fa;
+            color: #667eea;
+        }
+
+        .tab-link.active {
+            background-color: #667eea;
+            color: white;
+            border-left-color: #764ba2;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+
+        .content-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-title {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .content-body {
+            line-height: 1.8;
+        }
+
+        .content-body h1, .content-body h2, .content-body h3 {
+            color: #333;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .content-body p {
+            margin-bottom: 1rem;
+        }
+
+        .content-body ul, .content-body ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        .content-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 2rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="sidebar">
+                <h2>💼 Hizmetler</h2>
+                <ul class="tab-list" id="tabList">
+                    <li class="tab-item">
+                        <a href="#" class="tab-link active" data-tab="danismanlik">Danışmanlık</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="content-area">
+                <div class="content-header">
+                    <h1 class="content-title" id="contentTitle">Danışmanlık</h1>
+                    <p class="content-subtitle" id="contentSubtitle">Profesyonel emlak danışmanlık hizmetleri</p>
+                </div>
+                <div class="content-body" id="contentBody">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>İçerik yükleniyor...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvOkBwJ1ZqK8YqK8YqK8YqK8YqK8YqK8Yq",
+            authDomain: "emlaksende.firebaseapp.com",
+            databaseURL: "https://emlaksende-default-rtdb.firebaseio.com",
+            projectId: "emlaksende",
+            storageBucket: "emlaksende.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456789"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Tab data mapping
+        const tabData = {
+            'danismanlik': {
+                title: 'Danışmanlık',
+                subtitle: 'Profesyonel emlak danışmanlık hizmetleri'
+            }
+        };
+
+        let currentTab = 'danismanlik';
+        let servicesData = {};
+
+        // Load services data from Firebase
+        function loadServicesData() {
+            database.ref('hizmetler').once('value')
+                .then((snapshot) => {
+                    servicesData = snapshot.val() || {};
+                    showContent(currentTab);
+                })
+                .catch((error) => {
+                    console.error('Hizmetler verileri yüklenirken hata:', error);
+                    document.getElementById('contentBody').innerHTML = 
+                        '<p style="color: #e74c3c; text-align: center; padding: 2rem;">Veriler yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.</p>';
+                });
+        }
+
+        // Show content for selected tab
+        function showContent(tabKey) {
+            const content = servicesData[tabKey];
+            const tabInfo = tabData[tabKey];
+            
+            // Update title and subtitle
+            document.getElementById('contentTitle').textContent = tabInfo.title;
+            document.getElementById('contentSubtitle').textContent = tabInfo.subtitle;
+            
+            // Update content body
+            const contentBody = document.getElementById('contentBody');
+            
+            if (content) {
+                contentBody.innerHTML = content;
+            } else {
+                contentBody.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #666;">
+                        <h3>İçerik Bulunamadı</h3>
+                        <p>Bu bölüm için henüz içerik eklenmemiş.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Tab click handler
+        function handleTabClick(event) {
+            event.preventDefault();
+            
+            const tabLink = event.target;
+            const tabKey = tabLink.getAttribute('data-tab');
+            
+            // Update active tab
+            document.querySelectorAll('.tab-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            tabLink.classList.add('active');
+            
+            // Update content
+            currentTab = tabKey;
+            showContent(tabKey);
+        }
+
+        // Load header and footer
+        function loadHeader() {
+            fetch('header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+                    // Initialize header functionality
+                    initializeHeader();
+                })
+                .catch(error => {
+                    console.error('Header yüklenirken hata:', error);
+                    document.getElementById('header-container').innerHTML = '<div style="background: #1c2b4a; color: white; padding: 1rem; text-align: center;">EmlakSende</div>';
+                });
+        }
+
+        function loadFooter() {
+            fetch('footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-container').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Footer yüklenirken hata:', error);
+                    document.getElementById('footer-container').innerHTML = '<footer style="background: #333; color: white; text-align: center; padding: 2rem;">&copy; 2024 EmlakSende. Tüm hakları saklıdır.</footer>';
+                });
+        }
+
+        // Initialize header functionality
+        function initializeHeader() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (menuToggle && navMenu) {
+                menuToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('show');
+                });
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            loadHeader();
+            loadFooter();
+            
+            // Add click listeners to tabs
+            document.querySelectorAll('.tab-link').forEach(link => {
+                link.addEventListener('click', handleTabClick);
+            });
+            
+            // Load data
+            loadServicesData();
+        });
+    </script>
+</body>
+</html>

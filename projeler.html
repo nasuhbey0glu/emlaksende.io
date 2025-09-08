@@ -56,6 +56,13 @@
             flex-direction: column;
         }
 
+        .page-header {
+            margin-bottom: 0;
+            background: #ffffff;
+            z-index: -1;
+            position: relative;
+            padding: 20px 0 0 0;
+        }
 
         .page-title {
             font-size: 32px;
@@ -693,27 +700,77 @@
                 right: 20px; /* Menü açıldığında sağdan 20px içeride göster */
             }
 
-            .page-title { 
-                font-size: 24px; 
-                margin: 0 0 20px 0;
-                text-align: center;
-                width: 100%;
-                display: block;
+            /* Mobil görünümde özel frame oluştur */
+            .page-header {
+                background: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                margin-bottom: 20px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 15px;
+                position: relative;
+                z-index: 1;
             }
+
+            .page-title { 
+                font-size: 20px; 
+                margin-bottom: 0;
+                text-align: left;
+                flex: 1;
+                color: #1E2A47;
+            }
+
+            /* Mobil görünümde orijinal active-count-container'ı gizle */
+            .active-count-container {
+                display: none;
+            }
+
             .active-count { 
-                font-size: 14px;
-                padding: 6px 12px;
+                font-size: 12px;
+                padding: 8px 12px;
+                white-space: nowrap;
+                background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
+                border: 1px solid #97D2AD;
+                border-radius: 20px;
+                color: #97D2AD;
+                font-weight: 600;
+            }
+
+            /* Mobil görünümde yeni active count */
+            .mobile-active-count {
+                font-size: 12px;
+                padding: 8px 12px;
+                white-space: nowrap;
+                background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
+                border: 1px solid #97D2AD;
+                border-radius: 20px;
+                color: #97D2AD;
+                font-weight: 600;
+                flex-shrink: 0;
             }
             
             .mobile-filter-toggle {
-                margin-top: 30px;
-                margin-bottom: 30px;
+                position: fixed;
+                top: 100px;
+                left: 0;
+                right: auto;
+                z-index: 1000;
+                margin-top: 0;
+                margin-bottom: 0;
+                display: flex;
+                justify-content: flex-start;
             }
             
             .hamburger-btn {
-                min-width: 140px;
-                padding: 10px 16px;
-                font-size: 13px;
+                min-width: 100px;
+                padding: 8px 12px;
+                font-size: 12px;
+                box-shadow: 0 4px 15px rgba(151, 210, 173, 0.4);
+                border-radius: 0 25px 25px 0;
             }
 
             .projects-grid {
@@ -770,7 +827,11 @@
             <!-- Left Side with Title and Filters -->
             <div class="page-left">
                 <!-- Header -->
-                <h1 class="page-title">PROJELER</h1>
+                <header class="page-header">
+                    <h1 class="page-title">PROJELER</h1>
+                    <!-- Mobile Active Count -->
+                    <div class="mobile-active-count" id="mobileActiveCount">Aktif Proje Sayısı: Yükleniyor...</div>
+                </header>
                 
                 <!-- Active Count -->
                 <div class="active-count-container">
@@ -1060,8 +1121,14 @@
         // Update active count
         function updateActiveCount() {
             const activeCountElement = document.getElementById('activeCount');
+            const mobileActiveCountElement = document.getElementById('mobileActiveCount');
+            
             if (activeCountElement) {
                 activeCountElement.textContent = `Aktif Proje Sayısı: ${filteredProjects.length}`;
+            }
+            
+            if (mobileActiveCountElement) {
+                mobileActiveCountElement.textContent = `Aktif Proje Sayısı: ${filteredProjects.length}`;
             }
         }
 
