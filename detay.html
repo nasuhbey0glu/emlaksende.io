@@ -553,15 +553,7 @@
         }
 
         .chart-label {
-            position: absolute;
-            bottom: clamp(-20px, -2.5vw, -25px);
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: clamp(9px, 1.2vw, 11px);
-            color: var(--primary-ink);
-            font-weight: 500;
-            white-space: nowrap;
-            min-width: 0;
+            display: none;
         }
 
         .chart-bar:hover {
@@ -1001,6 +993,10 @@
                 padding: 0 clamp(8px, 2vw, 12px);
             }
 
+            .ozellikler-container {
+                padding: 0 clamp(8px, 2vw, 12px);
+            }
+
             .detail-grid {
                 gap: clamp(12px, 3vw, 16px);
             }
@@ -1064,7 +1060,7 @@
 
         /* ===== DESCRIPTION SECTION ===== */
         .description-section {
-            padding: 80px 0;
+            padding: 80px 0 40px 0;
             background-color: var(--bg);
         }
 
@@ -1081,7 +1077,7 @@
             margin: 0;
             background: var(--card);
             border-radius: 20px;
-            padding: 40px;
+            padding: 40px 24px;
             box-shadow: var(--shadow);
         }
 
@@ -1144,7 +1140,7 @@
         /* Description responsive */
         @media (max-width: 767px) {
             .description-section {
-                padding: 60px 0;
+                padding: 60px 0 30px 0;
             }
 
             .description-card {
@@ -1181,14 +1177,14 @@
 
         /* ===== ÖZELLIKLER SECTION ===== */
         .ozellikler-section {
-            padding: 80px 0;
+            padding: 40px 0 80px 0;
             background-color: var(--bg);
         }
 
         .ozellikler-card {
             background: var(--card);
             border-radius: 20px;
-            padding: 40px;
+            padding: 40px 24px;
             box-shadow: var(--shadow);
             margin: 0 auto;
         }
@@ -1197,6 +1193,7 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 24px;
+            box-sizing: border-box;
         }
 
         .ozellikler-title {
@@ -1425,7 +1422,7 @@
             }
 
             .ozellikler-section {
-                padding: 60px 0;
+                padding: 30px 0 60px 0;
             }
 
             .ozellikler-card {
@@ -1775,11 +1772,6 @@
         
         <!-- Icon Rail - Desktop görünümde başlığın altında -->
         <div class="icon-rail-desktop">
-            <button class="icon-btn" aria-label="Favorilere Ekle">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-                </svg>
-            </button>
             <button class="icon-btn" aria-label="Yazdır">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 8H5C3.34 8 2 9.34 2 11V17H6V21H18V17H22V11C22 9.34 20.66 8 19 8ZM16 19H8V14H16V19ZM19 12C18.45 12 18 11.55 18 11S18.45 10 19 10 20 10.45 20 11 19.55 12 19 12ZM18 3H6V7H18V3Z"/>
@@ -1797,11 +1789,6 @@
             <div class="gallery">
                 <!-- Icon Rail - Mobile görünümde gallery içinde -->
                 <div class="icon-rail-mobile">
-                    <button class="icon-btn" aria-label="Favorilere Ekle">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-                        </svg>
-                    </button>
                     <button class="icon-btn" aria-label="Yazdır">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19 8H5C3.34 8 2 9.34 2 11V17H6V21H18V17H22V11C22 9.34 20.66 8 19 8ZM16 19H8V14H16V19ZM19 12C18.45 12 18 11.55 18 11S18.45 10 19 10 20 10.45 20 11 19.55 12 19 12ZM18 3H6V7H18V3Z"/>
