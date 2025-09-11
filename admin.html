@@ -14,6 +14,18 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
     <!-- Google Maps API -->
+    <script>
+        // Google Maps değişkenlerini global olarak tanımla
+        let isMapInitialized = false;
+        let ilanMap;
+        let mapMarker;
+        
+        // Google Maps callback function
+        function initMap() {
+            console.log('Google Maps API loaded');
+            isMapInitialized = true;
+        }
+    </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAw3Z28goiYhTyQxY_zx5eEcx_9I9wMkR4&callback=initMap&libraries=places"></script>
     
 
@@ -2256,15 +2268,15 @@
                                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
                                         <div>
                                             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Metrekare *</label>
-                                            <input type="number" id="ilanMetrekare" placeholder="250.32" step="0.01" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateTotalPrice()">
+                                            <input type="number" id="ilanMetrekare" placeholder="250.32" step="0.01" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateUnitPrice()">
                                         </div>
                                         <div>
-                                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">M² Fiyat *</label>
-                                            <input type="number" id="ilanMetrekareFiyat" placeholder="789" step="0.01" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateTotalPrice()">
+                                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">M² Fiyat</label>
+                                            <input type="text" id="ilanMetrekareFiyat" placeholder="Otomatik hesaplanacak" readonly style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: var(--main-bg); color: var(--text-secondary);">
                                         </div>
                                         <div>
-                                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Toplam Fiyat</label>
-                                            <input type="text" id="ilanToplamFiyat" placeholder="Otomatik hesaplanacak" readonly style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: var(--main-bg); color: var(--text-secondary);">
+                                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Toplam Fiyat *</label>
+                                            <input type="number" id="ilanToplamFiyat" placeholder="200000" step="0.01" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateUnitPrice()">
                                         </div>
                                     </div>
                                     
@@ -2419,9 +2431,9 @@
                                         <label style="display: block; margin-bottom: 1rem; color: var(--text-primary); font-weight: 500; font-size: 1.1rem;">📈 Öngörülen Fiyat Artışı</label>
                                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
                                             <div>
-                                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">1. Sene Artış Oranı</label>
+                                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">3. Ay Artış Oranı</label>
                                                 <div style="position: relative;">
-                                                    <input type="number" id="ilan1SeneArtis" placeholder="15" step="0.1" min="0" max="100" style="width: 100%; padding: 0.75rem 2.5rem 0.75rem 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateFuturePrices()">
+                                                    <input type="number" id="ilan1SeneArtis" placeholder="5" step="0.1" min="0" max="100" style="width: 100%; padding: 0.75rem 2.5rem 0.75rem 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateFuturePrices()">
                                                     <span style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.9rem; pointer-events: none;">%</span>
                                                 </div>
                                                 <div style="margin-top: 0.5rem; padding: 0.5rem; background: var(--main-bg); border-radius: 6px; border: 1px solid var(--border-color);">
@@ -2430,9 +2442,9 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">2. Sene Artış Oranı</label>
+                                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">6. Ay Artış Oranı</label>
                                                 <div style="position: relative;">
-                                                    <input type="number" id="ilan2SeneArtis" placeholder="12" step="0.1" min="0" max="100" style="width: 100%; padding: 0.75rem 2.5rem 0.75rem 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateFuturePrices()">
+                                                    <input type="number" id="ilan2SeneArtis" placeholder="8" step="0.1" min="0" max="100" style="width: 100%; padding: 0.75rem 2.5rem 0.75rem 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateFuturePrices()">
                                                     <span style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.9rem; pointer-events: none;">%</span>
                                                 </div>
                                                 <div style="margin-top: 0.5rem; padding: 0.5rem; background: var(--main-bg); border-radius: 6px; border: 1px solid var(--border-color);">
@@ -2441,9 +2453,9 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">3. Sene Artış Oranı</label>
+                                                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">12. Ay Artış Oranı</label>
                                                 <div style="position: relative;">
-                                                    <input type="number" id="ilan3SeneArtis" placeholder="10" step="0.1" min="0" max="100" style="width: 100%; padding: 0.75rem 2.5rem 0.75rem 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateFuturePrices()">
+                                                    <input type="number" id="ilan3SeneArtis" placeholder="12" step="0.1" min="0" max="100" style="width: 100%; padding: 0.75rem 2.5rem 0.75rem 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;" oninput="calculateFuturePrices()">
                                                     <span style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.9rem; pointer-events: none;">%</span>
                                                 </div>
                                                 <div style="margin-top: 0.5rem; padding: 0.5rem; background: var(--main-bg); border-radius: 6px; border: 1px solid var(--border-color);">
@@ -2470,15 +2482,15 @@
                                                     <div id="mevcutFiyatOzet" style="font-weight: 600; color: var(--text-primary);">-</div>
                                                 </div>
                                                 <div style="text-align: center;">
-                                                    <div style="color: var(--text-secondary); margin-bottom: 0.25rem;">1. Sene</div>
+                                                    <div style="color: var(--text-secondary); margin-bottom: 0.25rem;">3. Ay</div>
                                                     <div id="birSeneOzet" style="font-weight: 600; color: var(--primary-color);">-</div>
                                                 </div>
                                                 <div style="text-align: center;">
-                                                    <div style="color: var(--text-secondary); margin-bottom: 0.25rem;">2. Sene</div>
+                                                    <div style="color: var(--text-secondary); margin-bottom: 0.25rem;">6. Ay</div>
                                                     <div id="ikiSeneOzet" style="font-weight: 600; color: var(--success-color);">-</div>
                                                 </div>
                                                 <div style="text-align: center;">
-                                                    <div style="color: var(--text-secondary); margin-bottom: 0.25rem;">3. Sene</div>
+                                                    <div style="color: var(--text-secondary); margin-bottom: 0.25rem;">12. Ay</div>
                                                     <div id="ucSeneOzet" style="font-weight: 600; color: var(--warning-color);">-</div>
                                                 </div>
                                             </div>
@@ -5527,6 +5539,15 @@
                 loadGabariForSelect();
                 loadTapuDurumuForSelect();
                 loadImarDurumuForSelect();
+                
+                // Harita konumunu temizle
+                clearMapLocation();
+                
+                // Arsa sınırlarını temizle
+                clearBoundary();
+                
+                // Tapu görselini temizle
+                removeTapuImage();
             }
         }
 
@@ -5535,7 +5556,7 @@
             if (form) {
                 form.style.display = 'none';
                 document.getElementById('ilanFormContent').reset();
-                document.getElementById('ilanToplamFiyat').value = '';
+                document.getElementById('ilanMetrekareFiyat').value = '';
                 
                 // Düzenleme modundan çık
                 if (window.editingIlanId) {
@@ -5588,21 +5609,22 @@
             }
         }
 
-        // Fiyat hesaplama
-        function calculateTotalPrice() {
+        // Birim fiyat hesaplama
+        function calculateUnitPrice() {
             const metrekare = parseFloat(document.getElementById('ilanMetrekare').value) || 0;
-            const metrekareFiyat = parseFloat(document.getElementById('ilanMetrekareFiyat').value) || 0;
-            const toplamFiyat = metrekare * metrekareFiyat;
+            const toplamFiyat = parseFloat(document.getElementById('ilanToplamFiyat').value) || 0;
             
-            const toplamFiyatInput = document.getElementById('ilanToplamFiyat');
-            if (toplamFiyat > 0) {
-                toplamFiyatInput.value = new Intl.NumberFormat('tr-TR', {
+            const metrekareFiyatInput = document.getElementById('ilanMetrekareFiyat');
+            
+            if (metrekare > 0 && toplamFiyat > 0) {
+                const metrekareFiyat = toplamFiyat / metrekare;
+                metrekareFiyatInput.value = new Intl.NumberFormat('tr-TR', {
                     style: 'currency',
                     currency: 'TRY',
                     minimumFractionDigits: 0
-                }).format(toplamFiyat);
+                }).format(metrekareFiyat);
             } else {
-                toplamFiyatInput.value = '';
+                metrekareFiyatInput.value = '';
             }
         }
 
@@ -5715,6 +5737,244 @@
             document.getElementById('tapuPreview').style.display = 'none';
         }
         
+        // Tapu görselini yükle (düzenleme için)
+        function loadTapuImage(tapuData) {
+            console.log('Tapu görseli yükleniyor:', tapuData);
+            const preview = document.getElementById('tapuPreview');
+            const previewImg = document.getElementById('tapuPreviewImg');
+            
+            if (tapuData && tapuData.url) {
+                console.log('Tapu görseli URL:', tapuData.url);
+                previewImg.src = tapuData.url;
+                preview.style.display = 'block';
+                
+                // Silme butonunu güncelle
+                const removeBtn = preview.querySelector('button[onclick="removeTapuImage()"]');
+                console.log('Silme butonu bulundu:', removeBtn);
+                
+                if (removeBtn) {
+                    removeBtn.innerHTML = `
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.5rem;">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                        Tapu Görselini Sil
+                    `;
+                    removeBtn.style.cssText = `
+                        margin-left: 1rem; 
+                        padding: 0.75rem 1.5rem; 
+                        background: #dc2626; 
+                        color: white; 
+                        border: none; 
+                        border-radius: 8px; 
+                        cursor: pointer; 
+                        font-size: 0.9rem;
+                        font-weight: 500;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                        transition: all 0.2s ease;
+                    `;
+                    
+                    // Hover efekti ekle
+                    removeBtn.addEventListener('mouseenter', function() {
+                        this.style.background = '#b91c1c';
+                        this.style.transform = 'translateY(-1px)';
+                        this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
+                    });
+                    
+                    removeBtn.addEventListener('mouseleave', function() {
+                        this.style.background = '#dc2626';
+                        this.style.transform = 'translateY(0)';
+                        this.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                    });
+                    removeBtn.onclick = () => deleteTapuImage(tapuData.fileName);
+                    console.log('Silme butonu güncellendi, fileName:', tapuData.fileName);
+                } else {
+                    console.log('Silme butonu bulunamadı!');
+                }
+            } else {
+                console.log('Tapu verisi veya URL bulunamadı');
+            }
+        }
+        
+        // Tapu görselini sil (Firebase Storage'dan)
+        async function deleteTapuImage(fileName) {
+            if (!fileName) return;
+            
+            if (confirm('Tapu görselini silmek istediğinizden emin misiniz?')) {
+                try {
+                    // Firebase Storage'dan sil
+                    const storageRef = storage.ref(`listing-photos/${fileName}`);
+                    await storageRef.delete();
+                    
+                    // UI'dan kaldır
+                    removeTapuImage();
+                    
+                    showGenericAlert('ilanAlert', 'Tapu görseli başarıyla silindi.', 'success');
+                } catch (error) {
+                    console.error('Tapu görseli silme hatası:', error);
+                    showGenericAlert('ilanAlert', 'Tapu görseli silinirken hata oluştu.', 'error');
+                }
+            }
+        }
+        
+        // Konum verilerini yükle (düzenleme için)
+        async function loadLocationData(ilan) {
+            console.log('Konum verileri yükleniyor:', ilan.sehir, ilan.ilce, ilan.mahalle);
+            
+            // Mahalle değerini direkt olarak yükle (input alanı)
+            console.log('İlan mahalle değeri:', ilan.mahalle);
+            console.log('Mahalle değeri var mı?', !!ilan.mahalle);
+            
+            if (ilan.mahalle) {
+                const mahalleInput = document.getElementById('ilanMahalle');
+                console.log('Mahalle input elementi:', mahalleInput);
+                console.log('Mahalle değeri atanıyor:', ilan.mahalle);
+                
+                // Değeri atla
+                mahalleInput.value = ilan.mahalle;
+                
+                // Input alanını focus ve blur yap
+                mahalleInput.focus();
+                mahalleInput.blur();
+                
+                // Input event'lerini tetikle
+                mahalleInput.dispatchEvent(new Event('input', { bubbles: true }));
+                mahalleInput.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                console.log('Mahalle ayarlandı:', mahalleInput.value);
+                
+                // Sürekli kontrol et ve tekrar ata
+                let checkCount = 0;
+                const checkInterval = setInterval(() => {
+                    checkCount++;
+                    if (mahalleInput.value !== ilan.mahalle) {
+                        console.log(`Mahalle değeri sıfırlanmış, tekrar atanıyor (${checkCount}. kontrol)`);
+                        mahalleInput.value = ilan.mahalle;
+                        mahalleInput.dispatchEvent(new Event('input', { bubbles: true }));
+                        mahalleInput.dispatchEvent(new Event('change', { bubbles: true }));
+                    } else {
+                        console.log(`Mahalle değeri korunuyor (${checkCount}. kontrol)`);
+                    }
+                    
+                    // 10 saniye sonra kontrolü durdur
+                    if (checkCount >= 20) {
+                        clearInterval(checkInterval);
+                        console.log('Mahalle kontrolü durduruldu');
+                    }
+                }, 500);
+                
+            } else {
+                console.log('Mahalle değeri boş, atama yapılmıyor');
+            }
+            
+            if (!ilan.sehir) return;
+            
+            try {
+                // Şehirleri yükle
+                await loadCities();
+                
+                // Şehir dropdown'ının doldurulmasını bekle
+                await waitForElementToBePopulated('ilanSehir');
+                
+                // Şehir değerini ayarla
+                const citySelect = document.getElementById('ilanSehir');
+                console.log('Şehir select elementi:', citySelect);
+                console.log('Mevcut şehir değeri:', citySelect ? citySelect.value : 'Element bulunamadı');
+                
+                if (citySelect) {
+                    // Şehir adından ID'yi bul
+                    const city = turkiyeApiData.cities.find(c => c.name === ilan.sehir);
+                    console.log('Bulunan şehir:', city);
+                    
+                    if (city) {
+                        console.log('Şehir değeri atanıyor:', city.name);
+                        citySelect.value = city.name;
+                        selectedCityId = city.id;
+                        console.log('Şehir ayarlandı:', city.name, city.id);
+                        console.log('Şehir select yeni değeri:', citySelect.value);
+                        
+                        // İlçeleri yükle
+                        if (ilan.ilce) {
+                            await loadDistricts(city.id);
+                            
+                            // İlçe dropdown'ının doldurulmasını bekle
+                            await waitForElementToBePopulated('ilanIlce');
+                            
+                            // İlçe değerini ayarla
+                            const districtSelect = document.getElementById('ilanIlce');
+                            console.log('İlçe select elementi:', districtSelect);
+                            console.log('Mevcut ilçe değeri:', districtSelect ? districtSelect.value : 'Element bulunamadı');
+                            
+                            if (districtSelect) {
+                                // İlçe adından ID'yi bul
+                                const district = turkiyeApiData.districts.find(d => d.name === ilan.ilce);
+                                console.log('Bulunan ilçe:', district);
+                                
+                                if (district) {
+                                    console.log('İlçe değeri atanıyor:', district.name);
+                                    districtSelect.value = district.name;
+                                    selectedDistrictId = district.id;
+                                    console.log('İlçe ayarlandı:', district.name, district.id);
+                                    console.log('İlçe select yeni değeri:', districtSelect.value);
+                                } else {
+                                    // Fallback: direkt değer ata
+                                    districtSelect.value = ilan.ilce;
+                                    selectedDistrictId = ilan.ilce;
+                                    console.log('İlçe fallback ayarlandı:', ilan.ilce);
+                                }
+                            }
+                        }
+                    } else {
+                        // Eski format için fallback
+                        citySelect.value = ilan.sehir;
+                        selectedCityId = ilan.sehir;
+                        console.log('Şehir fallback ayarlandı:', ilan.sehir);
+                        
+                        if (ilan.ilce) {
+                            await loadDistricts(ilan.sehir);
+                            await waitForElementToBePopulated('ilanIlce');
+                            
+                            const districtSelect = document.getElementById('ilanIlce');
+                            if (districtSelect) {
+                                districtSelect.value = ilan.ilce;
+                                selectedDistrictId = ilan.ilce;
+                                console.log('İlçe fallback ayarlandı:', ilan.ilce);
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Konum verileri yüklenirken hata:', error);
+            }
+        }
+        
+        // Element'in doldurulmasını bekle
+        function waitForElementToBePopulated(elementId, maxWait = 5000) {
+            return new Promise((resolve) => {
+                const element = document.getElementById(elementId);
+                if (!element) {
+                    console.warn(`Element ${elementId} bulunamadı`);
+                    resolve();
+                    return;
+                }
+                
+                console.log(`Element ${elementId} doldurulması bekleniyor...`);
+                const startTime = Date.now();
+                const checkInterval = setInterval(() => {
+                    // Element'in option'ları var mı kontrol et
+                    if (element.options && element.options.length > 1) {
+                        console.log(`Element ${elementId} dolduruldu, ${element.options.length} option bulundu`);
+                        clearInterval(checkInterval);
+                        resolve();
+                    } else if (Date.now() - startTime > maxWait) {
+                        console.warn(`Element ${elementId} ${maxWait}ms içinde doldurulamadı`);
+                        clearInterval(checkInterval);
+                        resolve();
+                    }
+                }, 100);
+            });
+        }
+        
         // Tapu görseli yükleme
         async function uploadTapuImage() {
             const fileInput = document.getElementById('ilanTapuGorseli');
@@ -5748,7 +6008,7 @@
                 { id: 'ilanBaslik', name: 'Başlık' },
                 { id: 'ilanNo', name: 'İlan No' },
                 { id: 'ilanMetrekare', name: 'Metrekare' },
-                { id: 'ilanMetrekareFiyat', name: 'Metrekare Fiyat' },
+                { id: 'ilanToplamFiyat', name: 'Toplam Fiyat' },
                 { id: 'ilanAdaNo', name: 'Ada No' },
                 { id: 'ilanParselNo', name: 'Parsel No' },
                 { id: 'ilanKaks', name: 'KAKS' },
@@ -5803,13 +6063,17 @@
                 return;
             }
             
+            const metrekare = parseFloat(document.getElementById('ilanMetrekare').value);
+            const toplamFiyat = parseFloat(document.getElementById('ilanToplamFiyat').value);
+            const metrekareFiyat = metrekare > 0 ? toplamFiyat / metrekare : 0;
+            
             const ilanData = {
                 baslik: document.getElementById('ilanBaslik').value.trim(),
                 ilanNo: document.getElementById('ilanNo').value.trim(),
                 proje: document.getElementById('ilanProje').value,
-                metrekare: parseFloat(document.getElementById('ilanMetrekare').value),
-                metrekareFiyat: parseFloat(document.getElementById('ilanMetrekareFiyat').value),
-                toplamFiyat: parseFloat(document.getElementById('ilanMetrekare').value) * parseFloat(document.getElementById('ilanMetrekareFiyat').value),
+                metrekare: metrekare,
+                metrekareFiyat: metrekareFiyat,
+                toplamFiyat: toplamFiyat,
                 adaNo: document.getElementById('ilanAdaNo').value.trim(),
                 parselNo: document.getElementById('ilanParselNo').value.trim(),
                 kaksId: document.getElementById('ilanKaks').value,
@@ -5829,15 +6093,15 @@
                 priceProjections: {
                     year1: {
                         increaseRate: parseFloat(document.getElementById('ilan1SeneArtis').value) || 0,
-                        projectedPrice: calculateProjectedPrice(parseFloat(document.getElementById('ilanMetrekare').value) * parseFloat(document.getElementById('ilanMetrekareFiyat').value), parseFloat(document.getElementById('ilan1SeneArtis').value) || 0)
+                        projectedPrice: calculateProjectedPrice(toplamFiyat, parseFloat(document.getElementById('ilan1SeneArtis').value) || 0)
                     },
                     year2: {
                         increaseRate: parseFloat(document.getElementById('ilan2SeneArtis').value) || 0,
-                        projectedPrice: calculateProjectedPrice(parseFloat(document.getElementById('ilanMetrekare').value) * parseFloat(document.getElementById('ilanMetrekareFiyat').value), parseFloat(document.getElementById('ilan1SeneArtis').value) || 0, parseFloat(document.getElementById('ilan2SeneArtis').value) || 0)
+                        projectedPrice: calculateProjectedPrice(toplamFiyat, parseFloat(document.getElementById('ilan1SeneArtis').value) || 0, parseFloat(document.getElementById('ilan2SeneArtis').value) || 0)
                     },
                     year3: {
                         increaseRate: parseFloat(document.getElementById('ilan3SeneArtis').value) || 0,
-                        projectedPrice: calculateProjectedPrice(parseFloat(document.getElementById('ilanMetrekare').value) * parseFloat(document.getElementById('ilanMetrekareFiyat').value), parseFloat(document.getElementById('ilan1SeneArtis').value) || 0, parseFloat(document.getElementById('ilan2SeneArtis').value) || 0, parseFloat(document.getElementById('ilan3SeneArtis').value) || 0)
+                        projectedPrice: calculateProjectedPrice(toplamFiyat, parseFloat(document.getElementById('ilan1SeneArtis').value) || 0, parseFloat(document.getElementById('ilan2SeneArtis').value) || 0, parseFloat(document.getElementById('ilan3SeneArtis').value) || 0)
                     }
                 },
                 // Fotoğraflar
@@ -5873,6 +6137,11 @@
                     hideIlanForm();
                     loadIlanList();
                     loadDashboardStats(); // Dashboard verilerini güncelle
+                    
+                    // Sayfayı yenile (tüm form alanlarını temizlemek için)
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500); // 1.5 saniye bekle ki kullanıcı başarı mesajını görebilsin
                 })
                 .catch((error) => {
                     console.error('İlan kaydetme hatası:', error);
@@ -5987,50 +6256,12 @@
                     document.getElementById('ilanNo').value = ilan.ilanNo || '';
                     document.getElementById('ilanProje').value = ilan.proje || '';
                     document.getElementById('ilanMetrekare').value = ilan.metrekare || '';
-                    document.getElementById('ilanMetrekareFiyat').value = ilan.metrekareFiyat || '';
+                    document.getElementById('ilanToplamFiyat').value = ilan.toplamFiyat || '';
                     document.getElementById('ilanAdaNo').value = ilan.adaNo || '';
                     document.getElementById('ilanParselNo').value = ilan.parselNo || '';
-                    // Şehir, ilçe, mahalle değerlerini yükle
-                    if (ilan.sehir) {
-                        // Önce şehirleri yükle
-                        loadCities().then(() => {
-                            // Şehir adından ID'yi bul
-                            const city = turkiyeApiData.cities.find(c => c.name === ilan.sehir);
-                            if (city) {
-                                document.getElementById('ilanSehir').value = city.id;
-                                selectedCityId = city.id;
-                                // İlçeleri yükle
-                                loadDistricts(city.id).then(() => {
-                                    if (ilan.ilce) {
-                                        // İlçe adından ID'yi bul
-                                        const district = turkiyeApiData.districts.find(d => d.name === ilan.ilce);
-                                        if (district) {
-                                            document.getElementById('ilanIlce').value = district.id;
-                                            selectedDistrictId = district.id;
-                                        } else {
-                                            document.getElementById('ilanIlce').value = ilan.ilce;
-                                            selectedDistrictId = ilan.ilce;
-                                        }
-                                    }
-                                });
-                            } else {
-                                // Eski format için fallback
-                                document.getElementById('ilanSehir').value = ilan.sehir;
-                                selectedCityId = ilan.sehir;
-                                loadDistricts(ilan.sehir).then(() => {
-                                    if (ilan.ilce) {
-                                        document.getElementById('ilanIlce').value = ilan.ilce;
-                                        selectedDistrictId = ilan.ilce;
-                                    }
-                                });
-                            }
-                        });
-                    }
                     
-                    // Mahalle değerini direkt olarak yükle
-                    if (ilan.mahalle) {
-                        document.getElementById('ilanMahalle').value = ilan.mahalle;
-                    }
+                    // Birim fiyatı hesapla ve göster
+                    calculateUnitPrice();
                     
                     document.getElementById('ilanLats').value = ilan.latitude || ilan.location?.lat || '';
                     document.getElementById('ilanLangs').value = ilan.longitude || ilan.location?.lng || '';
@@ -6125,9 +6356,8 @@
                         document.getElementById('ilanTapuDurumu').value = ilan.tapuDurumuId || '';
                         document.getElementById('ilanImarDurumu').value = ilan.imarDurumuId || '';
                         
-                        // Şehir, ilçe ve mahalle değerlerini direkt olarak doldur
-                        document.getElementById('ilanIlce').value = ilan.ilce || '';
-                        document.getElementById('ilanMahalle').value = ilan.mahalle || '';
+                        // Şehir, ilçe, mahalle değerlerini yükle
+                        loadLocationData(ilan);
                         
                         // Haritayı başlat ve konumu göster
                         initializeIlanMap();
@@ -6140,6 +6370,11 @@
                         // Arsa sınırlarını yükle
                         if (ilan.arsa_sinirlari && Array.isArray(ilan.arsa_sinirlari)) {
                             loadBoundaryData(ilan.arsa_sinirlari);
+                        }
+                        
+                        // Tapu görselini yükle
+                        if (ilan.tapuGorseli && ilan.tapuGorseli.url) {
+                            loadTapuImage(ilan.tapuGorseli);
                         }
                         
                         // Çevreleri yükle
@@ -6160,7 +6395,7 @@
                         }, 1000);
                         
                         // Fiyat hesaplamalarını yap
-                        calculateTotalPrice();
+                        calculateUnitPrice();
                         calculateFuturePrices();
                     }, 500);
                     
@@ -6189,12 +6424,12 @@
         }
 
         // İlan güncelleme fonksiyonu
-        function updateIlan(ilanId) {
+        async function updateIlan(ilanId) {
             const requiredFields = [
                 { id: 'ilanBaslik', name: 'Başlık' },
                 { id: 'ilanNo', name: 'İlan No' },
                 { id: 'ilanMetrekare', name: 'Metrekare' },
-                { id: 'ilanMetrekareFiyat', name: 'Metrekare Fiyat' },
+                { id: 'ilanToplamFiyat', name: 'Toplam Fiyat' },
                 { id: 'ilanAdaNo', name: 'Ada No' },
                 { id: 'ilanParselNo', name: 'Parsel No' },
                 { id: 'ilanKaks', name: 'KAKS' },
@@ -6217,13 +6452,17 @@
                 }
             }
             
+            const metrekare = parseFloat(document.getElementById('ilanMetrekare').value);
+            const toplamFiyat = parseFloat(document.getElementById('ilanToplamFiyat').value);
+            const metrekareFiyat = metrekare > 0 ? toplamFiyat / metrekare : 0;
+            
             const ilanData = {
                 baslik: document.getElementById('ilanBaslik').value.trim(),
                 ilanNo: document.getElementById('ilanNo').value.trim(),
                 proje: document.getElementById('ilanProje').value,
-                metrekare: parseFloat(document.getElementById('ilanMetrekare').value),
-                metrekareFiyat: parseFloat(document.getElementById('ilanMetrekareFiyat').value),
-                toplamFiyat: parseFloat(document.getElementById('ilanMetrekare').value) * parseFloat(document.getElementById('ilanMetrekareFiyat').value),
+                metrekare: metrekare,
+                metrekareFiyat: metrekareFiyat,
+                toplamFiyat: toplamFiyat,
                 adaNo: document.getElementById('ilanAdaNo').value.trim(),
                 parselNo: document.getElementById('ilanParselNo').value.trim(),
                 kaksId: document.getElementById('ilanKaks').value,
@@ -6243,17 +6482,19 @@
                 priceProjections: {
                     year1: {
                         increaseRate: parseFloat(document.getElementById('ilan1SeneArtis').value) || 0,
-                        projectedPrice: calculateProjectedPrice(parseFloat(document.getElementById('ilanMetrekare').value) * parseFloat(document.getElementById('ilanMetrekareFiyat').value), parseFloat(document.getElementById('ilan1SeneArtis').value) || 0)
+                        projectedPrice: calculateProjectedPrice(toplamFiyat, parseFloat(document.getElementById('ilan1SeneArtis').value) || 0)
                     },
                     year2: {
                         increaseRate: parseFloat(document.getElementById('ilan2SeneArtis').value) || 0,
-                        projectedPrice: calculateProjectedPrice(parseFloat(document.getElementById('ilanMetrekare').value) * parseFloat(document.getElementById('ilanMetrekareFiyat').value), parseFloat(document.getElementById('ilan1SeneArtis').value) || 0, parseFloat(document.getElementById('ilan2SeneArtis').value) || 0)
+                        projectedPrice: calculateProjectedPrice(toplamFiyat, parseFloat(document.getElementById('ilan1SeneArtis').value) || 0, parseFloat(document.getElementById('ilan2SeneArtis').value) || 0)
                     },
                     year3: {
                         increaseRate: parseFloat(document.getElementById('ilan3SeneArtis').value) || 0,
-                        projectedPrice: calculateProjectedPrice(parseFloat(document.getElementById('ilanMetrekare').value) * parseFloat(document.getElementById('ilanMetrekareFiyat').value), parseFloat(document.getElementById('ilan1SeneArtis').value) || 0, parseFloat(document.getElementById('ilan2SeneArtis').value) || 0, parseFloat(document.getElementById('ilan3SeneArtis').value) || 0)
+                        projectedPrice: calculateProjectedPrice(toplamFiyat, parseFloat(document.getElementById('ilan1SeneArtis').value) || 0, parseFloat(document.getElementById('ilan2SeneArtis').value) || 0, parseFloat(document.getElementById('ilan3SeneArtis').value) || 0)
                     }
                 },
+                // Tapu Görseli
+                tapuGorseli: await uploadTapuImage(),
                 // Fotoğraflar
                 photos: uploadedPhotos.map((photo, index) => ({
                     id: photo.id,
@@ -6336,7 +6577,7 @@
         // Global fonksiyonlar
         window.showAddIlanForm = showAddIlanForm;
         window.hideIlanForm = hideIlanForm;
-        window.calculateTotalPrice = calculateTotalPrice;
+        window.calculateUnitPrice = calculateUnitPrice;
         // loadIlceler fonksiyonu artık gerekli değil
         // loadMahalleler fonksiyonu artık gerekli değil
         window.saveIlan = saveIlan;
@@ -6367,15 +6608,6 @@
         window.testFirebaseConnection = testFirebaseConnection;
 
         // ===== GOOGLE MAPS INTEGRATION =====
-        let ilanMap;
-        let mapMarker;
-        let isMapInitialized = false;
-
-        // Google Maps callback function
-        function initMap() {
-            console.log('Google Maps API loaded');
-            isMapInitialized = true;
-        }
 
         // İlan haritasını başlat
         function initializeIlanMap() {
@@ -6545,6 +6777,8 @@
         window.updateMapFromInputs = updateMapFromInputs;
         window.clearMapLocation = clearMapLocation;
         window.initMap = initMap;
+        window.initializeIlanMap = initializeIlanMap;
+        window.setMapLocation = setMapLocation;
 
         // ===== FİYAT HESAPLAMA FONKSİYONLARI =====
         
@@ -6575,29 +6809,27 @@
 
         // Gelecek fiyatları hesapla ve göster
         function calculateFuturePrices() {
-            const metrekare = parseFloat(document.getElementById('ilanMetrekare').value) || 0;
-            const metrekareFiyat = parseFloat(document.getElementById('ilanMetrekareFiyat').value) || 0;
-            const currentPrice = metrekare * metrekareFiyat;
+            const currentPrice = parseFloat(document.getElementById('ilanToplamFiyat').value) || 0;
             
             const rate1 = parseFloat(document.getElementById('ilan1SeneArtis').value) || 0;
             const rate2 = parseFloat(document.getElementById('ilan2SeneArtis').value) || 0;
             const rate3 = parseFloat(document.getElementById('ilan3SeneArtis').value) || 0;
 
-            // Her yıl için ayrı hesaplama
-            const price1Year = calculateProjectedPrice(currentPrice, rate1);
-            const price2Year = calculateProjectedPrice(currentPrice, rate1, rate2);
-            const price3Year = calculateProjectedPrice(currentPrice, rate1, rate2, rate3);
+            // Her ay için ayrı hesaplama
+            const price3Month = calculateProjectedPrice(currentPrice, rate1);
+            const price6Month = calculateProjectedPrice(currentPrice, rate1, rate2);
+            const price12Month = calculateProjectedPrice(currentPrice, rate1, rate2, rate3);
 
             // Bireysel görüntüleme
-            document.getElementById('fiyat1Sene').textContent = formatPrice(price1Year);
-            document.getElementById('fiyat2Sene').textContent = formatPrice(price2Year);
-            document.getElementById('fiyat3Sene').textContent = formatPrice(price3Year);
+            document.getElementById('fiyat1Sene').textContent = formatPrice(price3Month);
+            document.getElementById('fiyat2Sene').textContent = formatPrice(price6Month);
+            document.getElementById('fiyat3Sene').textContent = formatPrice(price12Month);
 
             // Özet görüntüleme
             document.getElementById('mevcutFiyatOzet').textContent = formatPrice(currentPrice);
-            document.getElementById('birSeneOzet').textContent = formatPrice(price1Year);
-            document.getElementById('ikiSeneOzet').textContent = formatPrice(price2Year);
-            document.getElementById('ucSeneOzet').textContent = formatPrice(price3Year);
+            document.getElementById('birSeneOzet').textContent = formatPrice(price3Month);
+            document.getElementById('ikiSeneOzet').textContent = formatPrice(price6Month);
+            document.getElementById('ucSeneOzet').textContent = formatPrice(price12Month);
         }
 
         // Fiyat projeksiyonlarını sıfırla
@@ -6618,10 +6850,10 @@
             document.getElementById('ucSeneOzet').textContent = '-';
         }
 
-        // calculateTotalPrice fonksiyonunu genişlet
-        const originalCalculateTotalPrice = calculateTotalPrice;
-        calculateTotalPrice = function() {
-            originalCalculateTotalPrice();
+        // calculateUnitPrice fonksiyonunu genişlet
+        const originalCalculateUnitPrice = calculateUnitPrice;
+        calculateUnitPrice = function() {
+            originalCalculateUnitPrice();
             // Fiyat değiştiğinde future prices'ı da güncelle
             setTimeout(calculateFuturePrices, 100);
         };
@@ -7499,9 +7731,6 @@
             updateEditorStats();
         }
 
-        // Quill.js editör instance'ı
-        let quillEditor = null;
-
         // TurkiyeAPI entegrasyonu için değişkenler
         let turkiyeApiData = {
             cities: [],
@@ -7510,6 +7739,9 @@
         };
         let selectedCityId = null;
         let selectedDistrictId = null;
+
+        // Quill.js editör instance'ı
+        let quillEditor = null;
 
         // Quill.js editörünü başlat
         function initializeQuillEditor() {
@@ -8845,6 +9077,7 @@
         window.removeIlanFromProje = removeIlanFromProje;
         window.startBoundaryDrawing = startBoundaryDrawing;
         window.clearBoundary = clearBoundary;
+        window.initBoundaryMap = initBoundaryMap;
         window.removeBoundaryPoint = removeBoundaryPoint;
 
         // ===== HAKKIMIZDA FONKSİYONLARI =====

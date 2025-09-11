@@ -708,10 +708,8 @@ function initializeFooterFunctionality() {
             return;
         }
         
-        // Simulate newsletter subscription
-        console.log(`Newsletter subscription: ${email}`);
-        alert('Başarıyla abone oldunuz! Teşekkürler.');
-        newsletterEmail.value = '';
+        // Save email to Firebase Realtime Database
+        saveNewsletterEmail(email);
     });
     
     // Enter key support for newsletter input
@@ -755,6 +753,87 @@ function initializeFooterFunctionality() {
     });
     
     console.log('Footer fonksiyonları başlatıldı');
+}
+
+// Test Firebase bağlantısı
+window.testFirebaseConnection = function() {
+    console.log('=== FIREBASE BAĞLANTI TESTİ ===');
+    console.log('Firebase SDK yüklü mü:', typeof firebase !== 'undefined');
+    console.log('Local database:', database);
+    console.log('Global database:', window.database);
+    console.log('Kullanılacak database:', database || window.database);
+    
+    const db = database || window.database;
+    if (db) {
+        console.log('✅ Database bağlantısı mevcut');
+        // Test yazma
+        const testRef = db.ref('test-connection');
+        testRef.set({
+            timestamp: Date.now(),
+            message: 'Newsletter test bağlantısı'
+        }).then(() => {
+            console.log('✅ Test yazma başarılı');
+            return testRef.remove();
+        }).then(() => {
+            console.log('✅ Test silme başarılı');
+        }).catch((error) => {
+            console.error('❌ Test hatası:', error);
+        });
+    } else {
+        console.error('❌ Database bağlantısı yok');
+    }
+    console.log('=== TEST TAMAMLANDI ===');
+};
+
+// Newsletter email kaydetme fonksiyonu
+window.saveNewsletterEmail = function(email) {
+    console.log('saveNewsletterEmail fonksiyonu çağrıldı:', email);
+    console.log('Database durumu:', database);
+    console.log('Window.database durumu:', window.database);
+    
+    // Try both local and global database references
+    const db = database || window.database;
+    
+    if (!db) {
+        console.error('Database not initialized for newsletter');
+        alert('Sistem hatası. Lütfen daha sonra tekrar deneyin.');
+        return;
+    }
+    
+    console.log('Newsletter email kaydediliyor:', email);
+    
+    // Email'in daha önce kayıtlı olup olmadığını kontrol et
+    const emailRef = db.ref('newsletter/emails');
+    
+    emailRef.orderByChild('email').equalTo(email).once('value')
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                // Email zaten kayıtlı
+                alert('Bu e-posta adresi zaten kayıtlı.');
+                console.log('Email zaten kayıtlı:', email);
+            } else {
+                // Email kayıtlı değil, yeni kayıt oluştur
+                const newEmailRef = emailRef.push();
+                newEmailRef.set({
+                    email: email,
+                    subscribedAt: Date.now(),
+                    status: 'active'
+                })
+                .then(() => {
+                    console.log('Newsletter email başarıyla kaydedildi:', email);
+                    alert('Başarıyla abone oldunuz! Teşekkürler.');
+                    document.getElementById('newsletterEmail').value = '';
+                })
+                .catch((error) => {
+                    console.error('Newsletter email kaydetme hatası:', error);
+                    alert('Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+                });
+            }
+        })
+        .catch((error) => {
+            console.error('Newsletter email kontrol hatası:', error);
+            alert('Sistem hatası. Lütfen daha sonra tekrar deneyin.');
+        });
 }
 
 // ===== CITY SELECTION MODAL =====
@@ -1312,8 +1391,19 @@ function loadDefaultHeroBackground() {
     const heroBackground = document.querySelector('.hero-background');
     
     if (heroBackground) {
-        heroBackground.style.backgroundImage = "url('images/background.jpg')";
-        heroBackground.style.opacity = '1';
+        // Varsayılan resmi de önceden yükle
+        const img = new Image();
+        img.onload = function() {
+            heroBackground.style.backgroundImage = "url('images/background.jpg')";
+            heroBackground.style.backgroundColor = 'transparent';
+            heroBackground.style.opacity = '1';
+        };
+        img.onerror = function() {
+            // Varsayılan resim de yüklenemezse sadece arka plan rengi göster
+            heroBackground.style.backgroundColor = '#f8f9fa';
+            heroBackground.style.opacity = '1';
+        };
+        img.src = 'images/background.jpg';
     }
 }
 

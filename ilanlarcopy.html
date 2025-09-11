@@ -1562,11 +1562,26 @@
             if (newsletterBtn && newsletterEmail) {
                 newsletterBtn.addEventListener('click', () => {
                     const email = newsletterEmail.value.trim();
-                    if (email) {
-                        alert('Başarıyla abone oldunuz!');
-                        newsletterEmail.value = '';
+                    
+                    if (!email) {
+                        alert('Lütfen e-posta adresinizi girin.');
+                        newsletterEmail.focus();
+                        return;
+                    }
+                    
+                    // Basic email validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        alert('Lütfen geçerli bir e-posta adresi girin.');
+                        newsletterEmail.focus();
+                        return;
+                    }
+                    
+                    // Save email to Firebase Realtime Database
+                    if (typeof saveNewsletterEmail === 'function') {
+                        saveNewsletterEmail(email);
                     } else {
-                        alert('Lütfen geçerli bir email adresi girin.');
+                        alert('Sistem hatası. Lütfen daha sonra tekrar deneyin.');
                     }
                 });
             }
@@ -1616,6 +1631,7 @@
 
         // Initialize Firebase
         let database;
+        window.database = null; // Global database reference
         
         function initializeFirebaseAndLoadProperties() {
             console.log('Initializing Firebase...');
@@ -1636,6 +1652,7 @@
                     firebase.initializeApp(firebaseConfig);
                 }
                 database = firebase.database();
+                window.database = database; // Set global reference
                 console.log('Firebase initialized successfully');
                 
                 // Load properties after successful initialization

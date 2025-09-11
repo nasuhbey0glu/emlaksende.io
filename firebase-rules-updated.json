@@ -1,0 +1,88 @@
+{
+  "rules": {
+    "ilanlar": {
+      ".read": true,
+      ".write": true
+    },
+    "projeler": {
+      ".read": true,
+      ".write": true
+    },
+    "imar_durumu": {
+      ".read": true,
+      ".write": true
+    },
+    "tapu_durumu": {
+      ".read": true,
+      ".write": true
+    },
+    "gabari": {
+      ".read": true,
+      ".write": true
+    },
+    "kaks": {
+      ".read": true,
+      ".write": true
+    },
+    "cevre_kategorisi": {
+      ".read": true,
+      ".write": true
+    },
+    "cevre_kategorileri": {
+      ".read": true,
+      ".write": true
+    },
+    "cevreler": {
+      ".read": true,
+      ".write": true
+    },
+    "site-settings": {
+      ".read": true,
+      ".write": true
+    },
+    "site_ayarlari": {
+      ".read": true,
+      ".write": true
+    },
+    "test-connection": {
+      ".read": true,
+      ".write": true
+    },
+    "aciklama": {
+      ".read": true,
+      ".write": true
+    },
+    "soru_cevap": {
+      ".read": true,
+      ".write": true
+    },
+    "testimonials": {
+      ".read": true,
+      ".write": true
+    },
+    "users": {
+      ".read": true,
+      ".write": true
+    },
+    "sayfalar": {
+      ".read": true,
+      ".write": true
+    },
+    "destek": {
+      ".read": true,
+      ".write": true
+    },
+    "kurumsal": {
+      ".read": true,
+      ".write": true
+    },
+    "hizmetler": {
+      ".read": true,
+      ".write": true
+    },
+    "newsletter": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}

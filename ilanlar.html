@@ -1096,26 +1096,253 @@
             
             .mobile-filter-toggle {
                 position: fixed;
-                top: 100px;
-                left: 0;
-                right: auto;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
                 z-index: 1000;
                 margin-top: 0;
                 margin-bottom: 0;
                 display: flex;
-                justify-content: flex-start;
+                justify-content: center;
+                gap: 10px;
+                width: calc(100% - 40px);
+                max-width: 400px;
             }
             
             .hamburger-btn {
-                min-width: 100px;
-                padding: 8px 12px;
-                font-size: 12px;
+                min-width: 120px;
+                padding: 12px 16px;
+                font-size: 14px;
                 box-shadow: 0 4px 15px rgba(151, 210, 173, 0.4);
-                border-radius: 0 25px 25px 0;
+                border-radius: 25px;
+                flex: 1;
             }
             
-            /* Header styles are now included from header.html */
+            .sort-btn {
+                min-width: 120px;
+                padding: 12px 16px;
+                font-size: 14px;
+                background: linear-gradient(135deg, #1E2A47 0%, #2c3e50 100%);
+                color: #ffffff;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(30, 42, 71, 0.3);
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                font-weight: 600;
+            }
             
+            .sort-btn:hover {
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(30, 42, 71, 0.4);
+            }
+            
+            .sort-btn:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 10px rgba(30, 42, 71, 0.3);
+            }
+            
+            .sort-icon {
+                width: 16px;
+                height: 16px;
+                transition: transform 0.3s ease;
+            }
+            
+            .sort-btn.active .sort-icon {
+                transform: rotate(180deg);
+            }
+            
+            /* Sort Menu */
+            .sort-menu {
+                position: fixed;
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                padding: 16px;
+                z-index: 1001;
+                display: none;
+                min-width: 280px;
+                border: 1px solid #e5e7eb;
+            }
+            
+            .sort-menu.show {
+                display: block;
+                animation: slideUp 0.3s ease;
+            }
+            
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+            
+            .sort-menu-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: #1E2A47;
+                margin-bottom: 12px;
+                text-align: center;
+            }
+            
+            .sort-options {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .sort-option {
+                padding: 12px 16px;
+                background: #f8f9fa;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 14px;
+                font-weight: 500;
+                color: #374151;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            
+            .sort-option:hover {
+                background: #e9ecef;
+                border-color: #97D2AD;
+            }
+            
+            .sort-option.active {
+                background: #f0f9f0;
+                border-color: #97D2AD;
+                color: #2d5016;
+            }
+            
+            .sort-option-icon {
+                width: 16px;
+                height: 16px;
+                opacity: 0.6;
+            }
+            
+            .sort-option.active .sort-option-icon {
+                opacity: 1;
+                color: #97D2AD;
+            }
+        }
+
+        /* Desktop Sort Menu Styles */
+        @media (min-width: 768px) {
+            .sort-menu {
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                padding: 20px;
+                z-index: 1001;
+                display: none;
+                min-width: 300px;
+                border: 1px solid #e5e7eb;
+                margin-bottom: 10px;
+            }
+            
+            .sort-menu.show {
+                display: block;
+                animation: slideDown 0.3s ease;
+            }
+            
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+            
+            .sort-menu-title {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1E2A47;
+                margin-bottom: 16px;
+                text-align: center;
+                border-bottom: 1px solid #e5e7eb;
+                padding-bottom: 12px;
+            }
+            
+            .sort-options {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            
+            .sort-option {
+                padding: 14px 16px;
+                background: #f8f9fa;
+                border: 1px solid #e5e7eb;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 14px;
+                font-weight: 500;
+                color: #374151;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                text-align: left;
+            }
+            
+            .sort-option:hover {
+                background: #e9ecef;
+                border-color: #97D2AD;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(151, 210, 173, 0.2);
+            }
+            
+            .sort-option.active {
+                background: #f0f9f0;
+                border-color: #97D2AD;
+                color: #2d5016;
+                box-shadow: 0 4px 12px rgba(151, 210, 173, 0.3);
+            }
+            
+            .sort-option-icon {
+                width: 18px;
+                height: 18px;
+                opacity: 0.6;
+                transition: all 0.3s ease;
+            }
+            
+            .sort-option.active .sort-option-icon {
+                opacity: 1;
+                color: #97D2AD;
+            }
+            
+            .sort-option:hover .sort-option-icon {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+            
+        /* Header styles are now included from header.html */
+        
+        @media (max-width: 767px) {
             .container {
                 padding: 0 16px;
             }
@@ -1286,6 +1513,12 @@
                 </div>
                 <span>Filtre</span>
             </button>
+            <button class="sort-btn" id="mobileSortToggle" aria-label="Sıralama Seçenekleri">
+                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18M3 12h18M3 18h18"/>
+                </svg>
+                <span>Sırala</span>
+            </button>
         </div>
 
         <!-- Desktop layout -->
@@ -1397,6 +1630,37 @@
         </section>
     </div>
 
+    <!-- Sort Menu -->
+    <div class="sort-menu" id="sortMenu">
+        <div class="sort-menu-title">Sıralama Seçenekleri</div>
+        <div class="sort-options">
+            <div class="sort-option" data-sort="date-newest">
+                <span>En Yeni</span>
+                <svg class="sort-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+            </div>
+            <div class="sort-option" data-sort="date-oldest">
+                <span>En Eski</span>
+                <svg class="sort-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22l-3.09-6.26L2 14.73l5-4.87-1.18-6.88L12 6.23l6.18-3.25L17 9.86l5 4.87-6.91 1.01L12 22z"/>
+                </svg>
+            </div>
+            <div class="sort-option" data-sort="price-low">
+                <span>Fiyat (Düşük → Yüksek)</span>
+                <svg class="sort-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+            </div>
+            <div class="sort-option" data-sort="price-high">
+                <span>Fiyat (Yüksek → Düşük)</span>
+                <svg class="sort-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 7L7 17M7 17H17M7 17V7"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
     <!-- Mobile Drawer -->
     <div class="mobile-drawer" id="mobileDrawer">
         <div class="drawer-content">
@@ -1464,21 +1728,48 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-                         // Mobile filter toggle
-             const mobileFilterToggle = document.getElementById('mobileFilterToggle');
-             const mobileDrawer = document.getElementById('mobileDrawer');
-             const drawerClose = document.getElementById('drawerClose');
+            // Mobile filter toggle
+            const mobileFilterToggle = document.getElementById('mobileFilterToggle');
+            const mobileDrawer = document.getElementById('mobileDrawer');
+            const drawerClose = document.getElementById('drawerClose');
 
-             if (mobileFilterToggle && mobileDrawer) {
-                 mobileFilterToggle.addEventListener('click', function() {
-                     mobileDrawer.classList.add('open');
-                     mobileFilterToggle.classList.add('active');
-                     // Re-add event listeners for mobile drawer elements
-                     setTimeout(() => {
-                         addMobileDrawerEventListeners();
-                     }, 100);
-                 });
-             }
+            if (mobileFilterToggle && mobileDrawer) {
+                mobileFilterToggle.addEventListener('click', function() {
+                    mobileDrawer.classList.add('open');
+                    mobileFilterToggle.classList.add('active');
+                    // Close sort menu if open
+                    const sortMenu = document.getElementById('sortMenu');
+                    if (sortMenu) {
+                        sortMenu.classList.remove('show');
+                    }
+                    const sortToggle = document.getElementById('mobileSortToggle');
+                    if (sortToggle) {
+                        sortToggle.classList.remove('active');
+                    }
+                    // Re-add event listeners for mobile drawer elements
+                    setTimeout(() => {
+                        addMobileDrawerEventListeners();
+                    }, 100);
+                });
+            }
+
+            // Mobile sort toggle
+            const mobileSortToggle = document.getElementById('mobileSortToggle');
+            const sortMenu = document.getElementById('sortMenu');
+
+            if (mobileSortToggle && sortMenu) {
+                mobileSortToggle.addEventListener('click', function() {
+                    sortMenu.classList.toggle('show');
+                    mobileSortToggle.classList.toggle('active');
+                    // Close filter drawer if open
+                    if (mobileDrawer) {
+                        mobileDrawer.classList.remove('open');
+                    }
+                    if (mobileFilterToggle) {
+                        mobileFilterToggle.classList.remove('active');
+                    }
+                });
+            }
 
                          if (drawerClose && mobileDrawer) {
                  drawerClose.addEventListener('click', function() {
@@ -1487,15 +1778,46 @@
                  });
              }
 
-             // Close drawer when clicking outside
-             if (mobileDrawer) {
-                 mobileDrawer.addEventListener('click', function(e) {
-                     if (e.target === mobileDrawer) {
-                         mobileDrawer.classList.remove('open');
-                         mobileFilterToggle.classList.remove('active');
-                     }
-                 });
-             }
+            // Close drawer when clicking outside
+            if (mobileDrawer) {
+                mobileDrawer.addEventListener('click', function(e) {
+                    if (e.target === mobileDrawer) {
+                        mobileDrawer.classList.remove('open');
+                        mobileFilterToggle.classList.remove('active');
+                    }
+                });
+            }
+
+            // Close sort menu when clicking outside
+            if (sortMenu) {
+                sortMenu.addEventListener('click', function(e) {
+                    if (e.target === sortMenu) {
+                        sortMenu.classList.remove('show');
+                        mobileSortToggle.classList.remove('active');
+                    }
+                });
+            }
+
+            // Sort option event listeners
+            const sortOptions = document.querySelectorAll('.sort-option');
+            sortOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const sortType = this.getAttribute('data-sort');
+                    
+                    // Remove active class from all options
+                    sortOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to selected option
+                    this.classList.add('active');
+                    
+                    // Apply sorting
+                    applySorting(sortType);
+                    
+                    // Close sort menu
+                    sortMenu.classList.remove('show');
+                    mobileSortToggle.classList.remove('active');
+                });
+            });
 
             // Property button functionality (removing old inspect buttons since they don't exist anymore)
             // The new property buttons have onclick="window.open('detay.html', '_blank')" directly in HTML
@@ -1620,11 +1942,26 @@
             if (newsletterBtn && newsletterEmail) {
                 newsletterBtn.addEventListener('click', () => {
                     const email = newsletterEmail.value.trim();
-                    if (email) {
-                        alert('Başarıyla abone oldunuz!');
-                        newsletterEmail.value = '';
+                    
+                    if (!email) {
+                        alert('Lütfen e-posta adresinizi girin.');
+                        newsletterEmail.focus();
+                        return;
+                    }
+                    
+                    // Basic email validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        alert('Lütfen geçerli bir e-posta adresi girin.');
+                        newsletterEmail.focus();
+                        return;
+                    }
+                    
+                    // Save email to Firebase Realtime Database
+                    if (typeof saveNewsletterEmail === 'function') {
+                        saveNewsletterEmail(email);
                     } else {
-                        alert('Lütfen geçerli bir email adresi girin.');
+                        alert('Sistem hatası. Lütfen daha sonra tekrar deneyin.');
                     }
                 });
             }
@@ -1674,6 +2011,7 @@
 
         // Initialize Firebase
         let database;
+        window.database = null; // Global database reference
         
         function initializeFirebaseAndLoadProperties() {
             console.log('Initializing Firebase...');
@@ -1694,6 +2032,7 @@
                     firebase.initializeApp(firebaseConfig);
                 }
                 database = firebase.database();
+                window.database = database; // Set global reference
                 console.log('Firebase initialized successfully');
                 
                 // Load properties after successful initialization
@@ -1711,6 +2050,7 @@
         let allProperties = [];
         let filteredProperties = [];
         let currentFilters = {};
+        let currentSortType = 'date-newest'; // Default sort
 
         function loadAllProperties() {
             console.log('Loading all properties from Firebase...');
@@ -1759,8 +2099,15 @@
                     
                     // Initially show all properties
                     filteredProperties = [...allProperties];
-                    updatePropertyGrid(filteredProperties);
-                    updateActiveCount(filteredProperties.length);
+                    
+                    // Set default sort option as active
+                    const defaultSortOption = document.querySelector('.sort-option[data-sort="date-newest"]');
+                    if (defaultSortOption) {
+                        defaultSortOption.classList.add('active');
+                    }
+                    
+                    // Apply default sorting
+                    applySorting(currentSortType);
                 })
                 .catch((error) => {
                     console.error('Error loading properties:', error);
@@ -1770,64 +2117,6 @@
         }
         let imarDurumuOptions = [];
         let tapuDurumuOptions = [];
-
-        // Load all properties from Firebase
-        function loadAllProperties() {
-            console.log('Loading all properties from Firebase...');
-            
-            if (typeof firebase === 'undefined' || !database) {
-                console.error('Firebase not initialized');
-                const errorPlaceholder = document.getElementById('loadingPlaceholder');
-                if (errorPlaceholder) {
-                    errorPlaceholder.innerHTML = '<p>Firebase bağlantısı kurulamadı.</p>';
-                }
-                return;
-            }
-
-            database.ref('ilanlar').once('value')
-                .then((snapshot) => {
-                    const propertiesData = snapshot.val();
-                    
-                    if (!propertiesData) {
-                        console.log('No properties found');
-                        updatePropertyGrid([]);
-                        updateActiveCount(0);
-                        return;
-                    }
-
-                    // Convert Firebase object to array
-                    allProperties = [];
-                    Object.keys(propertiesData).forEach(key => {
-                        const property = propertiesData[key];
-                        property.id = key;
-                        allProperties.push(property);
-                    });
-
-                    console.log(`Loaded ${allProperties.length} properties:`, allProperties);
-                    
-                    // Sort by creation date (newest first)
-                    allProperties.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                    
-                    // Load filter options after loading properties
-                    loadFilterOptions();
-                    
-                    // Load additional filter data from Firebase
-                    loadAdditionalFilterData();
-                    
-                    // Apply URL parameters if any
-                    applyUrlParameters();
-                    
-                    // Initially show all properties
-                    filteredProperties = [...allProperties];
-                    updatePropertyGrid(filteredProperties);
-                    updateActiveCount(filteredProperties.length);
-                })
-                .catch((error) => {
-                    console.error('Error loading properties:', error);
-                    updatePropertyGrid([]);
-                    updateActiveCount(0);
-                });
-        }
 
         // Apply URL parameters to filters
         function applyUrlParameters() {
@@ -2430,8 +2719,52 @@
             });
             
             console.log(`Filtered ${filteredProperties.length} properties from ${allProperties.length} total`);
-            updatePropertyGrid(filteredProperties);
-            updateActiveCount(filteredProperties.length);
+            
+            // Apply current sorting to filtered properties
+            applySorting(currentSortType);
+        }
+
+        // Apply sorting to properties
+        function applySorting(sortType) {
+            currentSortType = sortType;
+            console.log('Applying sort:', sortType);
+            
+            if (!filteredProperties || filteredProperties.length === 0) {
+                console.log('No properties to sort');
+                return;
+            }
+            
+            let sortedProperties = [...filteredProperties];
+            
+            switch (sortType) {
+                case 'date-newest':
+                    sortedProperties.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                    break;
+                case 'date-oldest':
+                    sortedProperties.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+                    break;
+                case 'price-low':
+                    sortedProperties.sort((a, b) => {
+                        const priceA = a.toplamFiyat || 0;
+                        const priceB = b.toplamFiyat || 0;
+                        return priceA - priceB;
+                    });
+                    break;
+                case 'price-high':
+                    sortedProperties.sort((a, b) => {
+                        const priceA = a.toplamFiyat || 0;
+                        const priceB = b.toplamFiyat || 0;
+                        return priceB - priceA;
+                    });
+                    break;
+                default:
+                    // Default to newest first
+                    sortedProperties.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            }
+            
+            console.log(`Sorted ${sortedProperties.length} properties by ${sortType}`);
+            updatePropertyGrid(sortedProperties);
+            updateActiveCount(sortedProperties.length);
         }
     </script>
     
