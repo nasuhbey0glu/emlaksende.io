@@ -312,6 +312,7 @@ function initializeSearchFunctionality() {
     });
 }
 
+
 // ===== SMOOTH SCROLLING FOR INTERNAL LINKS =====
 function initializeSmoothScrolling() {
     const links = document.querySelectorAll('a[href^="#"]');
@@ -1680,8 +1681,8 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
         // Format price
         const formattedPrice = new Intl.NumberFormat('tr-TR').format(property.toplamFiyat);
         
-        // Format location
-        const location = `${property.sehir ? property.sehir.charAt(0).toUpperCase() + property.sehir.slice(1) : ''}, ${property.ilce ? property.ilce.charAt(0).toUpperCase() + property.ilce.slice(1) : ''}`;
+        // Format location - şehir, ilçe ve mahalle bilgisini göster
+        const location = `${property.sehir ? property.sehir.charAt(0).toUpperCase() + property.sehir.slice(1) : ''}, ${property.ilce ? property.ilce.charAt(0).toUpperCase() + property.ilce.slice(1) : ''}${property.mahalle ? ', ' + property.mahalle.charAt(0).toUpperCase() + property.mahalle.slice(1) : ''}`;
         
         // Format area
         const formattedArea = `${property.metrekare ? property.metrekare.toLocaleString('tr-TR') : '0'} m²`;

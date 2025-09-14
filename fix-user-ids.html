@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User ID'leri Düzeltme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .user-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .warning { color: orange; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User ID'leri Düzeltme</h1>
+        <p>Bu sayfa users tablosundaki kullanıcıları Firebase Auth UID'leri ile eşleştirir.</p>
+        
+        <div id="status"></div>
+        <div id="usersList"></div>
+        
+        <button onclick="loadUsers()">Kullanıcıları Yükle</button>
+        <button onclick="fixUserIds()" id="fixBtn" disabled>ID'leri Düzelt</button>
+        <button onclick="clearStatus()">Temizle</button>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+        let users = [];
+        let fixedCount = 0;
+
+        function loadUsers() {
+            const status = document.getElementById('status');
+            const usersList = document.getElementById('usersList');
+            
+            status.innerHTML = '<p class="warning">Kullanıcılar yükleniyor...</p>';
+            
+            database.ref('users').once('value')
+                .then((snapshot) => {
+                    const usersData = snapshot.val();
+                    users = [];
+                    
+                    if (usersData) {
+                        Object.keys(usersData).forEach(key => {
+                            const user = usersData[key];
+                            users.push({
+                                oldId: key,
+                                ...user
+                            });
+                        });
+                    }
+                    
+                    displayUsers();
+                    document.getElementById('fixBtn').disabled = false;
+                    status.innerHTML = `<p class="success">${users.length} kullanıcı bulundu.</p>`;
+                })
+                .catch((error) => {
+                    status.innerHTML = `<p class="error">Hata: ${error.message}</p>`;
+                });
+        }
+
+        function displayUsers() {
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = '';
+            
+            users.forEach((user, index) => {
+                const userDiv = document.createElement('div');
+                userDiv.className = 'user-item';
+                userDiv.innerHTML = `
+                    <h3>${user.firstName} ${user.lastName}</h3>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Eski ID:</strong> ${user.oldId}</p>
+                    <p><strong>Firebase UID:</strong> <span id="firebase-uid-${index}">Kontrol ediliyor...</span></p>
+                    <p><strong>Durum:</strong> <span id="status-${index}">Bekliyor</span></p>
+                `;
+                usersList.appendChild(userDiv);
+            });
+        }
+
+        async function fixUserIds() {
+            const status = document.getElementById('status');
+            const fixBtn = document.getElementById('fixBtn');
+            
+            fixBtn.disabled = true;
+            fixedCount = 0;
+            
+            status.innerHTML = '<p class="warning">ID\'ler düzeltiliyor...</p>';
+            
+            for (let i = 0; i < users.length; i++) {
+                const user = users[i];
+                const statusElement = document.getElementById(`status-${i}`);
+                const firebaseUidElement = document.getElementById(`firebase-uid-${i}`);
+                
+                try {
+                    statusElement.textContent = 'Firebase Auth kullanıcısı aranıyor...';
+                    
+                    // Firebase Auth'da kullanıcıyı bul
+                    const userRecord = await auth.getUserByEmail(user.email);
+                    const firebaseUid = userRecord.uid;
+                    
+                    firebaseUidElement.textContent = firebaseUid;
+                    
+                    if (user.oldId !== firebaseUid) {
+                        statusElement.textContent = 'ID güncelleniyor...';
+                        
+                        // Yeni ID ile kullanıcı verilerini kopyala
+                        await database.ref(`users/${firebaseUid}`).set({
+                            ...user,
+                            firebaseUid: firebaseUid,
+                            updatedAt: new Date().toISOString()
+                        });
+                        
+                        // Eski ID'yi sil
+                        await database.ref(`users/${user.oldId}`).remove();
+                        
+                        statusElement.textContent = 'Başarılı';
+                        statusElement.className = 'success';
+                        fixedCount++;
+                    } else {
+                        statusElement.textContent = 'Zaten doğru ID';
+                        statusElement.className = 'success';
+                    }
+                    
+                } catch (error) {
+                    console.error(`Kullanıcı ${user.email} düzeltme hatası:`, error);
+                    statusElement.textContent = `Hata: ${error.message}`;
+                    statusElement.className = 'error';
+                    firebaseUidElement.textContent = 'Bulunamadı';
+                }
+                
+                // Kısa bir bekleme
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            
+            status.innerHTML = `<p class="success">Düzeltme tamamlandı! ${fixedCount}/${users.length} kullanıcı başarıyla düzeltildi.</p>`;
+            fixBtn.disabled = false;
+        }
+
+        function clearStatus() {
+            document.getElementById('status').innerHTML = '';
+            document.getElementById('usersList').innerHTML = '';
+            document.getElementById('fixBtn').disabled = true;
+        }
+
+        // Initialize Firebase
+        const firebaseApp = initializeFirebase();
+        const auth = firebase.auth();
+        const database = getFirebaseDatabase();
+    </script>
+</body>
+</html>

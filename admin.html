@@ -10,8 +10,12 @@
     
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- Firebase Konfigürasyonu -->
+    <script src="firebase-config.js"></script>
     
     <!-- Google Maps API -->
     <script>
@@ -300,6 +304,7 @@
             padding: 0.5rem;
             border-radius: 8px;
             transition: background-color 0.2s ease;
+            position: relative;
         }
 
         .user-menu:hover {
@@ -1989,15 +1994,15 @@
                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" style="color: var(--text-secondary);">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
                         </svg>
-                    </div>
-                    
-                    <!-- User Dropdown -->
-                    <div class="user-dropdown" id="userDropdown" style="display: none;">
-                        <div class="dropdown-item" onclick="logout()">
-                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
-                            </svg>
-                            Çıkış Yap
+                        
+                        <!-- User Dropdown -->
+                        <div class="user-dropdown" id="userDropdown" style="display: none;">
+                            <div class="dropdown-item" onclick="logout()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+                                </svg>
+                                Çıkış Yap
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2099,20 +2104,13 @@
 
     <script>
         // Firebase Configuration - Web App Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyBZ1_56GJ5tOhK5Eth6cXscv8jnM4bpdEI",
-            authDomain: "emlaksende-8646a.firebaseapp.com",
-            databaseURL: "https://emlaksende-8646a-default-rtdb.firebaseio.com/",
-            projectId: "emlaksende-8646a",
-            storageBucket: "emlaksende-8646a.firebasestorage.app",
-            messagingSenderId: "861976091519",
-            appId: "1:861976091519:web:a24b7811322e3fc97dd84a"
-        };
+        // Firebase konfigürasyonu artık firebase-config.js dosyasından yükleniyor
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
-        const database = firebase.database();
+        const firebaseApp = initializeFirebase();
+        const auth = firebase.auth();
+        const storage = getFirebaseStorage();
+        const database = getFirebaseDatabase();
 
         // Storage reference
         const storageRef = storage.ref();
@@ -3277,7 +3275,59 @@
                                             </div>
                                             <div>
                                                 <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Proje Açıklaması *</label>
-                                                <textarea id="projeAciklama" placeholder="Proje açıklamasını girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; min-height: 120px; resize: vertical;"></textarea>
+                                                
+                                                <!-- Quill.js Editor Container -->
+                                                <div id="projeQuillEditor" style="height: 200px; margin-bottom: 1rem;"></div>
+                                                
+                                                <!-- Editor Actions -->
+                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 0.75rem; background: var(--main-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                                                    <div style="display: flex; align-items: center; color: var(--text-secondary); font-size: 0.9rem;">
+                                                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.5rem;">
+                                                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                                                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <span id="projeQuillWordCount">0 kelime</span>
+                                                    </div>
+                                                    <div style="display: flex; gap: 0.5rem;">
+                                                        <button type="button" class="btn btn-secondary" onclick="clearProjeQuillEditor()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                                            </svg>
+                                                            Temizle
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary" onclick="insertProjeQuillSampleText()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.25rem;">
+                                                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                                            </svg>
+                                                            Örnek Metin
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Adres Bilgileri -->
+                                            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                                                <h5 style="margin: 0 0 1rem 0; color: var(--text-primary); font-size: 1rem; font-weight: 600;">📍 Adres Bilgileri</h5>
+                                                
+                                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                                    <div>
+                                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Şehir *</label>
+                                                        <select id="projeSehir" onchange="onProjeSehirChange()" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
+                                                            <option value="">Şehir seçin...</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">İlçe *</label>
+                                                        <select id="projeIlce" onchange="onProjeIlceChange()" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;" disabled>
+                                                            <option value="">Önce şehir seçin</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div style="margin-top: 1rem;">
+                                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Mahalle *</label>
+                                                    <input type="text" id="projeMahalle" placeholder="Mahalle adını girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -3650,14 +3700,14 @@
                                     
                                     <!-- Row 3: Şifre -->
                                     <div>
-                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Şifre *</label>
-                                        <input type="password" id="userPassword" placeholder="Şifre girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Şifre (opsiyonel)</label>
+                                        <input type="password" id="userPassword" placeholder="Yeni şifre (opsiyonel)" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
                                     </div>
                                     
                                     <!-- Row 4: Şifre Tekrar -->
                                     <div>
-                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Şifre Tekrar *</label>
-                                        <input type="password" id="userPasswordConfirm" placeholder="Şifreyi tekrar girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Şifre Tekrar (opsiyonel)</label>
+                                        <input type="password" id="userPasswordConfirm" placeholder="Yeni şifreyi tekrar girin..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem;">
                                     </div>
                                     
                                     <!-- Form Actions -->
@@ -8332,6 +8382,15 @@
         let activeIlanlarData = []; // Aktif ilanlar verisi
         let isEditingProje = false;
         let editingProjeId = null;
+        
+        // Proje Quill.js editör instance'ı
+        let projeQuillEditor = null;
+        
+        // Proje adres bilgileri için değişkenler
+        let projeCities = [];
+        let projeDistricts = [];
+        let selectedProjeCityId = null;
+        let selectedProjeDistrictId = null;
 
         // Proje formu göster
         function showAddProjeForm() {
@@ -8355,6 +8414,14 @@
                 // Düzenleme durumunu sıfırla
                 isEditingProje = false;
                 editingProjeId = null;
+                
+                // Quill.js editörünü başlat
+                setTimeout(() => {
+                    initializeProjeQuillEditor();
+                }, 100);
+                
+                // Şehirleri yükle
+                loadProjeCities();
             }
         }
 
@@ -8371,10 +8438,34 @@
         function clearProjeForm() {
             // Input alanlarını temizle
             const baslik = document.getElementById('projeBaslik');
-            const aciklama = document.getElementById('projeAciklama');
             
             if (baslik) baslik.value = '';
-            if (aciklama) aciklama.value = '';
+            
+            // Quill.js editörünü temizle
+            if (projeQuillEditor) {
+                projeQuillEditor.setContents([]);
+                updateProjeQuillWordCount();
+            }
+            
+            // Adres alanlarını temizle
+            const sehir = document.getElementById('projeSehir');
+            const ilce = document.getElementById('projeIlce');
+            const mahalle = document.getElementById('projeMahalle');
+            
+            if (sehir) {
+                sehir.value = '';
+                sehir.disabled = false;
+            }
+            if (ilce) {
+                ilce.innerHTML = '<option value="">Önce şehir seçin</option>';
+                ilce.disabled = true;
+            }
+            if (mahalle) mahalle.value = '';
+            
+            // Adres değişkenlerini temizle
+            selectedProjeCityId = null;
+            selectedProjeDistrictId = null;
+            projeDistricts = [];
             
             // Checkbox'ları temizle
             const checkboxes = document.querySelectorAll('#projeFormContent input[type="checkbox"]');
@@ -8531,10 +8622,205 @@
             updateProjeIlanlariDisplay();
         }
 
+        // Proje Quill.js editörünü başlat
+        function initializeProjeQuillEditor() {
+            if (projeQuillEditor) {
+                projeQuillEditor = null;
+            }
+            
+            const quillContainer = document.getElementById('projeQuillEditor');
+            if (!quillContainer) return;
+            
+            // Quill.js konfigürasyonu
+            const quillOptions = {
+                theme: 'snow',
+                placeholder: 'Proje açıklamasını girin...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
+                        [{ 'align': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            };
+            
+            projeQuillEditor = new Quill(quillContainer, quillOptions);
+            
+            // Kelime sayısını güncelle
+            projeQuillEditor.on('text-change', function() {
+                updateProjeQuillWordCount();
+            });
+        }
+
+        // Proje Quill.js kelime sayısını güncelle
+        function updateProjeQuillWordCount() {
+            const wordCountElement = document.getElementById('projeQuillWordCount');
+            if (projeQuillEditor && wordCountElement) {
+                const text = projeQuillEditor.getText();
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                wordCountElement.textContent = `${words} kelime`;
+            }
+        }
+
+        // Proje Quill.js editörünü temizle
+        function clearProjeQuillEditor() {
+            if (confirm('Editor içeriğini temizlemek istediğinizden emin misiniz?')) {
+                if (projeQuillEditor) {
+                    projeQuillEditor.setContents([]);
+                    updateProjeQuillWordCount();
+                }
+            }
+        }
+
+        // Proje Quill.js editörüne örnek metin ekle
+        function insertProjeQuillSampleText() {
+            if (!projeQuillEditor) return;
+            
+            const sampleContent = `
+                <h3>🏗️ Proje Açıklaması</h3>
+                <p>Bu <strong>prestijli proje</strong>, modern yaşamın gereksinimlerini karşılayan <em>kaliteli konutlar</em> sunmaktadır.</p>
+                
+                <h4>📍 Proje Özellikleri:</h4>
+                <ul>
+                    <li>Merkezi konumda</li>
+                    <li>Modern mimari tasarım</li>
+                    <li>Geniş yeşil alanlar</li>
+                    <li>Güvenlik sistemi</li>
+                </ul>
+                
+                <h4>🏠 Konut Seçenekleri:</h4>
+                <p>1+1'den 4+1'e kadar farklı daire seçenekleri mevcuttur.</p>
+                
+                <p><strong>Yatırım fırsatı:</strong> Bu proje, gelecekteki değer artışı potansiyeli ile yatırımcılar için ideal bir seçenektir.</p>
+            `;
+            
+            projeQuillEditor.clipboard.dangerouslyPasteHTML(sampleContent);
+            updateProjeQuillWordCount();
+        }
+
+        // Proje şehirlerini yükle
+        async function loadProjeCities() {
+            console.log('Proje şehirleri yükleniyor...');
+            try {
+                // Cache'den şehirleri al
+                if (!cache.provinces) {
+                    console.log('API\'den proje şehirleri çekiliyor...');
+                    const response = await fetch(`${API_BASE}/provinces?limit=1000&fields=id,name`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    cache.provinces = data.data || [];
+                    console.log('Proje şehirleri yüklendi:', cache.provinces.length);
+                }
+                
+                projeCities = cache.provinces;
+                
+                // Şehir dropdown'ını doldur
+                const citySelect = document.getElementById('projeSehir');
+                if (citySelect) {
+                    citySelect.innerHTML = '<option value="">Şehir seçin...</option>';
+                    projeCities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.name;
+                        option.textContent = city.name;
+                        citySelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Proje şehirleri yüklenirken hata:', error);
+            }
+        }
+
+        // Proje ilçelerini yükle
+        async function loadProjeDistricts(cityName) {
+            console.log('Proje ilçeleri yükleniyor:', cityName);
+            try {
+                // Şehir ID'sini bul
+                const city = projeCities.find(c => c.name === cityName);
+                if (!city) {
+                    console.error('Şehir bulunamadı:', cityName);
+                    return;
+                }
+                
+                // Cache'den ilçeleri kontrol et
+                let districts = cache.districtsByProvinceId.get(city.id);
+                if (!districts) {
+                    console.log('API\'den proje ilçeleri çekiliyor...');
+                    const response = await fetch(`${API_BASE}/districts?provinceId=${city.id}&limit=1000&fields=id,name`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    districts = data.data || [];
+                    cache.districtsByProvinceId.set(city.id, districts);
+                    console.log('Proje ilçeleri yüklendi:', districts.length);
+                }
+                
+                projeDistricts = districts;
+                
+                // İlçe dropdown'ını doldur
+                const districtSelect = document.getElementById('projeIlce');
+                if (districtSelect) {
+                    districtSelect.innerHTML = '<option value="">İlçe seçin...</option>';
+                    projeDistricts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.name;
+                        option.textContent = district.name;
+                        districtSelect.appendChild(option);
+                    });
+                    districtSelect.disabled = false;
+                }
+            } catch (error) {
+                console.error('Proje ilçeleri yüklenirken hata:', error);
+            }
+        }
+
+        // Proje şehir değiştiğinde
+        function onProjeSehirChange() {
+            const citySelect = document.getElementById('projeSehir');
+            const cityName = citySelect.value;
+            selectedProjeCityId = cityName;
+            
+            if (cityName) {
+                loadProjeDistricts(cityName);
+            } else {
+                // Şehir seçimi temizlendiğinde ilçe dropdown'ını temizle
+                const districtSelect = document.getElementById('projeIlce');
+                if (districtSelect) {
+                    districtSelect.innerHTML = '<option value="">Önce şehir seçin</option>';
+                    districtSelect.disabled = true;
+                }
+                selectedProjeDistrictId = null;
+                projeDistricts = [];
+            }
+        }
+
+        // Proje ilçe değiştiğinde
+        function onProjeIlceChange() {
+            const districtSelect = document.getElementById('projeIlce');
+            const districtName = districtSelect.value;
+            selectedProjeDistrictId = districtName;
+        }
+
         // Proje kaydet
         function saveProje() {
             const baslik = document.getElementById('projeBaslik').value.trim();
-            const aciklama = document.getElementById('projeAciklama').value.trim();
+            
+            // Quill.js editöründen içeriği al
+            let aciklama = '';
+            if (projeQuillEditor) {
+                aciklama = projeQuillEditor.root.innerHTML;
+                // Boş HTML kontrolü
+                if (aciklama === '<p><br></p>' || aciklama === '<p></p>' || aciklama.trim() === '') {
+                    aciklama = '';
+                }
+            }
             
             // Validation
             if (!baslik) {
@@ -8549,6 +8835,26 @@
             
             if (selectedProjeIlanlar.size === 0) {
                 showAlert('projeAlert', 'En az bir ilan seçmelisiniz!', 'error');
+                return;
+            }
+            
+            // Adres validasyonu
+            const sehir = document.getElementById('projeSehir').value.trim();
+            const ilce = document.getElementById('projeIlce').value.trim();
+            const mahalle = document.getElementById('projeMahalle').value.trim();
+            
+            if (!sehir) {
+                showAlert('projeAlert', 'Şehir seçimi zorunludur!', 'error');
+                return;
+            }
+            
+            if (!ilce) {
+                showAlert('projeAlert', 'İlçe seçimi zorunludur!', 'error');
+                return;
+            }
+            
+            if (!mahalle) {
+                showAlert('projeAlert', 'Mahalle bilgisi zorunludur!', 'error');
                 return;
             }
             
@@ -8593,6 +8899,11 @@
             const projeData = {
                 baslik: baslik,
                 aciklama: aciklama,
+                adres: {
+                    sehir: sehir,
+                    ilce: ilce,
+                    mahalle: mahalle
+                },
                 altyapi_ozellikleri: altyapi_ozellikleri,
                 konum_ozellikleri: konum_ozellikleri,
                 genel_ozellikler: genel_ozellikler,
@@ -8715,7 +9026,46 @@
                     
                     // Form alanlarını doldur
                     document.getElementById('projeBaslik').value = proje.baslik || '';
-                    document.getElementById('projeAciklama').value = proje.aciklama || '';
+                    
+                    // Quill.js editörünü başlat ve içeriği yükle
+                    setTimeout(() => {
+                        initializeProjeQuillEditor();
+                        if (projeQuillEditor && proje.aciklama) {
+                            projeQuillEditor.clipboard.dangerouslyPasteHTML(proje.aciklama);
+                            updateProjeQuillWordCount();
+                        }
+                    }, 100);
+                    
+                    // Adres bilgilerini yükle
+                    if (proje.adres) {
+                        setTimeout(async () => {
+                            // Şehirleri yükle
+                            await loadProjeCities();
+                            
+                            // Şehir seçimini yap
+                            const sehirSelect = document.getElementById('projeSehir');
+                            if (sehirSelect && proje.adres.sehir) {
+                                sehirSelect.value = proje.adres.sehir;
+                                selectedProjeCityId = proje.adres.sehir;
+                                
+                                // İlçeleri yükle
+                                await loadProjeDistricts(proje.adres.sehir);
+                                
+                                // İlçe seçimini yap
+                                const ilceSelect = document.getElementById('projeIlce');
+                                if (ilceSelect && proje.adres.ilce) {
+                                    ilceSelect.value = proje.adres.ilce;
+                                    selectedProjeDistrictId = proje.adres.ilce;
+                                }
+                            }
+                            
+                            // Mahalle bilgisini yükle
+                            const mahalleInput = document.getElementById('projeMahalle');
+                            if (mahalleInput && proje.adres.mahalle) {
+                                mahalleInput.value = proje.adres.mahalle;
+                            }
+                        }, 200);
+                    }
                     
                     // Özellikleri işaretle
                     if (proje.altyapi_ozellikleri) {
@@ -9071,6 +9421,14 @@
         window.loadProjeList = loadProjeList;
         window.editProje = editProje;
         window.deleteProje = deleteProje;
+        window.initializeProjeQuillEditor = initializeProjeQuillEditor;
+        window.updateProjeQuillWordCount = updateProjeQuillWordCount;
+        window.clearProjeQuillEditor = clearProjeQuillEditor;
+        window.insertProjeQuillSampleText = insertProjeQuillSampleText;
+        window.loadProjeCities = loadProjeCities;
+        window.loadProjeDistricts = loadProjeDistricts;
+        window.onProjeSehirChange = onProjeSehirChange;
+        window.onProjeIlceChange = onProjeIlceChange;
         window.allowDrop = allowDrop;
         window.dragStart = dragStart;
         window.dropIlan = dropIlan;
@@ -11115,8 +11473,8 @@
             editingUserId = null;
         }
 
-        // Kullanıcı kaydetme
-        function saveUser() {
+        // Kullanıcı kaydetme (Firebase Auth ile entegre)
+        async function saveUser() {
             const firstNameInput = document.getElementById('userFirstName');
             const lastNameInput = document.getElementById('userLastName');
             const emailInput = document.getElementById('userEmail');
@@ -11154,55 +11512,105 @@
                 return;
             }
             
-            if (!password) {
-                showGenericAlert('userAlert', 'Şifre gereklidir.', 'error');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showGenericAlert('userAlert', 'Şifre en az 6 karakter olmalıdır.', 'error');
-                return;
-            }
-            
-            if (password !== passwordConfirm) {
-                showGenericAlert('userAlert', 'Şifreler eşleşmiyor.', 'error');
-                return;
-            }
-            
-            const userData = {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password, // Gerçek uygulamada şifre hash'lenmelidir
-                isActive: true,
-                createdAt: firebase.database.ServerValue.TIMESTAMP
-            };
-            
-            if (editingUserId) {
-                // Düzenleme
-                userData.updatedAt = firebase.database.ServerValue.TIMESTAMP;
-                database.ref('users').child(editingUserId).set(userData)
-                    .then(() => {
-                        showGenericAlert('userAlert', 'Kullanıcı başarıyla güncellendi.', 'success');
-                        hideUserForm();
-                        loadUsers();
-                    })
-                    .catch((error) => {
-                        console.error('Kullanıcı güncelleme hatası:', error);
-                        showGenericAlert('userAlert', 'Güncelleme sırasında hata oluştu: ' + error.message, 'error');
-                    });
+            // Şifre kontrolü - sadece yeni kullanıcı için zorunlu
+            if (!editingUserId) {
+                if (!password) {
+                    showGenericAlert('userAlert', 'Şifre gereklidir.', 'error');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    showGenericAlert('userAlert', 'Şifre en az 6 karakter olmalıdır.', 'error');
+                    return;
+                }
+                
+                if (password !== passwordConfirm) {
+                    showGenericAlert('userAlert', 'Şifreler eşleşmiyor.', 'error');
+                    return;
+                }
             } else {
-                // Yeni ekleme
-                database.ref('users').push(userData)
-                    .then(() => {
-                        showGenericAlert('userAlert', 'Kullanıcı başarıyla eklendi.', 'success');
-                        hideUserForm();
-                        loadUsers();
-                    })
-                    .catch((error) => {
-                        console.error('Kullanıcı ekleme hatası:', error);
-                        showGenericAlert('userAlert', 'Ekleme sırasında hata oluştu: ' + error.message, 'error');
-                    });
+                // Düzenleme modunda şifre opsiyonel
+                if (password && password.length > 0) {
+                    if (password.length < 6) {
+                        showGenericAlert('userAlert', 'Şifre en az 6 karakter olmalıdır.', 'error');
+                        return;
+                    }
+                    
+                    if (password !== passwordConfirm) {
+                        showGenericAlert('userAlert', 'Şifreler eşleşmiyor.', 'error');
+                        return;
+                    }
+                }
+            }
+            
+            try {
+                if (editingUserId) {
+                    // Düzenleme - Sadece Realtime Database'de güncelle
+                    const userData = {
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        isActive: true,
+                        updatedAt: firebase.database.ServerValue.TIMESTAMP
+                    };
+                    
+                    // Eğer şifre değiştirildiyse, şifreyi de güncelle
+                    if (password && password.length >= 6) {
+                        userData.password = password; // Şifre hash'lenmeli ama şimdilik böyle
+                    }
+                    
+                    await database.ref('users').child(editingUserId).set(userData);
+                    showGenericAlert('userAlert', 'Kullanıcı başarıyla güncellendi.', 'success');
+                    
+                } else {
+                    // Yeni ekleme - Firebase Auth'da kullanıcı oluştur
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    const firebaseUser = userCredential.user;
+                    
+                    // Realtime Database'de kullanıcı bilgilerini kaydet
+                    const userData = {
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        isActive: true,
+                        firebaseUid: firebaseUser.uid,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    };
+                    
+                    await database.ref('users').child(firebaseUser.uid).set(userData);
+                    showGenericAlert('userAlert', 'Kullanıcı başarıyla eklendi.', 'success');
+                    
+                    // Admin olarak giriş yapmaya devam et
+                    const currentUser = auth.currentUser;
+                    if (currentUser) {
+                        // Mevcut admin kullanıcısı ile tekrar giriş yap
+                        // Bu kısım gerekli değil, çünkü zaten admin olarak giriş yapmışız
+                    }
+                }
+                
+                hideUserForm();
+                loadUsers();
+                
+            } catch (error) {
+                console.error('Kullanıcı işlemi hatası:', error);
+                let errorMessage = 'İşlem sırasında hata oluştu.';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'Bu e-posta adresi zaten kullanımda.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Geçersiz e-posta adresi.';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'Şifre çok zayıf.';
+                        break;
+                    case 'auth/requires-recent-login':
+                        errorMessage = 'Bu işlem için tekrar giriş yapmanız gerekiyor.';
+                        break;
+                }
+                
+                showGenericAlert('userAlert', errorMessage, 'error');
             }
         }
 
@@ -11265,6 +11673,14 @@
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-sm ${user.isActive ? 'btn-warning' : 'btn-success'}" onclick="toggleUserStatus('${user.id}', ${user.isActive})" title="${user.isActive ? 'Pasif Yap' : 'Aktif Yap'}">
+                                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                            ${user.isActive ? 
+                                                '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>' :
+                                                '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>'
+                                            }
+                                        </svg>
+                                    </button>
                                     <button class="btn btn-sm btn-secondary" onclick="editUser('${user.id}')" title="Düzenle">
                                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
@@ -11333,18 +11749,49 @@
                 });
         }
 
-        // Kullanıcı silme
-        function deleteUser(id, userName) {
+        // Kullanıcı durumunu değiştirme (Aktif/Pasif)
+        async function toggleUserStatus(id, currentStatus) {
+            try {
+                const newStatus = !currentStatus;
+                const statusText = newStatus ? 'aktif' : 'pasif';
+                
+                await database.ref('users').child(id).update({
+                    isActive: newStatus,
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                });
+                
+                showGenericAlert('userAlert', `Kullanıcı ${statusText} yapıldı.`, 'success');
+                loadUsers();
+                
+            } catch (error) {
+                console.error('Kullanıcı durumu değiştirme hatası:', error);
+                showGenericAlert('userAlert', 'Durum değiştirilirken hata oluştu: ' + error.message, 'error');
+            }
+        }
+
+        // Kullanıcı silme (Firebase Auth ile entegre)
+        async function deleteUser(id, userName) {
             if (confirm(`"${userName}" adlı kullanıcıyı silmek istediğinizden emin misiniz?`)) {
-                database.ref('users').child(id).remove()
-                    .then(() => {
-                        showGenericAlert('userAlert', 'Kullanıcı başarıyla silindi.', 'success');
-                        loadUsers();
-                    })
-                    .catch((error) => {
-                        console.error('Kullanıcı silme hatası:', error);
-                        showGenericAlert('userAlert', 'Silme sırasında hata oluştu: ' + error.message, 'error');
-                    });
+                try {
+                    // Önce kullanıcı bilgilerini al
+                    const userSnapshot = await database.ref('users').child(id).once('value');
+                    const userData = userSnapshot.val();
+                    
+                    if (userData && userData.firebaseUid) {
+                        // Firebase Auth'dan kullanıcıyı sil
+                        // Not: Admin panelinde Firebase Admin SDK gerekir, şimdilik sadece Realtime Database'den silelim
+                        console.log('Firebase Auth kullanıcısı silinmeli:', userData.firebaseUid);
+                    }
+                    
+                    // Realtime Database'den kullanıcıyı sil
+                    await database.ref('users').child(id).remove();
+                    showGenericAlert('userAlert', 'Kullanıcı başarıyla silindi.', 'success');
+                    loadUsers();
+                    
+                } catch (error) {
+                    console.error('Kullanıcı silme hatası:', error);
+                    showGenericAlert('userAlert', 'Silme sırasında hata oluştu: ' + error.message, 'error');
+                }
             }
         }
 
@@ -11363,6 +11810,7 @@
         window.loadUsers = loadUsers;
         window.editUser = editUser;
         window.deleteUser = deleteUser;
+        window.toggleUserStatus = toggleUserStatus;
 
         // ==================== SAYFA YÖNETİMİ ====================
 
@@ -11688,24 +12136,25 @@
         // Dashboard fonksiyonunu window'a ekle
         window.loadDashboardStats = loadDashboardStats;
 
-        // ==================== LOGIN AUTHENTICATION ====================
+        // ==================== FIREBASE AUTHENTICATION ====================
         
         // Giriş durumunu kontrol et
         function checkLoginStatus() {
-            const isLoggedIn = localStorage.getItem('adminLoggedIn');
-            const loginContainer = document.getElementById('loginContainer');
-            const adminContainer = document.getElementById('adminContainer');
-            
-            if (isLoggedIn === 'true') {
-                // Kullanıcı giriş yapmış, admin panelini göster
-                if (loginContainer) loginContainer.style.display = 'none';
-                if (adminContainer) adminContainer.style.display = 'block';
-                updateUserInfo(); // Kullanıcı bilgilerini güncelle
-            } else {
-                // Kullanıcı giriş yapmamış, giriş ekranını göster
-                if (loginContainer) loginContainer.style.display = 'flex';
-                if (adminContainer) adminContainer.style.display = 'none';
-            }
+            auth.onAuthStateChanged((user) => {
+                const loginContainer = document.getElementById('loginContainer');
+                const adminContainer = document.getElementById('adminContainer');
+                
+                if (user) {
+                    // Kullanıcı giriş yapmış, admin panelini göster
+                    if (loginContainer) loginContainer.style.display = 'none';
+                    if (adminContainer) adminContainer.style.display = 'block';
+                    updateUserInfo(user); // Kullanıcı bilgilerini güncelle
+                } else {
+                    // Kullanıcı giriş yapmamış, giriş ekranını göster
+                    if (loginContainer) loginContainer.style.display = 'flex';
+                    if (adminContainer) adminContainer.style.display = 'none';
+                }
+            });
         }
 
         // Giriş formu gönderimi
@@ -11733,44 +12182,62 @@
             // Butonu loading durumuna getir
             setLoginButtonLoading(true);
             
-            // Firebase'den kullanıcıları kontrol et
-            database.ref('users').once('value')
-                .then((snapshot) => {
-                    const users = snapshot.val();
-                    let userFound = false;
+            // Firebase Authentication ile giriş yap
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
                     
-                    if (users) {
-                        Object.keys(users).forEach(key => {
-                            const user = users[key];
-                            if (user.email === email && user.password === password && user.isActive === true) {
-                                userFound = true;
-                                // Giriş başarılı
-                                localStorage.setItem('adminLoggedIn', 'true');
-                                localStorage.setItem('adminUser', JSON.stringify({
-                                    id: key,
-                                    firstName: user.firstName,
-                                    lastName: user.lastName,
-                                    email: user.email
-                                }));
+                    // Admin kullanıcı kontrolü
+                    return database.ref('users').orderByChild('email').equalTo(email).once('value')
+                        .then((snapshot) => {
+                            const users = snapshot.val();
+                            if (users) {
+                                const userKey = Object.keys(users)[0];
+                                const userData = users[userKey];
                                 
-                                showLoginAlert('Giriş başarılı! Yönlendiriliyorsunuz...', 'success');
-                                
-                                setTimeout(() => {
-                                    checkLoginStatus();
-                                    // Dashboard verilerini yükle
-                                    loadDashboardStats();
-                                }, 1000);
+                                if (userData.isActive === true) {
+                                    // Admin kullanıcı, giriş başarılı
+                                    showLoginAlert('Giriş başarılı! Yönlendiriliyorsunuz...', 'success');
+                                    
+                                    setTimeout(() => {
+                                        // Dashboard verilerini yükle
+                                        loadDashboardStats();
+                                    }, 1000);
+                                } else {
+                                    // Kullanıcı aktif değil
+                                    auth.signOut();
+                                    showLoginAlert('Hesabınız aktif değil. Lütfen yönetici ile iletişime geçin.', 'error');
+                                }
+                            } else {
+                                // Kullanıcı admin değil
+                                auth.signOut();
+                                showLoginAlert('Bu hesap admin yetkisine sahip değil.', 'error');
                             }
                         });
-                    }
-                    
-                    if (!userFound) {
-                        showLoginAlert('E-posta veya şifre hatalı.', 'error');
-                    }
                 })
                 .catch((error) => {
-                    console.error('Giriş kontrolü hatası:', error);
-                    showLoginAlert('Giriş sırasında bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+                    console.error('Giriş hatası:', error);
+                    let errorMessage = 'Giriş sırasında bir hata oluştu.';
+                    
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                            errorMessage = 'Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı.';
+                            break;
+                        case 'auth/wrong-password':
+                            errorMessage = 'Şifre hatalı.';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'Geçersiz e-posta adresi.';
+                            break;
+                        case 'auth/user-disabled':
+                            errorMessage = 'Bu hesap devre dışı bırakılmış.';
+                            break;
+                        case 'auth/too-many-requests':
+                            errorMessage = 'Çok fazla başarısız giriş denemesi. Lütfen daha sonra tekrar deneyin.';
+                            break;
+                    }
+                    
+                    showLoginAlert(errorMessage, 'error');
                 })
                 .finally(() => {
                     setLoginButtonLoading(false);
@@ -11813,9 +12280,13 @@
 
         // Çıkış yap
         function logout() {
-            localStorage.removeItem('adminLoggedIn');
-            localStorage.removeItem('adminUser');
-            checkLoginStatus();
+            auth.signOut().then(() => {
+                console.log('Çıkış yapıldı');
+                // onAuthStateChanged listener otomatik olarak giriş ekranını gösterecek
+            }).catch((error) => {
+                console.error('Çıkış hatası:', error);
+                showGenericAlert('userAlert', 'Çıkış yapılırken hata oluştu.', 'error');
+            });
         }
 
         // User dropdown toggle
@@ -11827,29 +12298,34 @@
         }
 
         // Kullanıcı bilgilerini güncelle
-        function updateUserInfo() {
-            const userData = localStorage.getItem('adminUser');
-            if (userData) {
-                const user = JSON.parse(userData);
-                const userAvatar = document.getElementById('userAvatar');
-                const userName = document.getElementById('userName');
-                
-                if (userAvatar) {
-                    userAvatar.textContent = user.firstName ? user.firstName.charAt(0).toUpperCase() : 'U';
-                }
-                
-                if (userName) {
-                    userName.textContent = `${user.firstName} ${user.lastName}`;
-                }
+        function updateUserInfo(firebaseUser) {
+            if (firebaseUser) {
+                // Firebase'den kullanıcı detaylarını al
+                database.ref('users').orderByChild('email').equalTo(firebaseUser.email).once('value')
+                    .then((snapshot) => {
+                        const users = snapshot.val();
+                        if (users) {
+                            const userKey = Object.keys(users)[0];
+                            const userData = users[userKey];
+                            
+                            const userAvatar = document.getElementById('userAvatar');
+                            const userName = document.getElementById('userName');
+                            
+                            if (userAvatar) {
+                                userAvatar.textContent = userData.firstName ? userData.firstName.charAt(0).toUpperCase() : 'U';
+                            }
+                            
+                            if (userName) {
+                                userName.textContent = `${userData.firstName} ${userData.lastName}`;
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Kullanıcı bilgileri yüklenirken hata:', error);
+                    });
             }
         }
 
-        // Çıkış yap (güncellenmiş)
-        function logout() {
-            localStorage.removeItem('adminLoggedIn');
-            localStorage.removeItem('adminUser');
-            checkLoginStatus();
-        }
 
         // Login fonksiyonlarını window'a ekle
         window.handleLogin = handleLogin;

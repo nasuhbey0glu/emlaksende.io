@@ -11,6 +11,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
+    <!-- Firebase Konfigürasyonu -->
+    <script src="firebase-config.js"></script>
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -583,6 +586,7 @@
             width: 14px;
             height: 14px;
         }
+
 
         /* Mobile Drawer */
         .mobile-drawer {
@@ -1999,16 +2003,8 @@
         });
         
         // ===== FIREBASE CONFIGURATION =====
-        const firebaseConfig = {
-            apiKey: "AIzaSyBZ1_56GJ5tOhK5Eth6cXscv8jnM4bpdEI",
-            authDomain: "emlaksende-8646a.firebaseapp.com",
-            databaseURL: "https://emlaksende-8646a-default-rtdb.firebaseio.com/",
-            projectId: "emlaksende-8646a",
-            storageBucket: "emlaksende-8646a.firebasestorage.app",
-            messagingSenderId: "861976091519",
-            appId: "1:861976091519:web:a24b7811322e3fc97dd84a"
-        };
-
+        // Firebase konfigürasyonu artık firebase-config.js dosyasından yükleniyor
+        
         // Initialize Firebase
         let database;
         window.database = null; // Global database reference
@@ -2028,10 +2024,13 @@
             }
             
             try {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
+                // Merkezi konfigürasyon dosyasından Firebase'i başlat
+                const firebaseApp = initializeFirebase();
+                if (!firebaseApp) {
+                    throw new Error('Firebase başlatılamadı');
                 }
-                database = firebase.database();
+                
+                database = getFirebaseDatabase();
                 window.database = database; // Set global reference
                 console.log('Firebase initialized successfully');
                 
@@ -2492,8 +2491,8 @@
 
             console.log(`Using photo URL: ${photoUrl}`);
 
-            // Format location
-            const location = `${property.sehir ? property.sehir.charAt(0).toUpperCase() + property.sehir.slice(1) : ''}, ${property.ilce ? property.ilce.charAt(0).toUpperCase() + property.ilce.slice(1) : ''}`.replace(/^, |, $/, '');
+            // Format location - şehir, ilçe ve mahalle bilgisini göster
+            const location = `${property.sehir ? property.sehir.charAt(0).toUpperCase() + property.sehir.slice(1) : ''}, ${property.ilce ? property.ilce.charAt(0).toUpperCase() + property.ilce.slice(1) : ''}${property.mahalle ? ', ' + property.mahalle.charAt(0).toUpperCase() + property.mahalle.slice(1) : ''}`.replace(/^, |, $/, '');
 
             // Format price
             const formattedPrice = property.toplamFiyat ? new Intl.NumberFormat('tr-TR').format(property.toplamFiyat) + '₺' : 'Fiyat belirtilmemiş';

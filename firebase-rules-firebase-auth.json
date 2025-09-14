@@ -1,0 +1,105 @@
+{
+  "rules": {
+    // İlanlar - herkes okuyabilir, sadece authenticated admin yazabilir
+    "ilanlar": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true",
+      ".indexOn": ["tarih", "fiyat", "il", "ilce", "mahalle", "tip", "durum"]
+    },
+    
+    // Projeler - herkes okuyabilir, sadece authenticated admin yazabilir
+    "projeler": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true",
+      ".indexOn": ["tarih", "fiyat", "il", "ilce"]
+    },
+    
+    // Filtreleme verileri - herkes okuyabilir, sadece authenticated admin yazabilir
+    "imar_durumu": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "tapu_durumu": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "gabari": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "kaks": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "cevre_kategorisi": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "cevre_kategorileri": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "cevreler": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    
+    // Site ayarları - herkes okuyabilir, sadece authenticated admin yazabilir
+    "site-settings": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "site_ayarlari": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    
+    // Test bağlantısı - sadece okuma
+    "test-connection": {
+      ".read": true,
+      ".write": false
+    },
+    
+    // İçerik sayfaları - herkes okuyabilir, sadece authenticated admin yazabilir
+    "aciklama": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "soru_cevap": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "testimonials": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "sayfalar": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "destek": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "kurumsal": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    "hizmetler": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    
+    // Kullanıcı verileri - sadece authenticated admin erişebilir
+    "users": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('isActive').val() === true"
+    },
+    
+    // Newsletter - sadece email ekleme izni
+    "newsletter": {
+      ".read": false,
+      ".write": "newData.hasChildren(['email', 'tarih']) && newData.child('email').isString() && newData.child('tarih').isString()"
+    }
+  }
+}

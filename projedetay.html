@@ -966,7 +966,12 @@
             // Update project description
             const projectDescription = document.getElementById('projectDescription');
             if (projectDescription) {
-                projectDescription.textContent = project.aciklama || 'Bu proje için açıklama bulunmuyor.';
+                if (project.aciklama) {
+                    // HTML formatındaki açıklamayı innerHTML ile göster
+                    projectDescription.innerHTML = project.aciklama;
+                } else {
+                    projectDescription.textContent = 'Bu proje için açıklama bulunmuyor.';
+                }
             }
             
             // Update project features
