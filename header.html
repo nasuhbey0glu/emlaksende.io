@@ -195,19 +195,19 @@
 <body>
   <header>
     <!-- Logo -->
-    <div class="logo" onclick="window.location.href='index.html'">
-      <img src="images/emlaknew.png" alt="Emlaksende Logo">
+    <div class="logo">
+      <img src="images/emlaknew.png" alt="Emlaksende Logo" onclick="window.location.href='index.html'">
       <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Arsanı Ara" class="search-input">
+        <i class="fa-solid fa-magnifying-glass" onclick="handleSearchClick(this)"></i>
+        <input type="text" placeholder="Arsanı Ara" class="search-input" onkeypress="handleSearchKeypress(event, this)">
       </div>
     </div>
 
     <!-- Menü -->
     <nav id="navMenu">
       <div class="search-box mobile-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Arsanı Ara" class="search-input">
+        <i class="fa-solid fa-magnifying-glass" onclick="handleSearchClick(this)"></i>
+        <input type="text" placeholder="Arsanı Ara" class="search-input" onkeypress="handleSearchKeypress(event, this)">
       </div>
       <a href="ilanlar.html">İlanlar</a>
       <a href="projeler.html">Projeler</a>
@@ -221,6 +221,7 @@
       <span></span>
     </div>
   </header>
+
 
 </body>
 </html>

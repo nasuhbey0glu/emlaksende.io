@@ -2342,6 +2342,17 @@
                                         </div>
                                     </div>
                                     
+                                    <!-- Row 7.5: İlan Durumu -->
+                                    <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                                        <div>
+                                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">İlan Durumu *</label>
+                                            <select id="ilanStatus" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
+                                                <option value="aktif">Aktif</option>
+                                                <option value="satıldı">Satıldı</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
                                     <!-- Row 8: Harita Konumu -->
                                     <div style="margin-top: 1rem;">
                                         <label style="display: block; margin-bottom: 1rem; color: var(--text-primary); font-weight: 500; font-size: 1.1rem;">📍 Harita Konumu</label>
@@ -6246,8 +6257,8 @@
                                             <span>📅 ${tarih}</span>
                                         </div>
                                         <div style="margin-top: 0.5rem;">
-                                            <span style="background: var(--success-color); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 500;">
-                                                ${ilan.status === 'aktif' ? 'Aktif' : ilan.status || 'Aktif'}
+                                            <span style="background: ${ilan.status === 'satıldı' ? 'var(--danger-color)' : 'var(--success-color)'}; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 500;">
+                                                ${ilan.status === 'aktif' ? 'Aktif' : ilan.status === 'satıldı' ? 'Satıldı' : 'Aktif'}
                                             </span>
                                         </div>
                                     </div>
@@ -6309,6 +6320,7 @@
                     document.getElementById('ilanToplamFiyat').value = ilan.toplamFiyat || '';
                     document.getElementById('ilanAdaNo').value = ilan.adaNo || '';
                     document.getElementById('ilanParselNo').value = ilan.parselNo || '';
+                    document.getElementById('ilanStatus').value = ilan.status || 'aktif';
                     
                     // Birim fiyatı hesapla ve göster
                     calculateUnitPrice();
@@ -6490,7 +6502,8 @@
                 { id: 'ilanIlce', name: 'İlçe' },
                 { id: 'ilanMahalle', name: 'Mahalle' },
                 { id: 'ilanLats', name: 'Enlem (Latitude)' },
-                { id: 'ilanLangs', name: 'Boylam (Longitude)' }
+                { id: 'ilanLangs', name: 'Boylam (Longitude)' },
+                { id: 'ilanStatus', name: 'İlan Durumu' }
             ];
             
             for (const field of requiredFields) {
@@ -6567,7 +6580,7 @@
                 // Arsa Sınırları
                 arsa_sinirlari: getBoundaryData(),
                 updatedAt: firebase.database.ServerValue.TIMESTAMP,
-                status: 'aktif'
+                status: document.getElementById('ilanStatus').value || 'aktif'
             };
             
             database.ref(`ilanlar/${ilanId}`).update(ilanData)

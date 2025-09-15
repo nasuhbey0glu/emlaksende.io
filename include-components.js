@@ -28,6 +28,9 @@ async function loadHeader() {
         // Header yüklendikten sonra mobile menu'yu initialize et
         initializeMobileMenu();
         
+        // Arama fonksiyonlarını initialize et
+        initializeSearchFunctions();
+        
     } catch (error) {
         console.error('Header yüklenirken hata oluştu:', error);
     }
@@ -98,4 +101,43 @@ function initializeMobileMenu() {
             }
         });
     }
+}
+
+// Arama fonksiyonlarını initialize et
+function initializeSearchFunctions() {
+    // Arama fonksiyonalitesi - Global scope'ta tanımla
+    window.performSearch = function(searchTerm) {
+        console.log('Performing search for:', searchTerm);
+        // Arama terimini URL parametresi olarak ilanlarcopy.html sayfasına gönder
+        const searchUrl = `ilanlarcopy.html?search=${encodeURIComponent(searchTerm)}`;
+        console.log('Redirecting to:', searchUrl);
+        window.location.href = searchUrl;
+    };
+    
+    // Inline event handler fonksiyonları - Global scope'ta tanımla
+    window.handleSearchKeypress = function(event, input) {
+        console.log('Key pressed:', event.key);
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const searchTerm = input.value.trim();
+            console.log('Enter pressed, search term:', searchTerm);
+            if (searchTerm) {
+                window.performSearch(searchTerm);
+            }
+        }
+    };
+    
+    window.handleSearchClick = function(icon) {
+        console.log('Search icon clicked');
+        const input = icon.parentElement.querySelector('.search-input');
+        if (input) {
+            const searchTerm = input.value.trim();
+            console.log('Icon clicked, search term:', searchTerm);
+            if (searchTerm) {
+                window.performSearch(searchTerm);
+            }
+        }
+    };
+    
+    console.log('Search functions initialized');
 }
