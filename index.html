@@ -19,6 +19,38 @@
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- URL Yönlendirme Scripti -->
+    <script>
+        // URL yönlendirme fonksiyonu
+        function handleURLRouting() {
+            const currentPath = window.location.pathname;
+            
+            // Admin paneli yönlendirmesi
+            if (currentPath === '/emlaksendeyonetim' || currentPath === '/emlaksendeyonetim/') {
+                window.location.href = 'admin.html';
+                return;
+            }
+            
+            // Diğer sayfa yönlendirmeleri (isteğe bağlı)
+            const routes = {
+                '/anasayfa': 'index.html',
+                '/hizmetler': 'hizmetler.html',
+                '/kurumsal': 'kurumsal.html',
+                '/destek': 'destek.html',
+                '/ilanlar': 'ilanlar.html',
+                '/projeler': 'projeler.html',
+                '/harita': 'harita.html'
+            };
+            
+            if (routes[currentPath]) {
+                window.location.href = routes[currentPath];
+            }
+        }
+        
+        // Sayfa yüklendiğinde URL kontrolü yap
+        document.addEventListener('DOMContentLoaded', handleURLRouting);
+    </script>
 </head>
 <body>
 
@@ -44,8 +76,8 @@
 
                 <!-- Hero Description -->
                 <p class="hero-description">
-                    Aradığın yatırımlık, işlenmiş veya imarlık arsalar ise doğru yerdesin. 
-                    Hemen ara veya bize ulaş!
+                    Kazanç betonda değil, toprakta!
+                    Gerçek verilerle, doğru fiyatla, güvenle yatırım yap.
                 </p>
 
                 <!-- Search Module -->

@@ -19,6 +19,36 @@
             line-height: 1.6;
         }
         
+        /* Footer düzenlemeleri - Alt boşlukları kaldır */
+        #footer-container {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #footer-container .footer {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #footer-container .footer-bottom {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        
+        #footer-container .footer-bottom-content {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        
+        /* Footer'ın altındaki tüm boşlukları kaldır */
+        #footer-container * {
+            margin-bottom: 0 !important;
+        }
+        
+        #footer-container .footer-bottom * {
+            margin-bottom: 0 !important;
+        }
+        
         .header {
             background: linear-gradient(135deg, #000000 0%, #333333 100%);
             color: white;
@@ -72,28 +102,23 @@
         .tab {
             background: transparent;
             border: none;
-            padding: 15px 20px;
+            padding: 15px 0;
             cursor: pointer;
             text-align: left;
             font-size: 1rem;
             color: #666666;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
             font-weight: 500;
-            border-radius: 8px;
             position: relative;
         }
         
         .tab:hover {
-            background-color: #f5f5f5;
             color: #333333;
-            transform: translateX(8px);
         }
         
         .tab.active {
-            background-color: #000000;
-            color: white;
-            transform: translateX(12px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            color: #000000;
+            font-weight: 600;
         }
         
         .content-area {
@@ -509,82 +534,10 @@
         });
     </script>
     
-    <!-- Include Header Only -->
-    <script>
-        // Header yükleme fonksiyonu
-        async function loadHeader() {
-            try {
-                const response = await fetch('header.html');
-                const headerHtml = await response.text();
-                
-                // Header container'ı bul veya oluştur
-                let headerContainer = document.getElementById('header-container');
-                if (!headerContainer) {
-                    headerContainer = document.createElement('div');
-                    headerContainer.id = 'header-container';
-                    document.body.insertBefore(headerContainer, document.body.firstChild);
-                }
-                
-                headerContainer.innerHTML = headerHtml;
-                
-                // Header yüklendikten sonra mobile menu'yu initialize et
-                initializeMobileMenu();
-                
-            } catch (error) {
-                console.error('Header yüklenirken hata oluştu:', error);
-            }
-        }
-
-        // Mobile menu initialization (header yüklendikten sonra çağrılır)
-        function initializeMobileMenu() {
-            const menuToggle = document.getElementById('menuToggle');
-            const navMenu = document.getElementById('navMenu');
-            
-            if (menuToggle && navMenu) {
-                menuToggle.addEventListener('click', function() {
-                    // Toggle show class on navigation menu
-                    navMenu.classList.toggle('show');
-                    
-                    // Update aria-expanded for accessibility
-                    const isExpanded = navMenu.classList.contains('show');
-                    menuToggle.setAttribute('aria-expanded', isExpanded);
-                });
-
-                // Close mobile menu when clicking on a link
-                const navLinks = navMenu.querySelectorAll('a');
-                navLinks.forEach(link => {
-                    link.addEventListener('click', () => {
-                        navMenu.classList.remove('show');
-                        menuToggle.setAttribute('aria-expanded', 'false');
-                    });
-                });
-
-                // Close mobile menu when clicking outside
-                document.addEventListener('click', function(event) {
-                    const isClickInsideNav = navMenu.contains(event.target);
-                    const isClickOnToggle = menuToggle.contains(event.target);
-                    
-                    if (!isClickInsideNav && !isClickOnToggle && navMenu.classList.contains('show')) {
-                        navMenu.classList.remove('show');
-                        menuToggle.setAttribute('aria-expanded', 'false');
-                    }
-                });
-
-                // Handle Escape key to close mobile menu
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && navMenu.classList.contains('show')) {
-                        navMenu.classList.remove('show');
-                        menuToggle.setAttribute('aria-expanded', 'false');
-                        menuToggle.focus();
-                    }
-                });
-            }
-        }
-
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            loadHeader();
-        });
-    </script>
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+    
+    <!-- Include Components Script -->
+    <script src="include-components.js"></script>
 </body>
 </html>

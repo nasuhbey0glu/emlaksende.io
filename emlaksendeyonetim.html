@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emlaksende Admin Paneli</title>
+    <meta http-equiv="refresh" content="0;url=admin.html">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .redirect-message {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .loading {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .manual-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .manual-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-message">
+        <h2>Admin Paneline Yönlendiriliyorsunuz...</h2>
+        <div class="loading"></div>
+        <p>Eğer otomatik yönlendirme çalışmazsa:</p>
+        <a href="admin.html" class="manual-link">Manuel Olarak Devam Et</a>
+    </div>
+    
+    <script>
+        // Hemen yönlendir
+        window.location.href = 'admin.html';
+    </script>
+</body>
+</html>

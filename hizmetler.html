@@ -13,201 +13,259 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
             line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
+        
+        
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
             color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
         }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-        }
-
-        .nav {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav a {
-            color: white;
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
-
-        .nav a:hover {
-            opacity: 0.8;
-        }
-
-        /* Main Content */
-        .main-content {
-            display: flex;
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 40px;
             min-height: calc(100vh - 200px);
-            margin: 2rem 0;
         }
-
-        /* Sidebar */
+        
         .sidebar {
-            width: 300px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            padding: 2rem;
-            margin-right: 2rem;
+            background: transparent;
+            padding: 0;
             height: fit-content;
+            position: sticky;
+            top: 20px;
+            margin-top: 20px;
         }
-
-        .sidebar h2 {
-            color: #667eea;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+        
+        .sidebar-header {
+            color: #000000;
+            padding: 0 0 20px 0;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #000000;
+            margin-bottom: 20px;
         }
-
-        .tab-list {
-            list-style: none;
+        
+        .support-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
-
-        .tab-item {
-            margin-bottom: 0.5rem;
+        
+        .tab {
+            background: transparent;
+            border: none;
+            padding: 15px 0;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            color: #666666;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            position: relative;
         }
-
-        .tab-link {
-            display: block;
-            padding: 1rem;
-            color: #666;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-            border-left: 4px solid transparent;
+        
+        .tab:hover {
+            color: #333333;
         }
-
-        .tab-link:hover {
-            background-color: #f8f9fa;
-            color: #667eea;
+        
+        .tab.active {
+            color: #000000;
+            font-weight: 600;
         }
-
-        .tab-link.active {
-            background-color: #667eea;
-            color: white;
-            border-left-color: #764ba2;
-        }
-
-        /* Content Area */
+        
         .content-area {
-            flex: 1;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            padding: 2rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            padding: 40px;
+            min-height: auto;
+            margin: 30px 0;
         }
-
-        .content-header {
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .content-title {
-            color: #333;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .content-subtitle {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .content-body {
+        
+        .content {
+            color: #333333;
+            font-size: 1rem;
             line-height: 1.8;
         }
-
-        .content-body h1, .content-body h2, .content-body h3 {
-            color: #333;
-            margin: 1.5rem 0 1rem 0;
+        
+        .content h3 {
+            color: #000000;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 10px;
         }
-
-        .content-body p {
-            margin-bottom: 1rem;
+        
+        .content h5 {
+            color: #000000;
+            font-size: 1.3rem;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
         }
-
-        .content-body ul, .content-body ol {
-            margin: 1rem 0 1rem 2rem;
+        
+        .content p {
+            margin-bottom: 15px;
+            color: #444444;
         }
-
-        .content-body li {
-            margin-bottom: 0.5rem;
+        
+        .content ul {
+            margin: 15px 0;
+            padding-left: 25px;
         }
-
-        /* Loading State */
-        .loading {
-            text-align: center;
-            padding: 3rem;
-            color: #666;
+        
+        .content li {
+            margin-bottom: 8px;
+            color: #444444;
         }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+        
+        .content strong {
+            color: #000000;
+            font-weight: 600;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Footer */
-        .footer {
-            background: #333;
+        
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: #000000;
             color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 2rem;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            width: 100%;
         }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
+        
+        .mobile-menu-toggle:hover {
+            background: #333333;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px 15px;
             }
-
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
             .sidebar {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 300px;
+                height: 100vh;
+                background: #ffffff;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                padding: 20px;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+                overflow-y: auto;
+                margin-top: 0;
+            }
+            
+            .sidebar.open {
+                left: 0;
+            }
+            
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
                 width: 100%;
-                margin-right: 0;
-                margin-bottom: 2rem;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
             }
-
-            .header-content {
+            
+            .sidebar-overlay.open {
+                display: block;
+            }
+            
+            .content-area {
+                order: 1;
+                margin: 0;
+                padding: 20px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .support-tabs {
                 flex-direction: column;
-                gap: 1rem;
+                gap: 8px;
             }
-
-            .nav {
-                gap: 1rem;
+            
+            .tab {
+                text-align: left;
+                padding: 15px 0;
+                transform: none;
+            }
+            
+            .tab:hover,
+            .tab.active {
+                transform: translateX(8px);
+            }
+        }
+        
+        /* Desktop görünümü için ekstra ayarlar */
+        @media (min-width: 1025px) {
+            .mobile-menu-toggle {
+                display: none !important;
+            }
+            
+            .sidebar-overlay {
+                display: none !important;
+            }
+            
+            .sidebar {
+                position: sticky !important;
+                top: 20px !important;
+                left: auto !important;
+                width: auto !important;
+                height: auto !important;
+                background: transparent !important;
+                z-index: auto !important;
+                transition: none !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                overflow-y: visible !important;
+                margin-top: 20px !important;
+            }
+            
+            .container {
+                grid-template-columns: 350px 1fr !important;
+                gap: 40px !important;
+                padding: 40px 20px !important;
+            }
+            
+            .content-area {
+                margin: 30px 0 !important;
+                padding: 40px !important;
             }
         }
     </style>
@@ -216,32 +274,30 @@
     <!-- Header -->
     <div id="header-container"></div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <div class="sidebar">
-                <h2>💼 Hizmetler</h2>
-                <ul class="tab-list" id="tabList">
-                    <li class="tab-item">
-                        <a href="#" class="tab-link active" data-tab="danismanlik">Danışmanlık</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="content-area">
-                <div class="content-header">
-                    <h1 class="content-title" id="contentTitle">Danışmanlık</h1>
-                    <p class="content-subtitle" id="contentSubtitle">Profesyonel emlak danışmanlık hizmetleri</p>
-                </div>
-                <div class="content-body" id="contentBody">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>İçerik yükleniyor...</p>
-                    </div>
-                </div>
+    <div class="container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            💼 Hizmetler
+        </button>
+        
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">Hizmetler</div>
+            <div class="support-tabs">
+                <div class="tab active" data-tab="danismanlik">Danışmanlık</div>
             </div>
         </div>
-    </main>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <div id="content">
+                <div class="loading">İçerik yükleniyor...</div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <div id="footer-container"></div>
@@ -253,60 +309,58 @@
     <script>
         // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBvOkBwJ1ZqK8YqK8YqK8YqK8YqK8YqK8Yq",
-            authDomain: "emlaksende.firebaseapp.com",
-            databaseURL: "https://emlaksende-default-rtdb.firebaseio.com",
-            projectId: "emlaksende",
-            storageBucket: "emlaksende.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef123456789"
+            apiKey: "AIzaSyBZ1_56GJ5tOhK5Eth6cXscv8jnM4bpdEI",
+            authDomain: "emlaksende-8646a.firebaseapp.com",
+            databaseURL: "https://emlaksende-8646a-default-rtdb.firebaseio.com/",
+            projectId: "emlaksende-8646a",
+            storageBucket: "emlaksende-8646a.firebasestorage.app",
+            messagingSenderId: "861976091519",
+            appId: "1:861976091519:web:a24b7811322e3fc97dd84a"
         };
-
+        
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-
-        // Tab data mapping
-        const tabData = {
-            'danismanlik': {
-                title: 'Danışmanlık',
-                subtitle: 'Profesyonel emlak danışmanlık hizmetleri'
-            }
-        };
-
-        let currentTab = 'danismanlik';
+        
+        // Global variables
         let servicesData = {};
-
+        let currentTab = 'danismanlik';
+        
         // Load services data from Firebase
         function loadServicesData() {
             database.ref('hizmetler').once('value')
                 .then((snapshot) => {
-                    servicesData = snapshot.val() || {};
-                    showContent(currentTab);
+                    const data = snapshot.val();
+                    if (data) {
+                        servicesData = data;
+                        console.log('Hizmetler verileri yüklendi:', servicesData);
+                        showContent(currentTab);
+                    } else {
+                        console.log('Firebase\'de hizmetler verisi bulunamadı');
+                        servicesData = {};
+                        document.getElementById('content').innerHTML = `
+                            <div style="text-align: center; padding: 3rem; color: #666;">
+                                <h3>İçerik Bulunamadı</h3>
+                                <p>Bu bölüm için henüz içerik eklenmemiş veya Firebase'den yüklenemedi.</p>
+                            </div>
+                        `;
+                    }
                 })
                 .catch((error) => {
                     console.error('Hizmetler verileri yüklenirken hata:', error);
-                    document.getElementById('contentBody').innerHTML = 
+                    document.getElementById('content').innerHTML = 
                         '<p style="color: #e74c3c; text-align: center; padding: 2rem;">Veriler yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.</p>';
                 });
         }
-
+        
         // Show content for selected tab
-        function showContent(tabKey) {
-            const content = servicesData[tabKey];
-            const tabInfo = tabData[tabKey];
+        function showContent(tabName) {
+            const content = document.getElementById('content');
             
-            // Update title and subtitle
-            document.getElementById('contentTitle').textContent = tabInfo.title;
-            document.getElementById('contentSubtitle').textContent = tabInfo.subtitle;
-            
-            // Update content body
-            const contentBody = document.getElementById('contentBody');
-            
-            if (content) {
-                contentBody.innerHTML = content;
+            if (servicesData[tabName]) {
+                content.innerHTML = servicesData[tabName];
             } else {
-                contentBody.innerHTML = `
+                content.innerHTML = `
                     <div style="text-align: center; padding: 3rem; color: #666;">
                         <h3>İçerik Bulunamadı</h3>
                         <p>Bu bölüm için henüz içerik eklenmemiş.</p>
@@ -314,25 +368,39 @@
                 `;
             }
         }
-
-        // Tab click handler
+        
+        // Handle tab click
         function handleTabClick(event) {
-            event.preventDefault();
+            const tab = event.target;
+            const tabName = tab.getAttribute('data-tab');
             
-            const tabLink = event.target;
-            const tabKey = tabLink.getAttribute('data-tab');
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             
-            // Update active tab
-            document.querySelectorAll('.tab-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            tabLink.classList.add('active');
+            // Add active class to clicked tab
+            tab.classList.add('active');
             
-            // Update content
-            currentTab = tabKey;
-            showContent(tabKey);
+            // Update current tab and show content
+            currentTab = tabName;
+            showContent(tabName);
+            
+            // Close mobile menu
+            closeMobileMenu();
         }
-
+        
+        // Mobile menu functions
+        function openMobileMenu() {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('sidebarOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMobileMenu() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+        
         // Load header and footer
         function loadHeader() {
             fetch('header.html')
@@ -372,15 +440,26 @@
             }
         }
 
-        // Initialize page
+        // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Load header and footer
             loadHeader();
             loadFooter();
             
             // Add click listeners to tabs
-            document.querySelectorAll('.tab-link').forEach(link => {
-                link.addEventListener('click', handleTabClick);
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', handleTabClick);
+            });
+            
+            // Mobile menu event listeners
+            document.getElementById('mobileMenuToggle').addEventListener('click', openMobileMenu);
+            document.getElementById('sidebarOverlay').addEventListener('click', closeMobileMenu);
+            
+            // Close menu on escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeMobileMenu();
+                }
             });
             
             // Load data

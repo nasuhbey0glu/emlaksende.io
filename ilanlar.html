@@ -90,6 +90,9 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: visible;
         }
 
         /* Page Layout */
@@ -98,6 +101,7 @@
             grid-template-columns: 300px 1fr;
             gap: 30px;
             align-items: start;
+            overflow: visible;
         }
 
         .page-left {
@@ -141,15 +145,28 @@
 
         /* Mobile Toggle */
         .mobile-filter-toggle {
-            display: none;
+            display: flex;
             margin-top: 40px;
             margin-bottom: 30px;
             justify-content: flex-start;
             width: 100%;
         }
+        
+        /* Desktop Sort Button Position */
+        @media (min-width: 768px) {
+            .mobile-filter-toggle {
+                position: fixed;
+                top: 100px;
+                right: 30px;
+                width: auto;
+                margin: 0;
+                z-index: 1000;
+                justify-content: flex-end;
+            }
+        }
 
         .hamburger-btn {
-            display: flex;
+            display: none;
             align-items: center;
             gap: 10px;
             padding: 12px 20px;
@@ -395,10 +412,12 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 1px;
             justify-items: center;
-            max-width: 1125px;
+            max-width: 100%;
             margin: 0 auto;
             margin-top: 100px;
             margin-bottom: 40px;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         /* Loading Placeholder */
@@ -1078,8 +1097,25 @@
             }
         }
         @media (max-width: 1023px) {
+            .container {
+                max-width: 100%;
+                margin: 0 auto;
+                padding: 0 20px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .page-left {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
             .property-grid { 
-                grid-template-columns: repeat(2, 1fr); 
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 100%;
+                margin: 0 auto;
+                width: 100%;
+                box-sizing: border-box;
             }
             
             .property-card {
@@ -1097,6 +1133,10 @@
         }
         @media (max-width: 767px) {
             /* Header styles are now included from header.html */
+            
+            .hamburger-btn {
+                display: flex;
+            }
             
             .mobile-filter-toggle {
                 position: fixed;
@@ -1172,7 +1212,7 @@
                 border-radius: 12px;
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
                 padding: 16px;
-                z-index: 1001;
+                z-index: 10000;
                 display: none;
                 min-width: 280px;
                 border: 1px solid #e5e7eb;
@@ -1246,27 +1286,72 @@
             }
         }
 
+        /* Desktop Sort Button Styles */
+        @media (min-width: 768px) {
+            .sort-btn {
+                min-width: 140px;
+                padding: 14px 20px;
+                font-size: 15px;
+                background: linear-gradient(135deg, #1E2A47 0%, #2c3e50 100%);
+                color: #ffffff;
+                border: none;
+                border-radius: 50px;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(30, 42, 71, 0.3);
+                transition: all 0.3s ease;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .sort-btn:hover {
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(30, 42, 71, 0.4);
+            }
+            
+            .sort-btn:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 10px rgba(30, 42, 71, 0.3);
+            }
+            
+            .sort-icon {
+                width: 18px;
+                height: 18px;
+                transition: transform 0.3s ease;
+            }
+            
+            .sort-btn.active .sort-icon {
+                transform: rotate(180deg);
+            }
+        }
+
         /* Desktop Sort Menu Styles */
         @media (min-width: 768px) {
             .sort-menu {
-                position: absolute;
-                bottom: 100%;
-                left: 50%;
-                transform: translateX(-50%);
+                position: fixed;
+                top: 160px;
+                right: 30px;
                 background: #ffffff;
                 border-radius: 12px;
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
                 padding: 20px;
-                z-index: 1001;
-                display: none;
+                z-index: 10000;
+                display: block;
                 min-width: 300px;
                 border: 1px solid #e5e7eb;
-                margin-bottom: 10px;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+                opacity: 0;
+                visibility: hidden;
             }
             
             .sort-menu.show {
-                display: block;
-                animation: slideDown 0.3s ease;
+                transform: translateX(0);
+                opacity: 1;
+                visibility: visible;
             }
             
             @keyframes slideDown {
@@ -1348,14 +1433,26 @@
         
         @media (max-width: 767px) {
             .container {
-                padding: 0 16px;
+                padding: 0 20px;
+                max-width: 100%;
+                margin: 0 auto;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .page-left {
+                padding: 0 20px;
+                width: 100%;
+                box-sizing: border-box;
             }
             
             .property-grid { 
                 grid-template-columns: 1fr;
                 gap: 1px;
-                max-width: 375px;
+                max-width: 100%;
                 margin: 0 auto;
+                width: 100%;
+                box-sizing: border-box;
             }
             
             /* Mobil görünümde özel frame oluştur */
@@ -1372,6 +1469,9 @@
                 gap: 15px;
                 position: relative;
                 z-index: 1;
+                max-width: 100%;
+                width: 100%;
+                box-sizing: border-box;
             }
             
             .page-title { 
@@ -1762,12 +1862,13 @@
                 });
             }
 
-            // Mobile sort toggle
+            // Sort toggle (works for both mobile and desktop)
             const mobileSortToggle = document.getElementById('mobileSortToggle');
             const sortMenu = document.getElementById('sortMenu');
 
             if (mobileSortToggle && sortMenu) {
-                mobileSortToggle.addEventListener('click', function() {
+                mobileSortToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     sortMenu.classList.toggle('show');
                     mobileSortToggle.classList.toggle('active');
                     // Close filter drawer if open
@@ -1798,14 +1899,14 @@
             }
 
             // Close sort menu when clicking outside
-            if (sortMenu) {
-                sortMenu.addEventListener('click', function(e) {
-                    if (e.target === sortMenu) {
+            document.addEventListener('click', function(e) {
+                if (sortMenu && mobileSortToggle) {
+                    if (!sortMenu.contains(e.target) && !mobileSortToggle.contains(e.target)) {
                         sortMenu.classList.remove('show');
                         mobileSortToggle.classList.remove('active');
                     }
-                });
-            }
+                }
+            });
 
             // Sort option event listeners
             const sortOptions = document.querySelectorAll('.sort-option');
