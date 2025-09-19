@@ -175,20 +175,66 @@
         /* Mobile Menu Toggle */
         .mobile-menu-toggle {
             display: none;
-            background: #000000;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             color: white;
             border: none;
             padding: 12px 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 20px;
             width: 100%;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .mobile-menu-toggle:hover {
-            background: #333333;
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(30, 58, 138, 0.4);
+        }
+        
+        .mobile-menu-toggle:active {
+            transform: translateY(0);
+        }
+        
+        /* Hamburger Icon Styles */
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+            transition: all 0.3s ease;
+            margin-right: 8px;
+        }
+        
+        .hamburger-line {
+            width: 20px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-toggle:hover .hamburger-line {
+            background: #ffffff;
+            transform: scale(1.1);
+        }
+        
+        /* Active state animation */
+        .mobile-menu-toggle.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .mobile-menu-toggle.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .mobile-menu-toggle.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
         }
         
         /* Responsive Design */
@@ -196,11 +242,21 @@
             .container {
                 grid-template-columns: 1fr;
                 gap: 20px;
-                padding: 20px 15px;
+                padding: 10px 15px;
+                padding-bottom: 100px; /* Alt boşluk ekle */
             }
             
             .mobile-menu-toggle {
                 display: block;
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 1000;
+                margin: 0;
+                width: calc(100% - 40px);
+                max-width: 400px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.4);
             }
             
             .sidebar {
@@ -240,7 +296,7 @@
             .content-area {
                 order: 1;
                 margin: 0;
-                padding: 20px;
+                padding: 15px 20px;
                 width: 100%;
                 box-sizing: border-box;
             }
@@ -307,7 +363,12 @@
     <div class="container">
         <!-- Mobile Menu Toggle -->
         <button class="mobile-menu-toggle" id="mobileMenuToggle">
-            ☰ Menü
+            <div class="hamburger-icon">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+            <span>Menü</span>
         </button>
         
         <!-- Sidebar Overlay -->
@@ -422,12 +483,14 @@
         function openMobileMenu() {
             document.getElementById('sidebar').classList.add('open');
             document.getElementById('sidebarOverlay').classList.add('open');
+            document.getElementById('mobileMenuToggle').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
         
         function closeMobileMenu() {
             document.getElementById('sidebar').classList.remove('open');
             document.getElementById('sidebarOverlay').classList.remove('open');
+            document.getElementById('mobileMenuToggle').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
         

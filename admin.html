@@ -5667,6 +5667,11 @@
                     // Arsa sınırlarını temizle
                     clearBoundary();
                 }
+                
+                // Sayfayı yenile (form temizleme problemlerini çözmek için)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
             }
         }
 
@@ -6590,6 +6595,11 @@
                     loadIlanList();
                     loadDashboardStats(); // Dashboard verilerini güncelle
                     window.editingIlanId = null;
+                    
+                    // Sayfayı yenile (form temizleme problemlerini çözmek için)
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500); // 1.5 saniye bekle ki kullanıcı başarı mesajını görebilsin
                 })
                 .catch((error) => {
                     console.error('İlan güncelleme hatası:', error);
@@ -8445,6 +8455,11 @@
                 form.style.display = 'none';
             }
             clearProjeForm();
+            
+            // Sayfayı yenile (form temizleme problemlerini çözmek için)
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
         }
 
         // Proje formu temizle
@@ -8936,6 +8951,11 @@
                     showAlert('projeAlert', message, 'success');
                     hideProjeForm();
                     loadProjeList(); // Listeyi yenile
+                    
+                    // Sayfayı yenile (form temizleme problemlerini çözmek için)
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500); // 1.5 saniye bekle ki kullanıcı başarı mesajını görebilsin
                 })
                 .catch(error => {
                     console.error('Proje kaydedilirken hata:', error);
