@@ -324,6 +324,39 @@
         height: 20px;
     }
 
+    /* Contact Buttons */
+    .contact-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        background: transparent;
+        color: #ffffff;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .contact-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #97D2AD;
+        transform: translateY(-2px);
+    }
+
+    .phone-btn:hover {
+        border-color: #25D366;
+    }
+
+    .email-btn:hover {
+        border-color: #97D2AD;
+    }
+
     /* Footer Bottom */
     .footer-bottom {
         padding: 30px 0;
@@ -661,13 +694,15 @@
                         <h4 class="footer-contact-title">Bize Ulaşın</h4>
                         
                         <!-- Phone -->
-                        <div class="contact-item phone-item" onclick="window.open('https://wa.me/905524709898', '_blank')" style="cursor: pointer;">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                                </svg>
-                            </div>
-                            <span class="contact-text">0552 470 98 98</span>
+                        <div class="contact-item phone-item">
+                            <button class="contact-btn phone-btn" onclick="window.open('https://wa.me/905524709898', '_blank')">
+                                <div class="contact-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                    </svg>
+                                </div>
+                                <span class="contact-text">0552 470 98 98</span>
+                            </button>
                         </div>
 
                         <!-- WhatsApp -->
@@ -684,12 +719,14 @@
 
                         <!-- Email -->
                         <div class="contact-item email-item">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                                </svg>
-                            </div>
-                            <span class="contact-text">info@emlaksende.com</span>
+                            <button class="contact-btn email-btn" onclick="window.open('mailto:info@emlaksende.com', '_blank')">
+                                <div class="contact-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                    </svg>
+                                </div>
+                                <span class="contact-text">info@emlaksende.com</span>
+                            </button>
                         </div>
                     </div>
                 </div>
