@@ -1323,114 +1323,31 @@ function initializeScrollAnimations() {
     }
 }
 
-// ===== DYNAMIC HERO BACKGROUND =====
-function loadDynamicHeroBackground() {
-    console.log('Firebase\'den ana resim yükleniyor...');
+// ===== HERO BACKGROUND =====
+function loadHeroBackground() {
+    console.log('Hero section arka plan resmi yükleniyor...');
     
-    const heroElement = document.querySelector('.hero');
     const heroBackground = document.querySelector('.hero-background');
     
-    if (!heroElement || !heroBackground) {
-        console.error('Hero elementleri bulunamadı');
+    if (!heroBackground) {
+        console.error('Hero background elementi bulunamadı');
         return;
     }
 
-    // Firebase'den ana resim verisini çek
-    const mainImageRef = database.ref('site-settings/main-image');
-    
-    console.log('Firebase referansı oluşturuldu:', mainImageRef.toString());
-    
-    mainImageRef.once('value')
-        .then((snapshot) => {
-            console.log('Firebase\'den veri alındı:', snapshot.val());
-            const data = snapshot.val();
-            
-            if (data && data.url && data.isActive) {
-                console.log('Ana resim Firebase\'den alındı:', data.url);
-                
-                // Yeni resmi önceden yükle
-                const img = new Image();
-                img.onload = function() {
-                    // Resim yüklendikten sonra background'ı güncelle
-                    heroBackground.style.backgroundImage = `url('${data.url}')`;
-                    
-                    // Yumuşak geçiş efekti
-                    heroBackground.style.opacity = '0';
-                    setTimeout(() => {
-                        heroBackground.style.opacity = '1';
-                    }, 100);
-                    
-                    console.log('Ana resim başarıyla güncellendi');
-                };
-                
-                img.onerror = function() {
-                    console.error('Ana resim yüklenemedi, varsayılan resim kullanılıyor');
-                    loadDefaultHeroBackground();
-                };
-                
-                img.src = data.url;
-                
-            } else {
-                console.log('Aktif ana resim bulunamadı, varsayılan resim kullanılıyor');
-                console.log('Mevcut veri:', data);
-                loadDefaultHeroBackground();
-            }
-        })
-        .catch((error) => {
-            console.error('Firebase\'den ana resim alınırken hata:', error);
-            console.error('Hata detayları:', {
-                code: error.code,
-                message: error.message,
-                stack: error.stack
-            });
-            loadDefaultHeroBackground();
-        });
-}
-
-function loadDefaultHeroBackground() {
-    console.log('Varsayılan ana resim yükleniyor...');
-    const heroBackground = document.querySelector('.hero-background');
-    
-    if (heroBackground) {
-        // Varsayılan resmi de önceden yükle
-        const img = new Image();
-        img.onload = function() {
-            heroBackground.style.backgroundImage = "url('images/background.jpg')";
-            heroBackground.style.backgroundColor = 'transparent';
-            heroBackground.style.opacity = '1';
-        };
-        img.onerror = function() {
-            // Varsayılan resim de yüklenemezse sadece arka plan rengi göster
-            heroBackground.style.backgroundColor = '#f8f9fa';
-            heroBackground.style.opacity = '1';
-        };
-        img.src = 'images/background.jpg';
-    }
-}
-
-// Real-time güncelleme için listener ekle
-function initializeHeroBackgroundListener() {
-    const mainImageRef = database.ref('site-settings/main-image');
-    
-    mainImageRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        
-        if (data && data.url && data.isActive) {
-            console.log('Ana resim real-time güncellendi:', data.url);
-            
-            const heroBackground = document.querySelector('.hero-background');
-            if (heroBackground) {
-                // Geçiş efekti ile güncelle
-                heroBackground.style.transition = 'opacity 0.5s ease';
-                heroBackground.style.opacity = '0.7';
-                
-                setTimeout(() => {
-                    heroBackground.style.backgroundImage = `url('${data.url}')`;
-                    heroBackground.style.opacity = '1';
-                }, 250);
-            }
-        }
-    });
+    // Yerel ana-resim.jpg dosyasını kullan
+    const img = new Image();
+    img.onload = function() {
+        heroBackground.style.backgroundImage = "url('images/ana-resim.jpg')";
+        heroBackground.style.backgroundColor = 'transparent';
+        heroBackground.style.opacity = '1';
+        console.log('Hero arka plan resmi başarıyla yüklendi: images/ana-resim.jpg');
+    };
+    img.onerror = function() {
+        console.error('Ana resim yüklenemedi, varsayılan arka plan kullanılıyor');
+        heroBackground.style.backgroundColor = '#f8f9fa';
+        heroBackground.style.opacity = '1';
+    };
+    img.src = 'images/ana-resim.jpg';
 }
 
 // Firebase bağlantısını test et
@@ -1471,8 +1388,7 @@ document.addEventListener('DOMContentLoaded', function() {
     testFirebaseConnection();
     
     // Initialize Firebase functionality first
-    loadDynamicHeroBackground();
-    initializeHeroBackgroundListener();
+    loadHeroBackground();
     loadAboutDescription();
     loadFAQContent();
     
