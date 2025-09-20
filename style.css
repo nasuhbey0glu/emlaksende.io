@@ -34,6 +34,33 @@ img {
     display: block;
 }
 
+/* Lazy loading için resim stilleri */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+/* Placeholder için blur efekti */
+img[loading="lazy"]:not(.loaded) {
+    filter: blur(5px);
+    transform: scale(1.1);
+}
+
+/* Picture element için stil */
+picture {
+    display: block;
+    width: 100%;
+}
+
+picture img {
+    width: 100%;
+    height: auto;
+}
+
 button {
     border: none;
     cursor: pointer;
@@ -786,6 +813,23 @@ select {
     
     .properties-title-area {
         order: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        flex-wrap: nowrap !important;
+    }
+    
+    .properties-title-area .title-logo {
+        flex-shrink: 0 !important;
+        width: 40px !important;
+        height: 40px !important;
+        object-fit: contain !important;
+    }
+    
+    .properties-title {
+        white-space: nowrap !important;
+        font-size: 20px !important;
     }
     
     .properties-actions {
@@ -813,7 +857,11 @@ select {
         width: 300px;
         height: 300px;
         left: -50px;
-        opacity: 0.15;
+        opacity: 0.05;
+        z-index: 0 !important;
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
     }
     
     .properties-header {
@@ -831,6 +879,22 @@ select {
     
     .properties-title-area {
         justify-content: center;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        flex-wrap: nowrap !important;
+    }
+    
+    .properties-title-area .title-logo {
+        flex-shrink: 0 !important;
+        width: 40px !important;
+        height: 40px !important;
+        object-fit: contain !important;
+    }
+    
+    .properties-title {
+        white-space: nowrap !important;
+        font-size: 20px !important;
     }
     
     .properties-actions {
@@ -1257,6 +1321,38 @@ select {
     transition: all 0.3s ease;
 }
 
+/* Desktop görünümde step icon'ları step title'ların orta hizasında yap */
+@media (min-width: 769px) {
+    .step-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 20px;
+        width: 100%;
+    }
+    
+    .step-icon-img {
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+/* Responsive görünümde step icon'ları center yap */
+@media (max-width: 768px) {
+    .step-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 20px;
+        width: 100%;
+    }
+    
+    .step-icon-img {
+        display: block;
+        margin: 0 auto;
+    }
+}
+
 .step-icon:hover {
     transform: translateY(-5px);
 }
@@ -1346,6 +1442,7 @@ select {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    z-index: 1;
 }
 
 /* Mobile Properties Section */
@@ -1367,8 +1464,8 @@ select {
     transform: translateY(-50%);
     width: 600px;
     height: 600px;
-    opacity: 0.2;
-    z-index: 1;
+    opacity: 0.05;
+    z-index: 0;
     pointer-events: none;
 }
 
@@ -1387,6 +1484,8 @@ select {
     width: 100%;
     padding: 0 20px;
     box-sizing: border-box;
+    position: relative;
+    z-index: 10;
 }
 
 /* Desktop only - Align with properties grid and add padding */
@@ -1407,11 +1506,12 @@ select {
 }
 
 .properties-title {
-    font-size: clamp(23.4px, 3.25vw, 31.2px);
+    font-size: 25px;
     font-weight: 600;
     color: #2d2d2d;
     margin: 0;
     line-height: 1.2;
+    white-space: nowrap;
 }
 
 .properties-actions {
@@ -1456,6 +1556,7 @@ select {
     display: flex;
     align-items: center;
     gap: 6px;
+    white-space: nowrap;
 }
 
 .btn-primary:hover {
@@ -1493,6 +1594,8 @@ select {
     justify-items: center;
     max-width: 1400px;
     margin: 0 auto;
+    position: relative;
+    z-index: 10;
 }
 
 /* Force single column on mobile */

@@ -16,6 +16,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Critical Images Preload -->
+    <link rel="preload" as="image" href="images/emlak.webp" type="image/webp">
+    <link rel="preload" as="image" href="images/emlak.png" type="image/png">
+    
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -68,7 +72,10 @@
             <div class="container">
                 <!-- Hero Logo -->
                 <div class="hero-logo">
-                    <img src="images/emlak.png" alt="EMLAKSENDE Logo" class="hero-logo-image">
+                    <picture>
+                        <source srcset="images/emlak.webp" type="image/webp">
+                        <img src="images/emlak.png" alt="EMLAKSENDE Logo" class="hero-logo-image" loading="eager">
+                    </picture>
                 </div>
 
                 <!-- Hero Title -->
@@ -121,7 +128,10 @@
                         <!-- Search Button -->
                         <button class="search-button" id="searchButton">
                             <span>Detaylı Ara</span>
-                            <img src="images/emlak.png" alt="Emlak Logo" class="location-icon">
+                            <picture>
+                                <source srcset="images/emlak.webp" type="image/webp">
+                                <img src="images/emlak.png" alt="Emlak Logo" class="location-icon" loading="eager">
+                            </picture>
                         </button>
                     </div>
                 </div>
@@ -134,7 +144,10 @@
         <div class="process-background">
             <!-- Watermark Logo -->
             <div class="process-watermark">
-                <img src="images/emlakyat.png" alt="EMLAKSENDE" class="watermark-logo">
+                <picture>
+                    <source srcset="images/emlakyat.webp" type="image/webp">
+                    <img src="images/emlakyat.png" alt="EMLAKSENDE" class="watermark-logo" loading="lazy">
+                </picture>
             </div>
         </div>
         
@@ -155,7 +168,10 @@
                         <!-- Step 1 -->
                         <div class="process-step" data-step="1">
                             <div class="step-icon">
-                                <img src="images/icon3.png" alt="Ne almak istediğini seç" class="step-icon-img">
+                                <picture>
+                                    <source srcset="images/icon3.webp" type="image/webp">
+                                    <img src="images/icon3.png" alt="Ne almak istediğini seç" class="step-icon-img" loading="lazy">
+                                </picture>
                             </div>
                             <div class="step-content">
                                 <h3 class="step-title">Ne almak istediğini seç</h3>
@@ -165,7 +181,10 @@
                         <!-- Step 2 -->
                         <div class="process-step" data-step="2">
                             <div class="step-icon">
-                                <img src="images/icon2.png" alt="Kaporanızı Yatırın" class="step-icon-img">
+                                <picture>
+                                    <source srcset="images/icon2.webp" type="image/webp">
+                                    <img src="images/icon2.png" alt="Kaporanızı Yatırın" class="step-icon-img" loading="lazy">
+                                </picture>
                             </div>
                             <div class="step-content">
                                 <h3 class="step-title">Kaporanızı Yatırın</h3>
@@ -175,7 +194,10 @@
                         <!-- Step 3 -->
                         <div class="process-step" data-step="3">
                             <div class="step-icon">
-                                <img src="images/icon4.png" alt="Evraklarınızı Yükleyin" class="step-icon-img">
+                                <picture>
+                                    <source srcset="images/icon4.webp" type="image/webp">
+                                    <img src="images/icon4.png" alt="Evraklarınızı Yükleyin" class="step-icon-img" loading="lazy">
+                                </picture>
                             </div>
                             <div class="step-content">
                                 <h3 class="step-title">Evraklarınızı Yükleyin</h3>
@@ -185,7 +207,10 @@
                         <!-- Step 4 -->
                         <div class="process-step" data-step="4">
                             <div class="step-icon">
-                                <img src="images/icon1.png" alt="Tapunuz Hazır Hayırlı Olsun" class="step-icon-img">
+                                <picture>
+                                    <source srcset="images/icon1.webp" type="image/webp">
+                                    <img src="images/icon1.png" alt="Tapunuz Hazır Hayırlı Olsun" class="step-icon-img" loading="lazy">
+                                </picture>
                             </div>
                             <div class="step-content">
                                 <h3 class="step-title">Tapunuz Hazır Hayırlı Olsun</h3>
@@ -200,18 +225,24 @@
     <!-- Latest Properties Section -->
     <section class="properties-section" id="propertiesSection">
         <!-- Background Logo -->
-        <img src="images/emlakyat2.png" alt="EMLAKSENDE" class="properties-background-logo">
+        <img src="images/emlakyat2.png" alt="EMLAKSENDE" class="properties-background-logo" loading="lazy">
         <div class="container">
             <!-- Section Header -->
             <div class="properties-header">
                 <div class="properties-title-area">
-                    <img src="images/emlakyesilyat.png" alt="Emlak" class="title-logo">
+                    <picture>
+                        <source srcset="images/emlakyesilyat.webp" type="image/webp">
+                        <img src="images/emlakyesilyat.png" alt="Emlak" class="title-logo" loading="lazy">
+                    </picture>
                     <h2 class="properties-title">Son Yüklenen İlanlar</h2>
                 </div>
                 <div class="properties-actions">
                     <button class="btn-secondary" onclick="window.location.href='ilanlar.html'">Tüm İlanları Gör</button>
                     <button class="btn-primary" id="citySelectBtn">
-                        <img src="images/emlak.png" alt="Emlak" class="btn-logo">
+                        <picture>
+                            <source srcset="images/emlak.webp" type="image/webp">
+                            <img src="images/emlak.png" alt="Emlak" class="btn-logo" loading="eager">
+                        </picture>
                         Şehir Seçin
                     </button>
                 </div>
@@ -232,7 +263,10 @@
         <div class="container">
             <!-- Section Header -->
             <div class="testimonials-header">
-                <img src="images/emlak1.png" alt="Emlak" class="testimonial-header-icon">
+                <picture>
+                    <source srcset="images/emlak1.webp" type="image/webp">
+                    <img src="images/emlak1.png" alt="Emlak" class="testimonial-header-icon" loading="lazy">
+                </picture>
                 <h2 class="testimonials-title">Müşterilerimizden Yorumlar</h2>
             </div>
 
@@ -336,7 +370,10 @@
                 <!-- Left Side - Text Content -->
                 <div class="about-text">
                     <div class="about-logo">
-                        <img src="images/hakkımızda.png" alt="EMLAKSENDE" class="about-logo-img">
+                        <picture>
+                            <source srcset="images/hakkımızda.webp" type="image/webp">
+                            <img src="images/hakkımızda.png" alt="EMLAKSENDE" class="about-logo-img" loading="lazy">
+                        </picture>
                     </div>
                     
                     <div class="about-description">
@@ -360,7 +397,10 @@
                 <!-- Right Side - Image -->
                 <div class="about-image">
                     <div class="image-container">
-                        <img src="images/background.jpg" alt="Emlaksende Hakkında" class="about-img">
+                        <picture>
+                            <source srcset="images/arsa.webp" type="image/webp">
+                            <img src="images/arsa.png" alt="Emlaksende Hakkında" class="about-img" loading="lazy">
+                        </picture>
                         <div class="image-overlay"></div>
                     </div>
                 </div>

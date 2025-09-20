@@ -2156,6 +2156,49 @@
         let filteredProperties = [];
         let currentFilters = {};
         let currentSortType = 'date-newest'; // Default sort
+        
+        // Pagination variables
+        const ITEMS_PER_PAGE = 20;
+        let currentPage = 1;
+        let totalPages = 1;
+        
+        // Cache sistemi
+        const dataCache = {
+            properties: null,
+            imarDurumu: null,
+            tapuDurumu: null,
+            seo: null,
+            lastUpdate: null
+        };
+        
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 dakika
+
+        // Loading state fonksiyonları
+        function showLoadingState() {
+            const loadingPlaceholder = document.getElementById('loadingPlaceholder');
+            if (loadingPlaceholder) {
+                loadingPlaceholder.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #3498db; 
+                                    border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                        <p style="color: #666; font-size: 16px;">İlanlar yükleniyor...</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `;
+            }
+        }
+        
+        function hideLoadingState() {
+            const loadingPlaceholder = document.getElementById('loadingPlaceholder');
+            if (loadingPlaceholder) {
+                loadingPlaceholder.style.display = 'none';
+            }
+        }
 
         function loadAllProperties() {
             console.log('Loading all properties from Firebase...');
@@ -2169,56 +2212,149 @@
                 return;
             }
 
-            database.ref('ilanlar').once('value')
-                .then((snapshot) => {
-                    const propertiesData = snapshot.val();
-                    
-                    if (!propertiesData) {
-                        console.log('No properties found');
-                        updatePropertyGrid([]);
-                        updateActiveCount(0);
-                        return;
-                    }
+            // Cache kontrolü
+            const now = Date.now();
+            if (dataCache.lastUpdate && (now - dataCache.lastUpdate) < CACHE_DURATION && dataCache.properties) {
+                console.log('Using cached data');
+                processCachedData();
+                return;
+            }
 
-                    // Convert Firebase object to array
-                    allProperties = [];
-                    Object.keys(propertiesData).forEach(key => {
-                        const property = propertiesData[key];
-                        property.id = key;
-                        allProperties.push(property);
-                    });
+            // Loading state göster
+            showLoadingState();
 
-                    console.log(`Loaded ${allProperties.length} properties:`, allProperties);
-                    
-                    // Sort by creation date (newest first)
-                    allProperties.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                    
-                    // Load filter options after loading properties
-                    loadFilterOptions();
-                    
-                    // Load additional filter data from Firebase
-                    loadAdditionalFilterData();
-                    
-                    // Apply URL parameters if any
-                    applyUrlParameters();
-                    
-                    // Initially show all properties
-                    filteredProperties = [...allProperties];
-                    
-                    // Set default sort option as active
-                    const defaultSortOption = document.querySelector('.sort-option[data-sort="date-newest"]');
-                    if (defaultSortOption) {
-                        defaultSortOption.classList.add('active');
-                    }
-                    
-                    // Apply default sorting
-                    applySorting(currentSortType);
-                })
-                .catch((error) => {
-                    console.error('Error loading properties:', error);
+            // Paralel olarak tüm verileri yükle
+            Promise.all([
+                database.ref('ilanlar').once('value'),
+                database.ref('imar_durumu').once('value'),
+                database.ref('tapu_durumu').once('value'),
+                database.ref(`sayfalar/ilanlar_DOT_html`).once('value')
+            ])
+            .then(([propertiesSnapshot, imarSnapshot, tapuSnapshot, seoSnapshot]) => {
+                // Ana ilanlar verisini işle
+                const propertiesData = propertiesSnapshot.val();
+                
+                if (!propertiesData) {
+                    console.log('No properties found');
                     updatePropertyGrid([]);
                     updateActiveCount(0);
+                    hideLoadingState();
+                    return;
+                }
+
+                // Convert Firebase object to array
+                allProperties = [];
+                Object.keys(propertiesData).forEach(key => {
+                    const property = propertiesData[key];
+                    property.id = key;
+                    allProperties.push(property);
                 });
+
+                console.log(`Loaded ${allProperties.length} properties:`, allProperties);
+                
+                // Sort by creation date (newest first)
+                allProperties.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                
+                // Filter verilerini işle
+                const imarData = imarSnapshot.val();
+                if (imarData) {
+                    imarDurumuOptions = Object.keys(imarData).map(key => ({
+                        id: key,
+                        name: imarData[key].name
+                    }));
+                    console.log('Loaded imar durumu options:', imarDurumuOptions);
+                }
+
+                const tapuData = tapuSnapshot.val();
+                if (tapuData) {
+                    tapuDurumuOptions = Object.keys(tapuData).map(key => ({
+                        id: key,
+                        name: tapuData[key].name
+                    }));
+                    console.log('Loaded tapu durumu options:', tapuDurumuOptions);
+                }
+
+                // SEO verisini işle
+                const seoData = seoSnapshot.val();
+                if (seoData) {
+                    console.log('SEO data loaded for ilanlar:', seoData);
+                    updatePageSEO(seoData);
+                }
+                
+                // Load filter options after loading properties
+                loadFilterOptions();
+                
+                // Update filter options with loaded data
+                updateImarDurumuOptions();
+                updateTapuDurumuOptions();
+                
+                // Apply URL parameters if any
+                applyUrlParameters();
+                
+                // Initially show all properties
+                filteredProperties = [...allProperties];
+                
+                // Set default sort option as active
+                const defaultSortOption = document.querySelector('.sort-option[data-sort="date-newest"]');
+                if (defaultSortOption) {
+                    defaultSortOption.classList.add('active');
+                }
+                
+                // Apply default sorting
+                applySorting(currentSortType);
+                
+                // Cache'e kaydet
+                dataCache.properties = allProperties;
+                dataCache.imarDurumu = imarDurumuOptions;
+                dataCache.tapuDurumu = tapuDurumuOptions;
+                dataCache.seo = seoData;
+                dataCache.lastUpdate = Date.now();
+                
+                // Loading state'i gizle
+                hideLoadingState();
+            })
+            .catch((error) => {
+                console.error('Error loading properties:', error);
+                updatePropertyGrid([]);
+                updateActiveCount(0);
+                hideLoadingState();
+            });
+        }
+        
+        // Cache'den veri işleme fonksiyonu
+        function processCachedData() {
+            console.log('Processing cached data...');
+            
+            allProperties = dataCache.properties;
+            imarDurumuOptions = dataCache.imarDurumu || [];
+            tapuDurumuOptions = dataCache.tapuDurumu || [];
+            
+            // Load filter options
+            loadFilterOptions();
+            
+            // Update filter options with cached data
+            updateImarDurumuOptions();
+            updateTapuDurumuOptions();
+            
+            // Apply URL parameters if any
+            applyUrlParameters();
+            
+            // Initially show all properties
+            filteredProperties = [...allProperties];
+            
+            // Set default sort option as active
+            const defaultSortOption = document.querySelector('.sort-option[data-sort="date-newest"]');
+            if (defaultSortOption) {
+                defaultSortOption.classList.add('active');
+            }
+            
+            // Apply default sorting
+            applySorting(currentSortType);
+            
+            // SEO verisini güncelle
+            if (dataCache.seo) {
+                updatePageSEO(dataCache.seo);
+            }
         }
         let imarDurumuOptions = [];
         let tapuDurumuOptions = [];
@@ -2463,44 +2599,7 @@
             });
         }
 
-        // Load additional filter data from Firebase
-        function loadAdditionalFilterData() {
-            console.log('Loading additional filter data from Firebase...');
-            
-            // Load imar durumu options
-            database.ref('imar_durumu').once('value')
-                .then((snapshot) => {
-                    const imarData = snapshot.val();
-                    if (imarData) {
-                        imarDurumuOptions = Object.keys(imarData).map(key => ({
-                            id: key,
-                            name: imarData[key].name
-                        }));
-                        console.log('Loaded imar durumu options:', imarDurumuOptions);
-                        updateImarDurumuOptions();
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error loading imar durumu:', error);
-                });
-
-            // Load tapu durumu options
-            database.ref('tapu_durumu').once('value')
-                .then((snapshot) => {
-                    const tapuData = snapshot.val();
-                    if (tapuData) {
-                        tapuDurumuOptions = Object.keys(tapuData).map(key => ({
-                            id: key,
-                            name: tapuData[key].name
-                        }));
-                        console.log('Loaded tapu durumu options:', tapuDurumuOptions);
-                        updateTapuDurumuOptions();
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error loading tapu durumu:', error);
-                });
-        }
+        // Bu fonksiyon artık gerekli değil - veriler paralel olarak yükleniyor
 
         // Update imar durumu select options
         function updateImarDurumuOptions() {
@@ -2651,7 +2750,7 @@
 
             // Add click handler to open detail page
             card.addEventListener('click', () => {
-                window.open(`detay.html?id=${property.id}`, '_blank');
+                window.location.href = `detay.html?id=${property.id}`;
             });
 
             // Create property image container
@@ -2923,6 +3022,9 @@
             }, 1000);
         });
     </script>
+    
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
     
     <!-- Include Components Script -->
     <script src="include-components.js"></script>

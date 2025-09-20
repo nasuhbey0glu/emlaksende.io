@@ -19,6 +19,72 @@ if (typeof firebase !== 'undefined') {
     console.error('Firebase SDK not loaded in script.js');
 }
 
+// ===== LAZY LOADING FUNCTIONALITY =====
+function initializeLazyLoading() {
+    // Intersection Observer API ile lazy loading
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                
+                // Resim yüklendiğinde blur efektini kaldır
+                img.addEventListener('load', () => {
+                    img.classList.add('loaded');
+                });
+                
+                // Eğer resim zaten yüklenmişse (cached)
+                if (img.complete) {
+                    img.classList.add('loaded');
+                }
+                
+                observer.unobserve(img);
+            }
+        });
+    }, {
+        rootMargin: '50px 0px', // 50px önceden yükle
+        threshold: 0.1
+    });
+
+    // Tüm lazy loading resimlerini gözlemle
+    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+    lazyImages.forEach(img => {
+        imageObserver.observe(img);
+    });
+
+    console.log(`Lazy loading initialized for ${lazyImages.length} images`);
+}
+
+// ===== WEBP SUPPORT DETECTION =====
+function supportsWebP() {
+    return new Promise((resolve) => {
+        const webP = new Image();
+        webP.onload = webP.onerror = () => {
+            resolve(webP.height === 2);
+        };
+        webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+    });
+}
+
+// WebP desteğini kontrol et ve gerekirse fallback kullan
+async function initializeWebPSupport() {
+    const webpSupported = await supportsWebP();
+    
+    if (!webpSupported) {
+        console.log('WebP not supported, using fallback images');
+        // WebP desteklenmiyorsa, tüm picture elementlerini img elementlerine dönüştür
+        const pictures = document.querySelectorAll('picture');
+        pictures.forEach(picture => {
+            const img = picture.querySelector('img');
+            if (img) {
+                // Picture elementini img ile değiştir
+                picture.parentNode.replaceChild(img, picture);
+            }
+        });
+    } else {
+        console.log('WebP supported, using optimized images');
+    }
+}
+
 // ===== CITY AND DISTRICT DATA =====
 const cityData = {
     istanbul: [
@@ -1621,7 +1687,6 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
         badges.className = 'property-badges';
         badges.innerHTML = `
             <span class="property-date">${formattedDate}</span>
-            <span class="property-status ${status}">${statusText}</span>
         `;
         
         const area = document.createElement('div');
@@ -1661,7 +1726,7 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
     
     // Navigate to property detail page
     function goToPropertyDetail(propertyId) {
-        window.open(`detay.html?id=${propertyId}`, '_blank');
+        window.location.href = `detay.html?id=${propertyId}`;
     }
     
     // Make function global for onclick handlers
@@ -1993,6 +2058,17 @@ if (typeof firebase !== 'undefined' && typeof database !== 'undefined') {
 } else {
     console.error('Firebase SDK not loaded');
 }
+
+// ===== INITIALIZE PERFORMANCE OPTIMIZATIONS =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Lazy loading'i başlat
+    initializeLazyLoading();
+    
+    // WebP desteğini kontrol et
+    initializeWebPSupport();
+    
+    console.log('Performance optimizations initialized');
+});
 
 // ===== SEO MANAGEMENT =====
 function loadPageSEO() {

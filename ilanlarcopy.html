@@ -2584,7 +2584,7 @@
 
             // Add click handler to open detail page
             card.addEventListener('click', () => {
-                window.open(`detay.html?id=${property.id}`, '_blank');
+                window.location.href = `detay.html?id=${property.id}`;
             });
 
             // Create property image container

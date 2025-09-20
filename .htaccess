@@ -1,14 +1,28 @@
 RewriteEngine On
 
-# Admin paneli için URL yönlendirme
-RewriteRule ^emlaksendeyonetim/?$ emlaksendeyonetim.html [L]
+# .html uzantılarını gizle - URL'lerden .html kaldır
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
 
-# Diğer sayfalar için de URL yönlendirmeleri (isteğe bağlı)
-RewriteRule ^anasayfa/?$ index.html [L]
-RewriteRule ^hizmetler/?$ hizmetler.html [L]
-RewriteRule ^kurumsal/?$ kurumsal.html [L]
-RewriteRule ^destek/?$ destek.html [L]
-RewriteRule ^ilanlar/?$ ilanlar.html [L]
-RewriteRule ^ilanlar/?$ ilanlarcopy.html [L]
-RewriteRule ^projeler/?$ projeler.html [L]
-RewriteRule ^harita/?$ harita.html [L]
+# .html uzantısını URL'den kaldır (dış yönlendirme)
+RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
+RewriteRule ^ /%1? [NC,L,R=301]
+
+# Admin paneli için URL yönlendirme
+RewriteRule ^emlaksendeyonetim/?$ emlaksendeyonetim.html [L,QSA]
+
+# Diğer sayfalar için URL yönlendirmeleri (query parametrelerini koruyarak)
+RewriteRule ^anasayfa/?$ index.html [L,QSA]
+RewriteRule ^hizmetler/?$ hizmetler.html [L,QSA]
+RewriteRule ^kurumsal/?$ kurumsal.html [L,QSA]
+RewriteRule ^destek/?$ destek.html [L,QSA]
+RewriteRule ^ilanlar/?$ ilanlar.html [L,QSA]
+RewriteRule ^projeler/?$ projeler.html [L,QSA]
+RewriteRule ^harita/?$ harita.html [L,QSA]
+
+# Detay sayfası için URL yönlendirmesi (query parametrelerini koruyarak)
+RewriteRule ^detay/?$ detay.html [L,QSA]
+
+# Ana sayfa için kök URL yönlendirmesi
+RewriteRule ^$ index.html [L]

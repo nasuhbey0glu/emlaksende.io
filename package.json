@@ -1,0 +1,16 @@
+{
+  "name": "emlaksende-image-optimizer",
+  "version": "1.0.0",
+  "description": "Emlaksende website image optimization tool",
+  "main": "optimize-images.js",
+  "scripts": {
+    "optimize": "node optimize-images.js",
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "sharp": "^0.32.6"
+  },
+  "keywords": ["image", "optimization", "webp", "performance"],
+  "author": "Emlaksende",
+  "license": "MIT"
+}
