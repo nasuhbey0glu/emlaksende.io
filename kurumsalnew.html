@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Kurumsal - EMLAKSENDE</title>
+    <link rel="icon" type="image/webp" href="images/emlak.webp">
+    <meta name="description" id="pageDescription" content="EMLAKSENDE hakkında bilgi edinin. Misyonumuz, vizyonumuz ve nasıl çalıştığımız hakkında detaylı bilgi alın.">
+    <meta name="keywords" id="pageKeywords" content="kurumsal, hakkımızda, misyon, vizyon, iletişim, nasıl çalışır">
+    
+    <!-- Firebase SDKs - Load first -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- URL Yönlendirme Scripti -->
+    <script>
+        // URL yönlendirme fonksiyonu
+        function handleURLRouting() {
+            const currentPath = window.location.pathname;
+            
+            // Admin paneli yönlendirmesi
+            if (currentPath === '/emlaksendeyonetim' || currentPath === '/emlaksendeyonetim/') {
+                window.location.href = 'admin.html';
+                return;
+            }
+            
+            // Diğer sayfa yönlendirmeleri
+            const routes = {
+                '/hizmetler': 'hizmetlernew.html',
+                '/kurumsal': 'kurumsalnew.html',
+                '/destek': 'desteknew.html',
+                '/ilanlar': 'ilanlar.html',
+                '/projeler': 'projeler.html',
+                '/harita': 'harita.html'
+            };
+            
+            if (routes[currentPath]) {
+                window.location.href = routes[currentPath];
+                return;
+            }
+            
+            // Ana sayfa için URL'yi /anasayfa olarak değiştir (sadece root veya index.html'den geliyorsa)
+            // Sadece production ortamında çalıştır (localhost değilse)
+            if ((currentPath === '/' || currentPath === '/kurumsalnew.html') && 
+                !window.location.hostname.includes('localhost') && 
+                !window.location.hostname.includes('127.0.0.1') &&
+                !window.location.protocol.includes('file')) {
+                // History API ile URL'yi değiştir (sayfa yeniden yüklenmez)
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, null, '/kurumsal');
+                }
+            }
+        }
+        
+        // Sayfa yüklendiğinde URL kontrolü yap
+        document.addEventListener('DOMContentLoaded', handleURLRouting);
+    </script>
+
+    <!-- URL'den tab parametresi okuma -->
+    <script>
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                var url = new URL(window.location.href);
+                var tab = url.searchParams.get('tab');
+                if (tab) {
+                    var target = document.querySelector('.tab[data-tab="' + tab + '"]');
+                    if (target) {
+                        // Aktifliği güncelle ve içerik yükle
+                        document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+                        target.classList.add('active');
+                        currentTab = tab;
+                        displayTabContent(tab);
+                    }
+                }
+            });
+        })();
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ===== HEADER STYLES ===== */
+        /* Header styles are now included from header.html */
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Page Layout */
+        .page-layout {
+            display: flex;
+            gap: 30px;
+            align-items: start;
+            margin-top: 40px;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #97D2AD 0%, #7bb89a 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(151, 210, 173, 0.4);
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: linear-gradient(135deg, #7bb89a 0%, #6ba88a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(151, 210, 173, 0.5);
+        }
+
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hamburger-line {
+            width: 20px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: #F7F7F7;
+            border-radius: 16px;
+            padding: 24px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1E2A47;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        .support-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tab {
+            padding: 14px 20px;
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .tab:hover {
+            background: #f9fafb;
+            border-color: #97D2AD;
+            color: #2d5016;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #97D2AD 0%, #7bb89a 100%);
+            color: white;
+            border-color: #97D2AD;
+            box-shadow: 0 4px 12px rgba(151, 210, 173, 0.3);
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            min-height: 500px;
+        }
+
+        #content {
+            line-height: 1.8;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        #content h1, #content h2, #content h3 {
+            color: #1E2A47;
+            margin-bottom: 16px;
+            margin-top: 24px;
+        }
+
+        #content h1 {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        #content h2 {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        #content h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        #content p {
+            margin-bottom: 16px;
+        }
+
+        #content ul, #content ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        #content a {
+            color: #97D2AD;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        #content a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            font-size: 18px;
+        }
+
+        /* Footer margin */
+        #footer-container {
+            margin-top: 20px;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 991px) {
+            .sidebar {
+                position: fixed;
+                left: -320px;
+                top: 0;
+                width: 280px;
+                height: 100%;
+                z-index: 999;
+                transition: left 0.3s ease;
+                overflow-y: auto;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .page-layout {
+                flex-direction: column;
+            }
+
+            .content-area {
+                width: 100%;
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 20px;
+            }
+
+            #content h1 {
+                font-size: 26px;
+            }
+
+            #content h2 {
+                font-size: 22px;
+            }
+
+            #content h3 {
+                font-size: 18px;
+            }
+
+            #content {
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+                left: -100%;
+            }
+
+            .content-area {
+                padding: 16px;
+            }
+
+            #content h1 {
+                font-size: 22px;
+            }
+
+            #content h2 {
+                font-size: 20px;
+            }
+
+            #content h3 {
+                font-size: 16px;
+            }
+
+            #content {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header-container" style="margin-bottom: 30px;"></div>
+
+    <div class="container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <div class="hamburger-icon">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+            <span>Menü</span>
+        </button>
+        
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        
+        <!-- Page Layout -->
+        <div class="page-layout">
+            <!-- Sidebar -->
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">Kurumsal</div>
+                <div class="support-tabs">
+                    <div class="tab active" data-tab="iletisim">İletişim</div>
+                    <div class="tab" data-tab="misyon">Misyon</div>
+                    <div class="tab" data-tab="vizyon">Vizyon</div>
+                    <div class="tab" data-tab="nasilCalisir">Nasıl Çalışır</div>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <div id="content">
+                    <div class="loading">İçerik yükleniyor...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhY-cgBNBGFd5o9e6l4_L4xYjOFAhyH0M",
+            authDomain: "emlaksende-8646a.firebaseapp.com",
+            databaseURL: "https://emlaksende-8646a-default-rtdb.firebaseio.com",
+            projectId: "emlaksende-8646a",
+            storageBucket: "emlaksende-8646a.firebasestorage.app",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abc123def456ghi789"
+        };
+
+        // Global variables
+        let database;
+        let corporateData = {};
+        let currentTab = 'iletisim';
+
+        // Initialize Firebase and load corporate data
+        setTimeout(() => {
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                
+                database = firebase.database();
+                loadCorporateData();
+            } else {
+                console.error('Firebase SDK not loaded');
+            }
+        }, 100);
+
+        // Load corporate data from Firebase
+        function loadCorporateData() {
+            database.ref('kurumsal').once('value')
+                .then((snapshot) => {
+                    corporateData = snapshot.val() || {};
+                    console.log('Kurumsal verisi yüklendi:', corporateData);
+                    
+                    // Display initial tab content
+                    displayTabContent(currentTab);
+                })
+                .catch((error) => {
+                    console.error('Kurumsal verileri yüklenirken hata:', error);
+                    document.getElementById('content').innerHTML = `
+                        <div class="loading" style="color: #e74c3c;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 16px;"></i><br>
+                            Veriler yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin.
+                        </div>
+                    `;
+                });
+        }
+
+        // Display tab content
+        function displayTabContent(tabName) {
+            const contentDiv = document.getElementById('content');
+            
+            if (corporateData[tabName]) {
+                contentDiv.innerHTML = corporateData[tabName];
+            } else {
+                contentDiv.innerHTML = `
+                    <div class="loading" style="color: #999;">
+                        <i class="fas fa-info-circle" style="font-size: 48px; margin-bottom: 16px;"></i><br>
+                        Bu bölüm için henüz içerik eklenmemiş.
+                    </div>
+                `;
+            }
+        }
+
+        // Tab click handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Get tab name and display content
+                    const tabName = this.getAttribute('data-tab');
+                    currentTab = tabName;
+                    displayTabContent(tabName);
+
+                    // Close mobile menu if open
+                    if (sidebar.classList.contains('active')) {
+                        sidebar.classList.remove('active');
+                        sidebarOverlay.classList.remove('active');
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                    sidebarOverlay.classList.toggle('active');
+                });
+            }
+
+            // Close sidebar when clicking overlay
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', function() {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                });
+            }
+        });
+    </script>
+    
+    <!-- SEO Management Script -->
+    <script>
+        // ===== SEO MANAGEMENT FOR KURUMSAL PAGE =====
+        function loadPageSEO() {
+            if (typeof firebase === 'undefined' || !firebase.database) {
+                console.error('Firebase not available for SEO');
+                return;
+            }
+            
+            const database = firebase.database();
+            const currentPage = 'kurumsal';
+            const safePageId = currentPage.replace(/\./g, '_DOT_').replace(/[#$\[\]]/g, '_');
+            
+            console.log('Loading SEO for kurumsal page:', safePageId);
+            
+            database.ref(`sayfalar/${safePageId}`).once('value')
+                .then((snapshot) => {
+                    const seoData = snapshot.val();
+                    if (seoData) {
+                        console.log('SEO data loaded for kurumsal:', seoData);
+                        updatePageSEO(seoData);
+                    } else {
+                        console.log('No SEO data found for kurumsal page');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading SEO data for kurumsal:', error);
+                });
+        }
+        
+        function updatePageSEO(seoData) {
+            try {
+                // Update page title
+                if (seoData.seo_title) {
+                    const titleElement = document.getElementById('pageTitle');
+                    if (titleElement) {
+                        titleElement.textContent = seoData.seo_title;
+                        document.title = seoData.seo_title;
+                    }
+                }
+                
+                // Update meta description
+                if (seoData.seo_description) {
+                    const descElement = document.getElementById('pageDescription');
+                    if (descElement) {
+                        descElement.setAttribute('content', seoData.seo_description);
+                    }
+                }
+                
+                // Update meta keywords
+                if (seoData.seo_keywords) {
+                    const keywordsElement = document.getElementById('pageKeywords');
+                    if (keywordsElement) {
+                        keywordsElement.setAttribute('content', seoData.seo_keywords);
+                    }
+                }
+                
+                console.log('SEO data updated successfully for kurumsal page');
+            } catch (error) {
+                console.error('Error updating SEO data for kurumsal:', error);
+            }
+        }
+        
+        // Load SEO when page is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for Firebase to be initialized
+            setTimeout(() => {
+                loadPageSEO();
+            }, 1000);
+        });
+    </script>
+    
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+    
+    <!-- Include Header and Footer -->
+    <script src="include-components.js"></script>
+</body>
+</html>

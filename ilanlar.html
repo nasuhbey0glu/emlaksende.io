@@ -4,8 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">İlanlar - EMLAKSENDE</title>
-    <meta name="description" id="pageDescription" content="EMLAKSENDE'de en güncel emlak ilanları. Arsa, tarla, bağ bahçe ve imarlı arsalar için detaylı arama yapın.">
-    <meta name="keywords" id="pageKeywords" content="emlak ilanları, arsa, tarla, bağ bahçe, imarlı arsa, emlak arama">
+    <link rel="icon" type="image/webp" href="images/emlak.webp">
+    <meta name="description" id="pageDescription" content="Emlaksende'de en güncel emlak ilanları. Arsa, tarla, bağ bahçe ve imarlı arsalar için detaylı arama yapın. Yatırım fırsatlarını keşfedin!">
+    <meta name="keywords" id="pageKeywords" content="emlak ilanları, arsa, tarla, bağ bahçe, imarlı arsa, emlak arama, arsa satışı, tarla satışı, yatırım arsa">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Emlak İlanları - EMLAKSENDE">
+    <meta property="og:description" content="Emlaksende'de en güncel emlak ilanları. Arsa, tarla, bağ bahçe ve imarlı arsalar için detaylı arama yapın.">
+    <meta property="og:image" content="https://emlaksende.com.tr/images/emlak.webp">
+    <meta property="og:url" content="https://emlaksende.com.tr/ilanlar.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Emlaksende">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Emlak İlanları - EMLAKSENDE">
+    <meta name="twitter:description" content="Emlaksende'de en güncel emlak ilanları. Arsa, tarla, bağ bahçe ve imarlı arsalar için detaylı arama yapın.">
+    <meta name="twitter:image" content="https://emlaksende.com.tr/images/emlak.webp">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Emlaksende">
+    <meta name="language" content="Turkish">
+    <meta name="revisit-after" content="1 days">
+    <meta name="distribution" content="global">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://emlaksende.com.tr/ilanlar.html">
     
     <!-- Firebase SDKs - Load first -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -21,6 +46,29 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- URL Yönlendirme Scripti -->
+    <script>
+        // URL yönlendirme fonksiyonu
+        function handleURLRouting() {
+            const currentPath = window.location.pathname;
+            
+            // Ana sayfa için URL'yi /ilanlar olarak değiştir (sadece root veya ilanlar.html'den geliyorsa)
+            // Sadece production ortamında çalıştır (localhost değilse)
+            if ((currentPath === '/ilanlar.html' || currentPath === '/ilanlar') && 
+                !window.location.hostname.includes('localhost') && 
+                !window.location.hostname.includes('127.0.0.1') &&
+                !window.location.protocol.includes('file')) {
+                // History API ile URL'yi değiştir (sayfa yeniden yüklenmez)
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, null, '/ilanlar');
+                }
+            }
+        }
+        
+        // Sayfa yüklendiğinde URL kontrolü yap
+        document.addEventListener('DOMContentLoaded', handleURLRouting);
+    </script>
     
     <style>
         * {
@@ -1660,20 +1708,20 @@
                         <div class="filter-content" id="location-filter">
                             <div class="form-row">
                                 <select class="form-select" aria-label="Şehir">
-                                    <option value="">City</option>
+                                    <option value="">Şehir</option>
                                     <option>Balıkesir</option>
                                     <option>İstanbul</option>
                                     <option>Ankara</option>
                                     <option>İzmir</option>
                                 </select>
                                 <select class="form-select" aria-label="İlçe">
-                                    <option value="">District</option>
+                                    <option value="">İlçe</option>
                                     <option>Edremit</option>
                                     <option>Çankaya</option>
                                     <option>Çeşme</option>
                                 </select>
                                 <select class="form-select" aria-label="Mahalle">
-                                    <option value="">Neighborhood</option>
+                                    <option value="">Mahalle</option>
                                     <option>Zeytinli</option>
                                     <option>Merkez</option>
                                 </select>
@@ -1781,20 +1829,20 @@
                 <div class="group-label">Konum</div>
                 <div class="form-row">
                     <select class="form-select">
-                        <option value="">City</option>
+                        <option value="">Şehir</option>
                         <option value="balikesir">Balıkesir</option>
                         <option value="istanbul">İstanbul</option>
                         <option value="ankara">Ankara</option>
                         <option value="izmir">İzmir</option>
                     </select>
                     <select class="form-select">
-                        <option value="">District</option>
+                        <option value="">İlçe</option>
                         <option value="edremit">Edremit</option>
                         <option value="cankaya">Çankaya</option>
                         <option value="cesme">Çeşme</option>
                     </select>
                     <select class="form-select">
-                        <option value="">Neighborhood</option>
+                        <option value="">Mahalle</option>
                         <option value="zeytinli">Zeytinli</option>
                         <option value="merkez">Merkez</option>
                     </select>
@@ -2773,10 +2821,13 @@
             dateBadge.className = 'property-date';
             dateBadge.textContent = formattedDate;
 
-            // Create status badge
-            const statusBadge = document.createElement('span');
-            statusBadge.className = `property-status ${statusClass}`;
-            statusBadge.textContent = statusText;
+            // Create status badge (only show if not available)
+            let statusBadge = null;
+            if (statusClass !== 'available') {
+                statusBadge = document.createElement('span');
+                statusBadge.className = `property-status ${statusClass}`;
+                statusBadge.textContent = statusText;
+            }
 
             // Create area badge
             const areaBadge = document.createElement('div');
@@ -2786,7 +2837,9 @@
             // Assemble image container
             imageContainer.appendChild(img);
             badgesContainer.appendChild(dateBadge);
-            badgesContainer.appendChild(statusBadge);
+            if (statusBadge) {
+                badgesContainer.appendChild(statusBadge);
+            }
             imageContainer.appendChild(badgesContainer);
             imageContainer.appendChild(areaBadge);
 

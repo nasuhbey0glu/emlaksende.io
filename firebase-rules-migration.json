@@ -2,11 +2,11 @@
   "rules": {
     "ilanlar": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": true
     },
     "projeler": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": true
     },
     "imar_durumu": {
       ".read": true,

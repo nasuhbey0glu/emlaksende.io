@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emlaksende Admin Paneli</title>
+    <link rel="icon" type="image/webp" href="images/emlak.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -2332,9 +2333,7 @@
                                         </div>
                                         <div>
                                             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">İlçe *</label>
-                                            <select id="ilanIlce" onchange="onDistrictChange()" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
-                                                <option value="">İlçe Seçin</option>
-                                            </select>
+                                            <input type="text" id="ilanIlce" placeholder="İlçe giriniz" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
                                         </div>
                                         <div>
                                             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">Mahalle *</label>
@@ -3329,9 +3328,7 @@
                                                     </div>
                                                     <div>
                                                         <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 500;">İlçe *</label>
-                                                        <select id="projeIlce" onchange="onProjeIlceChange()" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;" disabled>
-                                                            <option value="">Önce şehir seçin</option>
-                                                        </select>
+                                                        <input type="text" id="projeIlce" placeholder="İlçe giriniz" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: white;">
                                                     </div>
                                                 </div>
                                                 
@@ -5959,35 +5956,16 @@
                         console.log('Şehir ayarlandı:', city.name, city.id);
                         console.log('Şehir select yeni değeri:', citySelect.value);
                         
-                        // İlçeleri yükle
+                        // İlçe değerini direkt olarak ata (artık text input)
                         if (ilan.ilce) {
-                            await loadDistricts(city.id);
+                            const ilceInput = document.getElementById('ilanIlce');
+                            console.log('İlçe input elementi:', ilceInput);
+                            console.log('İlçe değeri atanıyor:', ilan.ilce);
                             
-                            // İlçe dropdown'ının doldurulmasını bekle
-                            await waitForElementToBePopulated('ilanIlce');
-                            
-                            // İlçe değerini ayarla
-                            const districtSelect = document.getElementById('ilanIlce');
-                            console.log('İlçe select elementi:', districtSelect);
-                            console.log('Mevcut ilçe değeri:', districtSelect ? districtSelect.value : 'Element bulunamadı');
-                            
-                            if (districtSelect) {
-                                // İlçe adından ID'yi bul
-                                const district = turkiyeApiData.districts.find(d => d.name === ilan.ilce);
-                                console.log('Bulunan ilçe:', district);
-                                
-                                if (district) {
-                                    console.log('İlçe değeri atanıyor:', district.name);
-                                    districtSelect.value = district.name;
-                                    selectedDistrictId = district.id;
-                                    console.log('İlçe ayarlandı:', district.name, district.id);
-                                    console.log('İlçe select yeni değeri:', districtSelect.value);
-                                } else {
-                                    // Fallback: direkt değer ata
-                                    districtSelect.value = ilan.ilce;
-                                    selectedDistrictId = ilan.ilce;
-                                    console.log('İlçe fallback ayarlandı:', ilan.ilce);
-                                }
+                            if (ilceInput) {
+                                ilceInput.value = ilan.ilce;
+                                selectedDistrictId = ilan.ilce;
+                                console.log('İlçe ayarlandı:', ilan.ilce);
                             }
                         }
                     } else {
@@ -5997,12 +5975,9 @@
                         console.log('Şehir fallback ayarlandı:', ilan.sehir);
                         
                         if (ilan.ilce) {
-                            await loadDistricts(ilan.sehir);
-                            await waitForElementToBePopulated('ilanIlce');
-                            
-                            const districtSelect = document.getElementById('ilanIlce');
-                            if (districtSelect) {
-                                districtSelect.value = ilan.ilce;
+                            const ilceInput = document.getElementById('ilanIlce');
+                            if (ilceInput) {
+                                ilceInput.value = ilan.ilce;
                                 selectedDistrictId = ilan.ilce;
                                 console.log('İlçe fallback ayarlandı:', ilan.ilce);
                             }
@@ -6066,6 +6041,40 @@
                 console.error('Tapu görseli yükleme hatası:', error);
                 throw error;
             }
+        }
+
+        // Türkçe karakterleri İngilizce karaktere çeviren ve URL-safe slug oluşturan fonksiyon
+        function createSlug(text) {
+            if (!text) return '';
+            
+            // Türkçe karakterleri İngilizce karaktere çevir
+            const turkishChars = {
+                'ç': 'c', 'Ç': 'C',
+                'ğ': 'g', 'Ğ': 'G',
+                'ı': 'i', 'İ': 'I',
+                'ö': 'o', 'Ö': 'O',
+                'ş': 's', 'Ş': 'S',
+                'ü': 'u', 'Ü': 'U'
+            };
+            
+            let slug = text.toString();
+            
+            // Türkçe karakterleri değiştir
+            for (const [turkish, english] of Object.entries(turkishChars)) {
+                slug = slug.replace(new RegExp(turkish, 'g'), english);
+            }
+            
+            // Küçük harfe çevir
+            slug = slug.toLowerCase();
+            
+            // Özel karakterleri kaldır ve tire ile değiştir
+            slug = slug
+                .replace(/[^a-z0-9\s-]/g, '') // Sadece harf, rakam, boşluk ve tire bırak
+                .replace(/\s+/g, '-') // Boşlukları tire ile değiştir
+                .replace(/-+/g, '-') // Birden fazla tireyi tek tire yap
+                .replace(/^-|-$/g, ''); // Başta ve sonda tire varsa kaldır
+            
+            return slug;
         }
 
         // İlan kaydetme
@@ -6133,9 +6142,14 @@
             const toplamFiyat = parseFloat(document.getElementById('ilanToplamFiyat').value);
             const metrekareFiyat = metrekare > 0 ? toplamFiyat / metrekare : 0;
             
+            // İlan başlığından slug oluştur
+            const baslik = document.getElementById('ilanBaslik').value.trim();
+            const ilanNo = document.getElementById('ilanNo').value.trim();
+            const customId = createSlug(baslik) + '-' + ilanNo;
+            
             const ilanData = {
-                baslik: document.getElementById('ilanBaslik').value.trim(),
-                ilanNo: document.getElementById('ilanNo').value.trim(),
+                baslik: baslik,
+                ilanNo: ilanNo,
                 proje: document.getElementById('ilanProje').value,
                 metrekare: metrekare,
                 metrekareFiyat: metrekareFiyat,
@@ -6197,7 +6211,8 @@
                 status: 'aktif'
             };
             
-            database.ref('ilanlar').push(ilanData)
+            // Custom ID ile Firebase'e kaydet
+            database.ref('ilanlar').child(customId).set(ilanData)
                 .then(() => {
                     showGenericAlert('ilanAlert', 'İlan başarıyla eklendi!', 'success');
                     hideIlanForm();
@@ -8265,11 +8280,11 @@
             console.log('İlçe dropdown başarıyla dolduruldu');
         }
 
-        // İlçeleri temizle
+        // İlçeleri temizle (artık text input olduğu için sadece değeri temizle)
         function clearDistricts() {
-            const districtSelect = document.getElementById('ilanIlce');
-            if (districtSelect) {
-                districtSelect.innerHTML = '<option value="">İlçe Seçin</option>';
+            const ilceInput = document.getElementById('ilanIlce');
+            if (ilceInput) {
+                ilceInput.value = '';
             }
             // Mahalle input alanını temizle
             const mahalleInput = document.getElementById('ilanMahalle');
@@ -8285,23 +8300,21 @@
             const cityName = citySelect.value;
             selectedCityId = cityName;
             
-            if (cityName) {
-                // Şehir adından ID'yi bul
-                const city = turkiyeApiData.cities.find(c => c.name === cityName);
-                if (city) {
-                    loadDistricts(city.id);
-                }
-            } else {
-                clearDistricts();
+            // İlçe input alanını temizle (artık text input olduğu için)
+            const ilceInput = document.getElementById('ilanIlce');
+            if (ilceInput) {
+                ilceInput.value = '';
+            }
+            
+            // Mahalle input alanını temizle
+            const mahalleInput = document.getElementById('ilanMahalle');
+            if (mahalleInput) {
+                mahalleInput.value = '';
             }
         }
 
-        // İlçe seçimi değiştiğinde
+        // İlçe seçimi değiştiğinde (artık text input olduğu için sadece mahalle temizleme)
         function onDistrictChange() {
-            const districtSelect = document.getElementById('ilanIlce');
-            const districtName = districtSelect.value;
-            selectedDistrictId = districtName;
-            
             // Mahalle input alanını temizle
             const mahalleInput = document.getElementById('ilanMahalle');
             if (mahalleInput) {
@@ -8765,48 +8778,10 @@
             }
         }
 
-        // Proje ilçelerini yükle
+        // Proje ilçelerini yükle (artık kullanılmıyor - text input kullanılıyor)
         async function loadProjeDistricts(cityName) {
-            console.log('Proje ilçeleri yükleniyor:', cityName);
-            try {
-                // Şehir ID'sini bul
-                const city = projeCities.find(c => c.name === cityName);
-                if (!city) {
-                    console.error('Şehir bulunamadı:', cityName);
-                    return;
-                }
-                
-                // Cache'den ilçeleri kontrol et
-                let districts = cache.districtsByProvinceId.get(city.id);
-                if (!districts) {
-                    console.log('API\'den proje ilçeleri çekiliyor...');
-                    const response = await fetch(`${API_BASE}/districts?provinceId=${city.id}&limit=1000&fields=id,name`);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    districts = data.data || [];
-                    cache.districtsByProvinceId.set(city.id, districts);
-                    console.log('Proje ilçeleri yüklendi:', districts.length);
-                }
-                
-                projeDistricts = districts;
-                
-                // İlçe dropdown'ını doldur
-                const districtSelect = document.getElementById('projeIlce');
-                if (districtSelect) {
-                    districtSelect.innerHTML = '<option value="">İlçe seçin...</option>';
-                    projeDistricts.forEach(district => {
-                        const option = document.createElement('option');
-                        option.value = district.name;
-                        option.textContent = district.name;
-                        districtSelect.appendChild(option);
-                    });
-                    districtSelect.disabled = false;
-                }
-            } catch (error) {
-                console.error('Proje ilçeleri yüklenirken hata:', error);
-            }
+            console.log('Proje ilçeleri artık text input olarak kullanılıyor:', cityName);
+            // Bu fonksiyon artık kullanılmıyor, sadece log için bırakıldı
         }
 
         // Proje şehir değiştiğinde
@@ -8815,25 +8790,26 @@
             const cityName = citySelect.value;
             selectedProjeCityId = cityName;
             
-            if (cityName) {
-                loadProjeDistricts(cityName);
-            } else {
-                // Şehir seçimi temizlendiğinde ilçe dropdown'ını temizle
-                const districtSelect = document.getElementById('projeIlce');
-                if (districtSelect) {
-                    districtSelect.innerHTML = '<option value="">Önce şehir seçin</option>';
-                    districtSelect.disabled = true;
-                }
-                selectedProjeDistrictId = null;
-                projeDistricts = [];
+            // İlçe input alanını temizle (artık text input olduğu için)
+            const ilceInput = document.getElementById('projeIlce');
+            if (ilceInput) {
+                ilceInput.value = '';
+            }
+            
+            // Mahalle input alanını temizle
+            const mahalleInput = document.getElementById('projeMahalle');
+            if (mahalleInput) {
+                mahalleInput.value = '';
             }
         }
 
-        // Proje ilçe değiştiğinde
+        // Proje ilçe değiştiğinde (artık text input olduğu için sadece mahalle temizleme)
         function onProjeIlceChange() {
-            const districtSelect = document.getElementById('projeIlce');
-            const districtName = districtSelect.value;
-            selectedProjeDistrictId = districtName;
+            // Mahalle input alanını temizle
+            const mahalleInput = document.getElementById('projeMahalle');
+            if (mahalleInput) {
+                mahalleInput.value = '';
+            }
         }
 
         // Proje kaydet
@@ -8924,6 +8900,9 @@
                 ilanlar[ilanId] = true; // Firebase için sadece key olarak kullanıyoruz
             });
             
+            // Proje başlığından slug oluştur
+            const customProjeId = createSlug(baslik);
+            
             const projeData = {
                 baslik: baslik,
                 aciklama: aciklama,
@@ -8940,10 +8919,10 @@
                 durum: 'aktif'
             };
             
-            // Firebase'e kaydet
+            // Firebase'e kaydet - Custom ID kullan
             const projeRef = isEditingProje ? 
                 database.ref(`projeler/${editingProjeId}`) : 
-                database.ref('projeler').push();
+                database.ref(`projeler/${customProjeId}`);
             
             projeRef.set(projeData)
                 .then(() => {
@@ -9081,13 +9060,10 @@
                                 sehirSelect.value = proje.adres.sehir;
                                 selectedProjeCityId = proje.adres.sehir;
                                 
-                                // İlçeleri yükle
-                                await loadProjeDistricts(proje.adres.sehir);
-                                
-                                // İlçe seçimini yap
-                                const ilceSelect = document.getElementById('projeIlce');
-                                if (ilceSelect && proje.adres.ilce) {
-                                    ilceSelect.value = proje.adres.ilce;
+                                // İlçe değerini direkt olarak ata (artık text input)
+                                const ilceInput = document.getElementById('projeIlce');
+                                if (ilceInput && proje.adres.ilce) {
+                                    ilceInput.value = proje.adres.ilce;
                                     selectedProjeDistrictId = proje.adres.ilce;
                                 }
                             }

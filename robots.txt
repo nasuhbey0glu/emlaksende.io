@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://emlaksende.com.tr/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Disallow admin pages
+Disallow: /admin.html
+Disallow: /emlaksendeyonetim.html
+Disallow: /migrate-*.html
+
+# Allow important pages
+Allow: /index.html
+Allow: /ilanlar.html
+Allow: /projeler.html
+Allow: /hizmetler.html
+Allow: /kurumsal.html
+Allow: /destek.html
+Allow: /detay.html
+Allow: /projedetay.html
+Allow: /images/
+Allow: /style.css
+Allow: /script.js
